@@ -1,0 +1,26 @@
+.numbered-text-area-container {
+    display: flex;
+    border: 1px solid #ccc;
+    overflow: hidden;
+  }
+  
+  .line-numbers {
+    flex-shrink: 0;
+    padding: 0.5em 1em;
+    background-color: #f0f0f0;
+    border-right: 1px solid #ccc;
+    text-align: right;
+  }
+  
+  .text-area {
+    width: 100%;
+    border: none;
+    padding: 0.5em;
+  }
+  
+  .text-area2 {
+    width: 100%;
+    border: none;
+    padding: 0.5em;
+    color: black;
+  }
