@@ -1,0 +1,23 @@
+para instalar jison
+npm install jison
+para instalar dependencias
+npm install ó npm i
+
+para la api
+npm i express // para levantar el servidor
+npm i cors //permisos de entradas y salidas
+npm i morgan -D // ver peticiones
+npm i nodemon -D // facilitar el desarrollo
+
+para ejecutar el backend
+npm start
+para ejecutar el parser
+npm run parser
+
+//para ejecutarse automaticamente al hacer los cambios
+npm run dev
+
+
+
+para ejecutar Frontend
+npm run dev
