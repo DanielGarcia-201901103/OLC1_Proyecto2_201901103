@@ -72,12 +72,12 @@
   }
 */
 var parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o};
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,4],$V2=[1,5],$V3=[2,5,7,10];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"inicio":3,"instruccion":4,"EOF":5,"ENTERO":6,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"ENTERO"},
-productions_: [0,[3,2],[4,1],[4,1]],
+symbols_: {"error":2,"inicio":3,"codigo":4,"EOF":5,"instruccion":6,"ENTERO":7,"PUNTO":8,"MAS":9,"CADENAT":10,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"ENTERO",8:"PUNTO",9:"MAS",10:"CADENAT"},
+productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,3],[6,3],[6,1],[6,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -86,16 +86,25 @@ switch (yystate) {
 case 1:
 this.$=$$[$0-1]; return this.$;
 break;
-case 2:
-this.$ = $$[$0];
+case 2: case 3:
+ this.$ = $$[$0];
 break;
-case 3:
+case 4: case 7:
+console.log($$[$0]); this.$ = $$[$0];
+break;
+case 5:
+console.log($$[$0-2]+$$[$0-1]+$$[$0]); this.$ = $$[$0-2];
+break;
+case 6:
+console.log($$[$0-2]+ " "+ $$[$0-1] + " " +$$[$0]); this.$ = $$[$0-2];
+break;
+case 8:
 console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);
 break;
 }
 },
-table: [{2:[1,4],3:1,4:2,6:[1,3]},{1:[3]},{5:[1,5]},{5:[2,2]},{5:[2,3]},{1:[2,1]}],
-defaultActions: {3:[2,2],4:[2,3],5:[2,1]},
+table: [{2:$V0,3:1,4:2,6:3,7:$V1,10:$V2},{1:[3]},{2:$V0,5:[1,7],6:8,7:$V1,10:$V2},o($V3,[2,3]),o($V3,[2,4],{8:[1,9],9:[1,10]}),o($V3,[2,7]),o($V3,[2,8]),{1:[2,1]},o($V3,[2,2]),{7:[1,11]},{7:[1,12]},o($V3,[2,5]),o($V3,[2,6])],
+defaultActions: {7:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -671,18 +680,72 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0: return 6; 
+case 0: return 7; 
 break;
-case 1:/* Espacios se ignoran */
+case 1: return 10; 
 break;
-case 2:return 5;
+case 2: return 9; 
 break;
-case 3: console.error('Error léxico: \"' + yy_.yytext + '\", linea: ' + yy_.yylloc.first_line + ', columna: ' + yy_.yylloc.first_column);  
+case 3: return 'MENOS'; 
+break;
+case 4: return 'POR'; 
+break;
+case 5: return 'DIVIDIDO'; 
+break;
+case 6: return 'MODULO'; 
+break;
+case 7: return 'SIGUAL'; 
+break;
+case 8: return 'SADMIRACION'; 
+break;
+case 9: return 'SMENOR'; 
+break;
+case 10: return 'SMAYOR'; 
+break;
+case 11: return 'SINTERROGACION'; 
+break;
+case 12: return 'DOSPUNTOS'; 
+break;
+case 13: return 'COMPOR'; 
+break;
+case 14: return 'COMPAND'; 
+break;
+case 15: return 'PARENTESISABRE'; 
+break;
+case 16: return 'PARENTESISCIERRA'; 
+break;
+case 17: return 'LLAVEABRE'; 
+break;
+case 18: return 'LLAVECIERRA'; 
+break;
+case 19: return 'PUNTOYCOMA'; 
+break;
+case 20: return 'CORCHETEABRE'; 
+break;
+case 21: return 'CORCHETECIERRA'; 
+break;
+case 22: return 'COMILLADOBLE'; 
+break;
+case 23: return 'COMA'; 
+break;
+case 24: return 8; 
+break;
+case 25: return 'COMILLASIMPLE'; 
+break;
+case 26:/* Espacios se ignoran */
+break;
+case 27:/**/
+break;
+case 28:/**/
+break;
+case 29:return 5;
+break;
+case 30: console.error('Error léxico: \"' + yy_.yytext + '\", linea: ' + yy_.yylloc.first_line + ', columna: ' + yy_.yylloc.first_column);  
 break;
 }
 },
-rules: [/^(?:([0-9]+))/i,/^(?:[ \s\r\n\t])/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3],"inclusive":true}}
+rules: [/^(?:([0-9]+))/i,/^(?:("[^\"]*"))/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:%)/i,/^(?:=)/i,/^(?:!)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\?)/i,/^(?::)/i,/^(?:\|)/i,/^(?:&)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:;)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:")/i,/^(?:,)/i,/^(?:\.)/i,/^(?:')/i,/^(?:[ \s\r\n\t])/i,/^(?:(\/\*[^\/\*]*[^\*\/]*\*\/))/i,/^(?:([/][/][^\n]*))/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"inclusive":true}}
 });
 return lexer;
 })();
