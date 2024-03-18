@@ -682,70 +682,72 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0: return 7; 
 break;
-case 1: return 10; 
+case 1: return 'DECIMALES';
 break;
-case 2: return 9; 
+case 2: return 10; 
 break;
-case 3: return 'MENOS'; 
+case 3: return 9; 
 break;
-case 4: return 'POR'; 
+case 4: return 'MENOS'; 
 break;
-case 5: return 'DIVIDIDO'; 
+case 5: return 'POR'; 
 break;
-case 6: return 'MODULO'; 
+case 6: return 'DIVIDIDO'; 
 break;
-case 7: return 'SIGUAL'; 
+case 7: return 'MODULO'; 
 break;
-case 8: return 'SADMIRACION'; 
+case 8: return 'SIGUAL'; 
 break;
-case 9: return 'SMENOR'; 
+case 9: return 'SADMIRACION'; 
 break;
-case 10: return 'SMAYOR'; 
+case 10: return 'SMENOR'; 
 break;
-case 11: return 'SINTERROGACION'; 
+case 11: return 'SMAYOR'; 
 break;
-case 12: return 'DOSPUNTOS'; 
+case 12: return 'SINTERROGACION'; 
 break;
-case 13: return 'COMPOR'; 
+case 13: return 'DOSPUNTOS'; 
 break;
-case 14: return 'COMPAND'; 
+case 14: return 'COMPOR'; 
 break;
-case 15: return 'PARENTESISABRE'; 
+case 15: return 'COMPAND'; 
 break;
-case 16: return 'PARENTESISCIERRA'; 
+case 16: return 'PARENTESISABRE'; 
 break;
-case 17: return 'LLAVEABRE'; 
+case 17: return 'PARENTESISCIERRA'; 
 break;
-case 18: return 'LLAVECIERRA'; 
+case 18: return 'LLAVEABRE'; 
 break;
-case 19: return 'PUNTOYCOMA'; 
+case 19: return 'LLAVECIERRA'; 
 break;
-case 20: return 'CORCHETEABRE'; 
+case 20: return 'PUNTOYCOMA'; 
 break;
-case 21: return 'CORCHETECIERRA'; 
+case 21: return 'CORCHETEABRE'; 
 break;
-case 22: return 'COMILLADOBLE'; 
+case 22: return 'CORCHETECIERRA'; 
 break;
-case 23: return 'COMA'; 
+case 23: return 'COMILLADOBLE'; 
 break;
-case 24: return 8; 
+case 24: return 'COMA'; 
 break;
-case 25: return 'COMILLASIMPLE'; 
+case 25: return 8; 
 break;
-case 26:/* Espacios se ignoran */
+case 26: return 'COMILLASIMPLE'; 
 break;
-case 27:/**/
+case 27:/* Espacios se ignoran */
 break;
 case 28:/**/
 break;
-case 29:return 5;
+case 29:/**/
 break;
-case 30: console.error('Error léxico: \"' + yy_.yytext + '\", linea: ' + yy_.yylloc.first_line + ', columna: ' + yy_.yylloc.first_column);  
+case 30:return 5;
+break;
+case 31: console.error('Error léxico: \"' + yy_.yytext + '\", linea: ' + yy_.yylloc.first_line + ', columna: ' + yy_.yylloc.first_column);  
 break;
 }
 },
-rules: [/^(?:([0-9]+))/i,/^(?:("[^\"]*"))/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:%)/i,/^(?:=)/i,/^(?:!)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\?)/i,/^(?::)/i,/^(?:\|)/i,/^(?:&)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:;)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:")/i,/^(?:,)/i,/^(?:\.)/i,/^(?:')/i,/^(?:[ \s\r\n\t])/i,/^(?:(\/\*[^\/\*]*[^\*\/]*\*\/))/i,/^(?:([/][/][^\n]*))/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"inclusive":true}}
+rules: [/^(?:([0-9]+))/i,/^(?:([0-9]+(\.[0-9]+)?\b))/i,/^(?:("[^\"]*"))/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:%)/i,/^(?:=)/i,/^(?:!)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\?)/i,/^(?::)/i,/^(?:\|)/i,/^(?:&)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:;)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:")/i,/^(?:,)/i,/^(?:\.)/i,/^(?:')/i,/^(?:[ \s\r\n\t])/i,/^(?:(\/\*[^\/\*]*[^\*\/]*\*\/))/i,/^(?:([/][/][^\n]*))/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],"inclusive":true}}
 });
 return lexer;
 })();

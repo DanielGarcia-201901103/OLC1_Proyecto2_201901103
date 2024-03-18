@@ -4,9 +4,10 @@
 
 // ---------> Expresiones Regulares
 entero  [0-9]+;
-commulti \/\*[^\/\*]*[^\*\/]*\*\/;
-comulinea [/][/][^\n]*;
+commulti \/\*[^\/\*]*[^\*\/]*\*\/;  //no sirve
+comulinea [/][/][^\n]*;              //no sirve
 cadena \"[^\"]*\";
+decimales [0-9]+(\.[0-9]+)?\b;  //no sirve
 
 %%
 // -----> Reglas Lexicas
