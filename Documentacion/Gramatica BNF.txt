@@ -1,0 +1,154 @@
+<INICIO> ::= <CODIGO> EOF
+
+<CODIGO> ::= <CODIGO> <INSTRUCCION> 
+                        |  <INSTRUCCION>
+
+<INSTRUCCION> ::=  <DECLARACIONES>
+                                 |  <SENTENCIAS>
+                                 |  <INCREYDECRE>
+                                 |  <FUNCIONES>
+                                 |  <METODOS> 
+                                 |  <LLAMADAS> ;
+                                 |  <FCOUT>
+                                 |  <FEXECUTE>
+
+<DECLARACIONES> ::= <TIPODATO> <LISTANVARIABLES>;
+                                        | <TIPODATO> <LISTANVARIABLES> = <ASIGNACIONES>;
+                                        | <LISTANVARIABLES> = <ASIGNACIONES> ;
+
+<LISTANVARIABLES> ::= id
+                                        | id , <LISTANVARIABLES>
+
+<TIPODATO> ::= int
+                            |  double
+                            |  bool
+                            |  char
+                            |  std::string
+
+<ASIGNACIONES> ::= id
+                                    | caracter
+                                    | cadena
+                                    | true
+                                    | false
+                                    | decimal
+                                    | entero
+                                    | <OPERACIONES>
+                                    | <OPERACIONESRELACIONAL> 
+                                    | <OPERADORTERNARIO>
+                                    | <OPERADORESLOGICOS>
+                                    | <AGRUPACION>
+                                    | <CASTEAR>
+                                    | <INCREYDECRE>
+                                    | <LLAMADAS>
+                                    | <FTOLOWER>
+                                    | <FTOUPPER>
+                                    | <FROUND>
+                                    | <FLENGTH>
+                                    | <FTYPEOF>
+                                    | <FTOSTRING>
+                                    | <FCSTR>
+
+<AGRUPACION> ::= ( <ASIGNACIONES> )
+
+<OPERACIONES>  ::= <ASIGNACIONES> + <ASIGNACIONES>
+                                    | <ASIGNACIONES> - <ASIGNACIONES>
+                                    | <ASIGNACIONES> * <ASIGNACIONES>
+                                    | <ASIGNACIONES> / <ASIGNACIONES>
+                                    | <ASIGNACIONES> % <ASIGNACIONES>
+                                    | pow ( <ASIGNACIONES> , <ASIGNACIONES> )
+                                    | -  <ASIGNACIONES>
+
+<OPERACIONESRELACIONAL>   ::= <ASIGNACIONES> == <ASIGNACIONES>
+                                                            | <ASIGNACIONES> != <ASIGNACIONES>
+                                                            | <ASIGNACIONES> < <ASIGNACIONES>
+                                                            | <ASIGNACIONES> > <ASIGNACIONES>
+                                                            | <ASIGNACIONES> <= <ASIGNACIONES>
+                                                            | <ASIGNACIONES> >= <ASIGNACIONES> 
+
+<OPERADORTERNARIO> ::= <OPERACIONESRELACIONAL> ? <ASIGNACIONES> : <ASIGNACIONES>
+
+<OPERADORESLOGICOS>  ::=  <ASIGNACIONES> || <ASIGNACIONES>
+                                                    | <ASIGNACIONES> && <ASIGNACIONES>
+                                                    | ! <ASIGNACIONES>
+
+<CASTEAR> ::=   (  <TIPODATO>  ) <ASIGNACIONES>
+
+<INCREYDECRE> ::= <ASIGNACIONES> ++
+                                   | <ASIGNACIONES> --
+
+<SENTENCIAS>  ::= <SENTIF> 
+                                | <SENTSWITCH>
+                                | <SENTWHILE>
+                                | <SENTFOR>
+                                | <SENTDOWHILE>
+
+<SENTIF> ::= if ( <CONDICIONALIF> )  { <CONTENIDOS> <FINIF>
+
+
+<CONDICIONALIF> ::= <OPERACIONESRELACIONAL>
+                                    | <OPERADORESLOGICOS> 
+                                    | id
+
+<FINIF> ::= } 
+                 | } else <SENTIF>
+                 | } else { <CONTENIDOS> }
+
+<SENTSWITCH> ::= switch  ( <CONDICIONALIF> ) { <SWCASOS> }
+<SWCASOS> ::= <SWCASE>
+                           | <SWCASE> <SWCASOS>
+<SWCASE> ::=  case <ASIGNACIONES> : <CONTENIDOS>
+                        |  default : <CONTENIDOS>
+
+<CONTENIDOS> := <CODIGO>
+                                | break ;
+                                | <RETORNOS>
+
+
+<SENTWHILE> ::= while (<CONDICIONALIF>) {<CONTENIDOSCICLOS> }
+
+<SENTFOR> ::= for ( <DECLARACIONES> ; <CONDICIONALIF> ; <INCREYDECRE>){ <CONTENIDOSCICLOS> }
+
+<SENTDOWHILE> ::= do { <CONTENIDOSCICLOS> } while ( <CONDICIONALIF> ) ;
+
+<CONTENIDOSCICLOS> := <CODIGO>
+                                | break ;
+                                | continue ;
+                                | <RETORNOS>
+
+<RETORNOS> ::= return ;
+                            | return  <ASIGNACIONES> ;
+
+<FUNCIONES> ::= <TIPODATO> id <SNPARAMETROS> { <CONTENIDOSCICLOS> }
+
+<SNPARAMETROS> ::= ( <PARAMETROS> )
+                                        | ( ) 
+
+<PARAMETROS> ::= <TIPODATO> id
+                                |  <TIPODATO> id , <PARAMETROS>
+
+<METODOS> ::= void id <SNPARAMETROS> { <CONTENIDOSMETOD> }
+
+<CONTENIDOSMETOD> := <CODIGO>
+                                | break ;
+                                | continue ;
+
+<LLAMADAS> ::= id <SNPARAMETROS>
+
+<FCOUT> ::= cout << <ASIGNACIONES> ;
+                    |  cout  << <ASIGNACIONES>  << endl ;
+
+<FTOLOWER> ::= tolower ( <ASIGNACIONES>) 
+
+<FTOUPPER> ::= toupper ( <ASIGNACIONES> )
+
+<FROUND> ::= round (  <ASIGNACIONES>  )
+
+<FLENGTH> ::= <ASIGNACIONES> . length ( ) 
+ 
+<FTYPEOF> ::= typeof ( <ASIGNACIONES> ) 
+
+<FTOSTRING> ::= std :: toString (<ASIGNACIONES> )
+
+<FCSTR> ::= <ASIGNACIONES> . c_str ( )
+
+<FEXECUTE> ::= execute id <SNPARAMETROS> ;
