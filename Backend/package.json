@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "parser": "npx jison ./analizador/parser.jison -o ./analizador/parser.js",
+    "parser": "npx jison ./analizador/gramatica.jison -o ./analizador/gramatica.js",
     "dev": "nodemon index.js"
   },
   "keywords": [],

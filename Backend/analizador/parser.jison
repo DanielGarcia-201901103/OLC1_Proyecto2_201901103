@@ -5,8 +5,9 @@
 // ---------> Expresiones Regulares
 entero  [0-9]+;
 commulti \/\*[^\/\*]*[^\*\/]*\*\/;  //no sirve
-comulinea [/][/][^\n]*;              //no sirve
+comulinea "//".  ;              //no sirve
 cadena \"[^\"]*\";
+caracter \'[^\']\';
 decimales [0-9]+(\.[0-9]+)?\b;  //no sirve
 
 %%
@@ -80,3 +81,6 @@ instruccion
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 //video https://www.youtube.com/watch?v=YcUUTyJ2DiE
+//conferencia
+//https://drive.google.com/file/d/1kiTbuTNiIu5q12Lol7CIWp8bFmxv4sKQ/view
+//https://github.com/JoseMore99/Conferencia-AST          

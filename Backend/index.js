@@ -1,14 +1,14 @@
-const parser = require("./analizador/parser.js");
-
+const parser = require("./analizador/gramatica.js");
+//const parser = require("./analizador/parser.js");
 
 //con alt + 96 se obtiene la comilla invertida para multilinea
 let entrada =`
 //comentario de una linea
 5
-6+7
-4+2
 8.8
 "cadena"
+'c'
+//aqui termina
 `;
 let resultado = parser.parse(entrada);
 //console.log(resultado);
