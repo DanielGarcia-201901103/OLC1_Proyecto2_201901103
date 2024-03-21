@@ -8,7 +8,11 @@ let entrada =`
 8.8
 "cadena"
 'c'
-//aqui termina
+identificador
+
+/*
+  aqui termina
+*/
 `;
 let resultado = parser.parse(entrada);
 //console.log(resultado);

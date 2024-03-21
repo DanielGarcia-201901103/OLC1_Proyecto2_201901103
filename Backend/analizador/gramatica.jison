@@ -16,41 +16,68 @@
 
 %%
 
-\s+                 //espacios en blanco
+[ \s\r\n\t]                //espacios en blanco
 "//".*		//comentario simple	
 
 "+"                 return 'mas';
 "-"                 return 'menos';
-"/"                 return 'divid';
+"/"                 return 'dividir';
 "*"                 return 'por';
-"^"                 return 'pot';
-"%"                 return 'mod';
-"("                 return 'pariz';
-")"                 return 'parder';
-"{"                 return 'llaveiz';
-"}"                 return 'llaveder';
-','                 return 'coma';
-";"                 return 'puntycom';
-":"                 return 'dospunt';
-"print"             return 'print';
-"println"           return 'println';
-"if"                return 'resif';
-"else"              return 'reselse';
+"%"                 return 'modulo';
+"!"                 return 'notlogico';
+"("                 return 'parentesisabre';
+")"                 return 'parentesiscierra';
+"{"                 return 'llaveabre';
+"}"                 return 'llavecierra';
+"["                 return 'corcheteabre';
+"]"                 return 'corchetecierra';
+","                 return 'signocoma';
+";"                 return 'sigpuntoycoma';
+"="                 return 'sigigual';
+"."                 return 'sigpunto';
+"?"                 return 'siginterrogacion';
+":"                 return 'dospuntos';
+"=="                return 'igualgiual';
+"!="                return 'negacionigual';
+"<"                 return 'menorque';
+">"                 return 'mayorque';
+"<="                return 'menorigual';
+">="                return 'mayorigual';
+"||"                return 'orlogico';
+"&&"                return 'andlogico';
+"++"                return 'sigincremento';
+"--"                return 'sigdecremento';
+"<<"                return 'menormenor';
 "int"               return 'resint';
 "double"            return 'resdouble';
-"string"            return 'resstring';
-"boolean"           return 'resbool';
+"bool"              return 'resbool';
 "char"              return 'reschar';
-"=="                return 'igualigual';
-"!="                return 'noigual';
-"="                 return 'igual';
-">="                return 'mayorigual';                     
-">"                 return 'mayor';
-"<="                return 'menorigual';
-"<"                 return 'menor';
-"||"                 return 'or';
-"&&"                return 'and';
-"!"                 return 'not';
+"std::string"       return 'resstring';
+"pow"               return 'respotencia';
+"new"               return 'resnew';
+"if"                return 'resif';
+"else"              return 'reselse';
+"switch"            return 'resswitch';
+"case"              return 'rescase';
+"default"           return 'resdefault';
+"while"             return 'reswhile';
+"for"               return 'resfor';
+"do"                return 'resdo';
+"break"             return 'resbreak';
+"continue"          return 'rescontinue';
+"return"            return 'resreturn';
+"void"              return 'resvoid';
+"cout"              return 'rescout';
+"endl"              return 'resendl';
+"tolower"           return 'restolower';
+"toupper"           return 'restoupper';
+"round"             return 'resround';
+"length"            return 'reslength';
+"typeof"            return 'restypeof';
+"std::tostring"     return 'restostring';
+"c_str"             return 'rescstr';
+"execute"           return 'resexecute';
+
 
 ("true"|"false")\b      return 'bool';
 [0-9]+[.][0-9]+\b    return 'decimal';
@@ -88,6 +115,7 @@ INSTRUCCION: decimal            {console.log($1);$$=$1;}
         | numero       {console.log($1);$$=$1;}
         | caracter                 {console.log($1);$$=$1;}   
         | cadena                 {console.log($1);$$=$1;}   
+        | id                  {console.log($1);$$=$1;} 
 ;
 
 
