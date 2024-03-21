@@ -109,12 +109,12 @@
 INI: CODIGO EOF                              {return $1;}
 ;
 
-CODIGO: CODIGO INSTRUCCION                   { $$ = $2;}
+CODIGO: CODIGO INSTRUCCION                   { $$ = $1+ " " +$2;}
             |INSTRUCCION                     { $$ = $1;}
 ;
 
 INSTRUCCION: DECLARACIONES            {$$=$1;}
-        | SENTENCIAS                  {$$=$1;}  
+        | SENTENCIAS                  {console.log($1); $$=$1;}  
         | FUNCIONES                   {$$=$1;}    
         | METODOS                     {$$=$1;}    
         | LLAMADAS sigpuntoycoma      {$$=$1;}    
@@ -122,11 +122,11 @@ INSTRUCCION: DECLARACIONES            {$$=$1;}
         | FEXECUTE                    {$$=$1;} 
 ;
 
-DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma            {console.log($1 + " "+ $2 + $3); $$=$1;} 
-        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    {console.log($1 + " "+ $2 + $3 + " "+$4+$5);$$=$1;} 
-        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma {console.log($1 + " "+ $2 + " "+ $3 +$4); $$=$1;}  
-        | id sigincremento sigpuntoycoma  {console.log($1 + " "+ $2 + " "+ $3); $$=$1;} 
-        | id sigdecremento sigpuntoycoma  {console.log($1 + " "+ $2 + " "+ $3); $$=$1;} 
+DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma            {$$=$1 + " "+ $2 + $3;} 
+        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    {$$=$1 + " "+ $2 + $3 + " "+$4+$5;} 
+        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma { $$=$1 + " "+ $2 + " "+ $3 +$4;}  
+        | id sigincremento sigpuntoycoma  { $$= $1 + " "+ $2 + " "+ $3;} 
+        | id sigdecremento sigpuntoycoma  {$$=$1 + " "+ $2 + " "+ $3;} 
 ;
  
 TIPODATO: resint       {$$=$1;} 
@@ -205,106 +205,106 @@ INCREYDECRE: EXPRESIONES sigincremento    {$$=$1 + $2;}
         | EXPRESIONES sigdecremento      {$$=$1 + $2;} 
 ;
 
-SENTENCIAS: SENTIF    {console.log($1);$$=$1;} 
-        | SENTSWITCH    {console.log($1);$$=$1;} 
-        | SENTWHILE    {console.log($1);$$=$1;} 
-        | SENTFOR    {console.log($1);$$=$1;} 
-        | SENTDOWHILE    {console.log($1);$$=$1;} 
+SENTENCIAS: SENTIF    {$$=$1;} 
+        | SENTSWITCH   {$$=$1;} 
+        | SENTWHILE   {$$=$1;}  
+        | SENTFOR    {$$=$1;} 
+        | SENTDOWHILE   {$$=$1;}  
 ;
 
-SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {console.log($1);$$=$1;} 
+SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$=$1 +" "+ $2 + $3 +$4 + $5 + " " +$6 + " " + $7;} 
 ;
 
-CONTENIDOS: resbreak sigpuntoycoma    {console.log($1);$$=$1;} 
-        | RETORNOS    {console.log($1);$$=$1;} 
-        | CODIGO    {console.log($1);$$=$1;} 
+CONTENIDOS: resbreak sigpuntoycoma    {$$=$1 + $2;} 
+        | RETORNOS    {$$=$1;} 
+        | CODIGO    {$$=$1;} 
 ;
 
-FINIF: llavecierra    {console.log($1);$$=$1;} 
-        | llavecierra reselse SENTIF    {console.log($1);$$=$1;} 
-        | llavecierra reselse llaveabre CONTENIDOS llavecierra     {console.log($1);$$=$1;} 
+FINIF: llavecierra    {$$=$1;} 
+        | llavecierra reselse SENTIF    {$$=$1 + $2 +" " +$3;} 
+        | llavecierra reselse llaveabre CONTENIDOS llavecierra     {$$=$1 + $2 +$3 +" " + $4 + " " + $5;} 
 ;
 
-SENTSWITCH: resswitch parentesisabre CONDICIONALIF parentesiscierra llaveabre SWCASOS llavecierra    {console.log($1);$$=$1;} 
+SENTSWITCH: resswitch parentesisabre EXPRESIONES parentesiscierra llaveabre SWCASOS llavecierra    {$$=$1 +" "+$2 + " " + $3 + " " +$4+" "+$5+" "+$6+" " + $7;} 
 ;
 
-SWCASOS: SWCASE    {console.log($1);$$=$1;} 
-        | SWCASE SWCASOS    {console.log($1);$$=$1;} 
+SWCASOS: SWCASE    {$$=$1;} 
+        | SWCASE SWCASOS    {$$=$1 + " " +$2;} 
 ;
 
-SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS    {console.log($1);$$=$1;} 
-        | resdefault dospuntos CONTENIDOS    {console.log($1);$$=$1;} 
+SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS    {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+        | resdefault dospuntos CONTENIDOS    {$$=$1+ " " + $2 +" " + $3;} 
 ;
 
-SENTWHILE: reswhile parentesisabre CONDICIONALIF parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra    {console.log($1);$$=$1;} 
+SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra    {$$=$1;} 
 ;
 
-SENTFOR: resfor parentesisabre DECLARACIONES sigpuntoycoma CONDICIONALIF sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra    {console.log($1);$$=$1;} 
+SENTFOR: resfor parentesisabre DECLARACIONES sigpuntoycoma EXPRESIONES sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra    {$$=$1;} 
 ;
 
-SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre CONDICIONALIF parentesiscierra sigpuntoycoma    {console.log($1);$$=$1;} 
+SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma    {$$=$1;} 
 ;
 
-CONTENIDOSCICLOS: resbreak sigpuntoycoma    {console.log($1);$$=$1;} 
-        | rescontinue sigpuntoycoma    {console.log($1);$$=$1;} 
-        | RETORNOS    {console.log($1);$$=$1;} 
-        | CODIGO    {console.log($1);$$=$1;} 
+CONTENIDOSCICLOS: resbreak sigpuntoycoma    {$$=$1;} 
+        | rescontinue sigpuntoycoma    {$$=$1;} 
+        | RETORNOS    {$$=$1;} 
+        | CODIGO    {$$=$1;} 
 ;
 
-RETORNOS: resreturn sigpuntoycoma    {console.log($1);$$=$1;} 
-        | resreturn ASIGNACIONES sigpuntoycoma    {console.log($1);$$=$1;} 
+RETORNOS: resreturn sigpuntoycoma    {$$=$1;} 
+        | resreturn ASIGNACIONES sigpuntoycoma    {$$=$1;} 
 ;
 
-FUNCIONES: TIPODATO id SNPARAMETROS llaveabre CONTENIDOSCICLOS llavecierra    {console.log($1);$$=$1;} 
-;
-
-
-SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra    {console.log($1);$$=$1;} 
-        | parentesisabre  parentesiscierra    {console.log($1);$$=$1;} 
-;
-
-PARAMETROS: TIPODATO id    {console.log($1);$$=$1;} 
-        | TIPODATO id signocoma PARAMETROS    {console.log($1);$$=$1;} 
+FUNCIONES: TIPODATO id SNPARAMETROS llaveabre CONTENIDOSCICLOS llavecierra    {$$=$1;} 
 ;
 
 
-METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra    {console.log($1);$$=$1;} 
+SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra    {$$=$1;} 
+        | parentesisabre  parentesiscierra    {$$=$1;} 
 ;
 
-CONTENIDOSMETOD: resbreak sigpuntoycoma    {console.log($1);$$=$1;} 
-        | rescontinue sigpuntoycoma    {console.log($1);$$=$1;} 
-        | CODIGO    {console.log($1);$$=$1;} 
+PARAMETROS: TIPODATO id    {$$=$1;} 
+        | TIPODATO id signocoma PARAMETROS    {$$=$1;} 
 ;
 
-LLAMADAS: id SNPARAMETROS    {console.log($1);$$=$1;} 
+
+METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra    {$$=$1;} 
 ;
 
-FCOUT: rescout menormenor ASIGNACIONES sigpuntoycoma    {console.log($1);$$=$1;} 
-        | rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {console.log($1);$$=$1;} 
+CONTENIDOSMETOD: resbreak sigpuntoycoma    {$$=$1;} 
+        | rescontinue sigpuntoycoma    {$$=$1;} 
+        | CODIGO    {$$=$1;} 
 ;
 
-FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra    {console.log($1);$$=$1;} 
+LLAMADAS: id SNPARAMETROS    {$$=$1;} 
 ;
 
-FTOUPPER: restoupper parentesisabre ASIGNACIONES parentesiscierra    {console.log($1);$$=$1;} 
+FCOUT: rescout menormenor ASIGNACIONES sigpuntoycoma    {$$=$1;} 
+        | rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {$$=$1;} 
 ;
 
-FROUND: resround parentesisabre ASIGNACIONES parentesiscierra    {console.log($1);$$=$1;} 
+FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra    {$$=$1;} 
 ;
 
-FLENGTH: EXPRESIONES sigpunto reslength parentesisabre parentesiscierra    {console.log($1);$$=$1;} 
+FTOUPPER: restoupper parentesisabre ASIGNACIONES parentesiscierra    {$$=$1;} 
 ;
 
-FTYPEOF: restypeof parentesisabre ASIGNACIONES parentesiscierra    {console.log($1);$$=$1;} 
+FROUND: resround parentesisabre ASIGNACIONES parentesiscierra    {$$=$1;} 
 ;
 
-FTOSTRING: restostring parentesisabre ASIGNACIONES parentesiscierra    {console.log($1);$$=$1;} 
+FLENGTH: EXPRESIONES sigpunto reslength parentesisabre parentesiscierra    {$$=$1;} 
 ;
 
-FCSTR: EXPRESIONES sigpunto rescstr parentesisabre parentesiscierra    {console.log($1);$$=$1;} 
+FTYPEOF: restypeof parentesisabre ASIGNACIONES parentesiscierra    {$$=$1;} 
 ;
 
-FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {console.log($1);$$=$1;} 
+FTOSTRING: restostring parentesisabre ASIGNACIONES parentesiscierra    {$$=$1;} 
+;
+
+FCSTR: EXPRESIONES sigpunto rescstr parentesisabre parentesiscierra    {$$=$1;} 
+;
+
+FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {$$=$1;} 
 ;
 
 
