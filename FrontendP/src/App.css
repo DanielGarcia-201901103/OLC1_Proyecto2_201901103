@@ -1,105 +1,30 @@
-#root {
-  margin: 0 auto;
-  text-align: center;
-}
-
-.titulo{
-  padding-top: 20px;
-  padding-bottom: 20px;
-  color-scheme: light dark;
-  background-color: #242424;
-  color: aquamarine;
-}
-
-/* Estilos para las pestañas */
-.react-tabs {
-  font-family: Arial, sans-serif;
-  background-color: #272924;
-}
-
-.react-tabs__tab-list {
-  border-bottom: 1px solid #5db09e;
-  padding: 0;
-  margin: 0;
-  list-style: none;
+.code-editor-container {
   display: flex;
+  gap: 20px;
 }
 
-.react-tabs__tab {
+.code-editor-left,
+.code-editor-right {
+  flex: 1;
+}
+
+.output-console {
+  width: 100%;
+  height: 340px;
+  resize: vertical;
+}
+
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: #333; /* Cambia el color de fondo según tu diseño */
+}
+
+.navbar button {
+  background-color: #4caf50; /* Color de fondo del botón */
+  color: white; /* Color de texto del botón */
+  border: none;
   padding: 10px 20px;
   cursor: pointer;
-  position: relative;
-  background-color: #777474;
-  border: 1px solid #5db09e;
-  border-bottom: none;
-  margin-right: 5px;
-  border-radius: 5px 5px 0 0;
-  display: flex;
-  align-items: center;
-}
-
-.react-tabs__tab--selected {
-  background-color: #777474;
-  border-color: #5db09e;
-}
-
-.react-tabs__tab span {
-  margin-left: 5px;
-  cursor: pointer;
-  color: #ff0000; /* Color del icono de cerrar */
-}
-
-/* Estilos para el área de texto */
-.react-tabs__tab-panel {
-  padding: 10px;
-  border: 1px solid #5db09e;
-  border-top: none;
-  border-radius: 0 0 5px 5px;
-}
-
-textarea {
-  width: 100%;
-  height: 200px;
-  border: 1px solid #5db09e;
-  padding: 5px;
-  border-radius: 5px;
-  resize: none;
-}
-
-.numbered-text-area-container {
-  display: flex;
-  border: 1px solid #5db09e;
-  overflow: hidden;
-}
-
-.line-numbers {
-  flex-shrink: 0;
-  padding: 0.5em 1em;
-  background-color: #6ab07d6b;
-  border-right: 1px solid #5db09e;
-  text-align: right;
-  font-size: 14px; /* Tamaño de la letra */
-  font-family: 'Arial', sans-serif;
-}
-
-.text-area {
-  width: 100%;
-  border: none;
-  padding: 0.5em;
-  font-size: 18px; /* Tamaño de la letra */
-  font-family: 'Arial', sans-serif;
-}
-
-.text-area2:disabled {
-  width: 100%;
-  border: none;
-  padding: 0.5em;
-  font-size: 18px; /* Tamaño de la letra */
-  font-family: 'Arial', sans-serif;
-  /*color: black;*/
-
-  background-color: #1c1b1b; /* Cambia el color de fondo */
-  color: white; /* Cambia el color del texto */
-  border: 2px solid gray; /* Cambia el borde del textarea */
-  cursor: not-allowed;
 }
