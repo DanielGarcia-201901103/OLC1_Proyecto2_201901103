@@ -37,7 +37,7 @@
 "."                 return 'sigpunto';
 "?"                 return 'siginterrogacion';
 ":"                 return 'dospuntos';
-"=="                return 'igualgiual';
+"=="                return 'igualigual';
 "!="                return 'negacionigual';
 "<"                 return 'menorque';
 ">"                 return 'mayorque';
@@ -90,32 +90,163 @@
 .                   {console.log(yylloc.first_line, yylloc.first_columm, 'Lexico', yytext)}
 /lex
 
-%left 'or'
-%left 'and'
-%left 'not'
-%left 'noigual' 'igualigual'
-%left 'menorigual' 'mayorigual' 'mayor' 'menor'
+%left 'orlogico'
+%left 'andlogico'
+%left 'notlogico'
+%left 'negacionigual' 'igualigual'
+%left 'menorigual' 'mayorigual' 'mayorque' 'menorque'
 %left 'mas', 'menos'
-%left 'divid', 'por','mod' 
-%left 'pot'
+%left 'dividir', 'por','modulo' 
+%left 'pow'
 %left Umenos 
 
 %start INI
 
 %%
 
-INI: INSTRUCCIONES EOF {return $1;}
+INI: CODIGO EOF {return $1;}
 ;
 
-INSTRUCCIONES: INSTRUCCIONES INSTRUCCION     { $$ = $2;}
+CODIGO: CODIGO INSTRUCCION     { $$ = $2;}
             |INSTRUCCION                     { $$ = $1;}
 ;
 
-INSTRUCCION: decimal            {console.log($1);$$=$1;}
-        | numero       {console.log($1);$$=$1;}
-        | caracter                 {console.log($1);$$=$1;}   
-        | cadena                 {console.log($1);$$=$1;}   
-        | id                  {console.log($1);$$=$1;} 
+INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
+        | SENTENCIAS       {console.log($1);$$=$1;}
+        | INCREYDECRE                 {console.log($1);$$=$1;}   
+        | FUNCIONES                 {console.log($1);$$=$1;}   
+        | METODOS                  {console.log($1);$$=$1;}    
+        | LLAMADAS sigpuntoycoma                 {console.log($1);$$=$1;}    
+        | FCOUT                  {console.log($1);$$=$1;}    
+        | FEXECUTE                  {console.log($1);$$=$1;} 
 ;
 
+DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma
+        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma
+        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma
+;
 
+TIPODATO: resint
+        | resdouble
+        | resbool
+        | reschar
+        | resstring
+;
+
+LISTANVARIABLES: id
+        | id signocoma LISTANVARIABLES
+;
+
+ASIGNACIONES: id
+        | caracter
+        | cadena
+        | bool
+        | decimal
+        | numero
+        | OPERACIONES
+        | OPERACIONESRELACIONAL
+        | OPERADORTERNARIO
+        | OPERADORESLOGICOS
+        | AGRUPACION
+        | CASTEAR
+        | INCREYDECRE
+        | LLAMADAS
+        | FTOLOWER
+        | FTOUPPER
+        | FROUND
+        | FLENGTH
+        | FTYPEOF
+        | FTOSTRING
+        | FCSTR
+;
+
+OPERACIONES: menos ASIGNACIONES %prec Umenos
+        | ASIGNACIONES mas ASIGNACIONES
+        | ASIGNACIONES menos ASIGNACIONES
+        | ASIGNACIONES por ASIGNACIONES
+        | ASIGNACIONES dividir ASIGNACIONES
+        | respotencia parentesisabre ASIGNACIONES signocoma ASIGNACIONES parentesiscierra
+        | ASIGNACIONES modulo ASIGNACIONES
+;
+
+OPERACIONESRELACIONAL: ASIGNACIONES igualigual ASIGNACIONES
+        | ASIGNACIONES negacionigual ASIGNACIONES
+        | ASIGNACIONES menorigual ASIGNACIONES
+        | ASIGNACIONES menorque ASIGNACIONES
+        | ASIGNACIONES mayorigual ASIGNACIONES
+        | ASIGNACIONES mayorque ASIGNACIONES
+;
+
+OPERADORESLOGICOS: ASIGNACIONES andlogico ASIGNACIONES
+        | ASIGNACIONES orlogico ASIGNACIONES
+        | notlogico ASIGNACIONES
+;
+
+OPERADORTERNARIO: OPERACIONESRELACIONAL siginterrogacion ASIGNACIONES dospuntos ASIGNACIONES
+;
+
+AGRUPACION: parentesisabre ASIGNACIONES parentesiscierra
+;
+
+CASTEAR: parentesisabre TIPODATO parentesiscierra ASIGNACIONES
+;
+
+INCREYDECRE: ASIGNACIONES sigincremento
+        | ASIGNACIONES sigdecremento
+;
+
+SENTENCIAS: SENTIF
+        | SENTSWITCH
+        | SENTWHILE
+        | SENTFOR
+        | SENTDOWHILE
+;
+
+SENTIF: resif parentesisabre CONDICIONALIF parentesiscierra llaveabre CONTENIDOS FINIF
+;
+
+CONDICIONALIF: id
+        | OPERACIONESRELACIONAL
+        | OPERADORESLOGICOS
+;
+
+CONTENIDOS: resbreak sigpuntoycoma
+        | RETORNOS
+        | CODIGO
+;
+
+FINIF: llavecierra
+        | llavecierra reselse SENTIF
+        | llavecierra reselse llaveabre CONTENIDOS llavecierra 
+;
+
+SENTSWITCH:
+;
+
+SENTWHILE:
+;
+
+SENTFOR:
+;
+
+SENTDOWHILE:
+;
+
+RETORNOS:
+;
+LLAMADAS
+;
+FTOLOWER
+;
+FTOUPPER
+;
+FROUND
+;
+FLENGTH
+;
+FTYPEOF
+;
+FTOSTRING
+;
+FCSTR
+;
