@@ -220,33 +220,82 @@ FINIF: llavecierra
         | llavecierra reselse llaveabre CONTENIDOS llavecierra 
 ;
 
-SENTSWITCH:
+SENTSWITCH: resswitch parentesisabre CONDICIONALIF parentesiscierra llaveabre SWCASOS llavecierra
 ;
 
-SENTWHILE:
+SWCASOS: SWCASE
+        | SWCASE SWCASOS
 ;
 
-SENTFOR:
+SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS
+        | resdefault dospuntos CONTENIDOS
 ;
 
-SENTDOWHILE:
+SENTWHILE: reswhile parentesisabre CONDICIONALIF parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra
 ;
 
-RETORNOS:
+SENTFOR: resfor parentesisabre DECLARACIONES sigpuntoycoma CONDICIONALIF sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra
 ;
-LLAMADAS
+
+SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre CONDICIONALIF parentesiscierra sigpuntoycoma
 ;
-FTOLOWER
+
+CONTENIDOSCICLOS: resbreak sigpuntoycoma
+        | rescontinue sigpuntoycoma
+        | RETORNOS
+        | CODIGO
 ;
-FTOUPPER
+
+RETORNOS: resreturn sigpuntoycoma
+        | resreturn ASIGNACIONES sigpuntoycoma
 ;
-FROUND
+
+FUNCIONES: TIPODATO id SNPARAMETROS llaveabre CONTENIDOSCICLOS llavecierra
 ;
-FLENGTH
+
+SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra
+        | parentesisabre  parentesiscierra
 ;
-FTYPEOF
+
+PARAMETROS: TIPODATO id
+        | TIPODATO id signocoma PARAMETROS
 ;
-FTOSTRING
+
+METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra
 ;
-FCSTR
+
+CONTENIDOSMETOD: resbreak sigpuntoycoma
+        | rescontinue sigpuntoycoma
+        | CODIGO
+;
+
+LLAMADAS: id SNPARAMETROS
+;
+
+FCOUT: rescout menormenor ASIGNACIONES sigpuntoycoma
+        | rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma
+;
+
+FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra
+;
+
+FTOUPPER: restoupper parentesisabre ASIGNACIONES parentesiscierra
+;
+
+FROUND: resround parentesisabre ASIGNACIONES parentesiscierra
+;
+
+FLENGTH: ASIGNACIONES sigpunto reslength parentesisabre parentesiscierra
+;
+
+FTYPEOF: restypeof parentesisabre ASIGNACIONES parentesiscierra
+;
+
+FTOSTRING: restostring parentesisabre ASIGNACIONES parentesiscierra
+;
+
+FCSTR: ASIGNACIONES sigpunto rescstr parentesisabre parentesiscierra
+;
+
+FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma
 ;
