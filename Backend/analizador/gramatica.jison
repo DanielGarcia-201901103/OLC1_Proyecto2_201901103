@@ -18,7 +18,11 @@
 
 [ \s\r\n\t]                //espacios en blanco
 "//".*		//comentario simple	
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]  //comentario vlineas
 
+
+"++"                return 'sigincremento';
+"--"                return 'sigdecremento';
 "+"                 return 'mas';
 "-"                 return 'menos';
 "/"                 return 'dividir';
@@ -33,21 +37,19 @@
 "]"                 return 'corchetecierra';
 ","                 return 'signocoma';
 ";"                 return 'sigpuntoycoma';
+"=="                return 'igualigual';
 "="                 return 'sigigual';
 "."                 return 'sigpunto';
 "?"                 return 'siginterrogacion';
 ":"                 return 'dospuntos';
-"=="                return 'igualigual';
 "!="                return 'negacionigual';
-"<"                 return 'menorque';
-">"                 return 'mayorque';
 "<="                return 'menorigual';
 ">="                return 'mayorigual';
+"<<"                return 'menormenor';
+"<"                 return 'menorque';
+">"                 return 'mayorque';
 "||"                return 'orlogico';
 "&&"                return 'andlogico';
-"++"                return 'sigincremento';
-"--"                return 'sigdecremento';
-"<<"                return 'menormenor';
 "int"               return 'resint';
 "double"            return 'resdouble';
 "bool"              return 'resbool';
@@ -111,94 +113,96 @@ CODIGO: CODIGO INSTRUCCION                   { $$ = $2;}
             |INSTRUCCION                     { $$ = $1;}
 ;
 
-INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
-        | SENTENCIAS                  {console.log($1);$$=$1;}  
-        | FUNCIONES                   {console.log($1);$$=$1;}    
-        | METODOS                     {console.log($1);$$=$1;}    
-        | LLAMADAS sigpuntoycoma      {console.log($1);$$=$1;}    
-        | FCOUT                       {console.log($1);$$=$1;}    
-        | FEXECUTE                    {console.log($1);$$=$1;} 
+INSTRUCCION: DECLARACIONES            {$$=$1;}
+        | SENTENCIAS                  {$$=$1;}  
+        | FUNCIONES                   {$$=$1;}    
+        | METODOS                     {$$=$1;}    
+        | LLAMADAS sigpuntoycoma      {$$=$1;}    
+        | FCOUT                       {$$=$1;}    
+        | FEXECUTE                    {$$=$1;} 
 ;
 
-DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma            {console.log($1);$$=$1;} 
-        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    {console.log($1);$$=$1;} 
-        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma {console.log($1);$$=$1;} 
+DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma            {console.log($1 + " "+ $2 + $3); $$=$1;} 
+        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    {console.log($1 + " "+ $2 + $3 + " "+$4+$5);$$=$1;} 
+        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma {console.log($1 + " "+ $2 + " "+ $3 +$4); $$=$1;}  
+        | id sigincremento sigpuntoycoma  {console.log($1 + " "+ $2 + " "+ $3); $$=$1;} 
+        | id sigdecremento sigpuntoycoma  {console.log($1 + " "+ $2 + " "+ $3); $$=$1;} 
 ;
  
-TIPODATO: resint       {console.log($1);$$=$1;} 
-        | resdouble    {console.log($1);$$=$1;} 
-        | resbool    {console.log($1);$$=$1;} 
-        | reschar    {console.log($1);$$=$1;} 
-        | resstring    {console.log($1);$$=$1;} 
+TIPODATO: resint       {$$=$1;} 
+        | resdouble    {$$=$1;} 
+        | resbool    {$$=$1;} 
+        | reschar    {$$=$1;} 
+        | resstring    {$$=$1;} 
 ;
 
-LISTANVARIABLES: id    {console.log($1);$$=$1;} 
-        | id signocoma LISTANVARIABLES    {console.log($1);$$=$1;} 
+LISTANVARIABLES: id    {$$=$1;} 
+        | id signocoma LISTANVARIABLES    {$$=$1 + " "+ $2 + " " + $3;} 
 ;
 
-ASIGNACIONES: EXPRESIONES 
-        | OTRASEXPRESIONES
+ASIGNACIONES: OTRASEXPRESIONES {$$=$1;}  
+        | EXPRESIONES  {$$=$1;} 
 ;
 
-EXPRESIONES: OPERACIONES    {console.log($1);$$=$1;} 
-        | OPERACIONESRELACIONAL    {console.log($1);$$=$1;} 
-        | OPERADORESLOGICOS    {console.log($1);$$=$1;} 
-        | id    {console.log($1);$$=$1;} 
-        | caracter    {console.log($1);$$=$1;} 
-        | cadena    {console.log($1);$$=$1;} 
-        | bool    {console.log($1);$$=$1;} 
-        | decimal    {console.log($1);$$=$1;} 
-        | numero    {console.log($1);$$=$1;} 
+EXPRESIONES: OPERACIONES    {$$=$1;} 
+        | OPERACIONESRELACIONAL    {$$=$1;} 
+        | OPERADORESLOGICOS    {$$=$1;} 
+        | id    {$$=$1;} 
+        | caracter    {$$=$1;} 
+        | cadena    {$$=$1;} 
+        | bool    {$$=$1;} 
+        | decimal    {$$=$1;} 
+        | numero    {$$=$1;} 
 ;
-OTRASEXPRESIONES: AGRUPACION    {console.log($1);$$=$1;} 
-        | OPERADORTERNARIO    {console.log($1);$$=$1;} 
-        | CASTEAR    {console.log($1);$$=$1;}
-        | INCREYDECRE    {console.log($1);$$=$1;}  
-        | LLAMADAS    {console.log($1);$$=$1;} 
-        | FTOLOWER    {console.log($1);$$=$1;} 
-        | FTOUPPER    {console.log($1);$$=$1;} 
-        | FROUND    {console.log($1);$$=$1;} 
-        | FLENGTH    {console.log($1);$$=$1;} 
-        | FTYPEOF    {console.log($1);$$=$1;} 
-        | FTOSTRING    {console.log($1);$$=$1;} 
-        | FCSTR    {console.log($1);$$=$1;} 
+OTRASEXPRESIONES: CASTEAR    {$$=$1;} 
+        | OPERADORTERNARIO    {$$=$1;}  
+        | INCREYDECRE    {$$=$1;}  
+        | LLAMADAS    {$$=$1;} 
+        | FTOLOWER    {$$=$1;}  
+        | FTOUPPER    {$$=$1;}  
+        | FROUND    {$$=$1;} 
+        | FLENGTH    {$$=$1;}  
+        | FTYPEOF    {$$=$1;}  
+        | FTOSTRING   {$$=$1;} 
+        | FCSTR   {$$=$1;} 
 ; 
 
-OPERACIONES: menos EXPRESIONES %prec Umenos    {console.log($1);$$=$1;} 
-        | EXPRESIONES mas EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES menos EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES por EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES dividir EXPRESIONES    {console.log($1);$$=$1;} 
-        | respotencia parentesisabre EXPRESIONES signocoma EXPRESIONES parentesiscierra    {console.log($1);$$=$1;} 
-        | EXPRESIONES modulo EXPRESIONES    {console.log($1);$$=$1;} 
+OPERACIONES: menos EXPRESIONES %prec Umenos    {$$=$1 + $2;} 
+        | EXPRESIONES mas EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
+        | EXPRESIONES menos EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
+        | EXPRESIONES por EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
+        | EXPRESIONES dividir EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
+        | respotencia parentesisabre EXPRESIONES signocoma EXPRESIONES parentesiscierra  {$$=$1 + $2 + " " + $3 + " " + $4 +" " + $5 + $6;} 
+        | EXPRESIONES modulo EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
+        | AGRUPACION   {$$=$1;} 
 ;
 
-OPERACIONESRELACIONAL: EXPRESIONES igualigual EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES negacionigual EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES menorigual EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES menorque EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES mayorigual EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES mayorque EXPRESIONES    {console.log($1);$$=$1;} 
+OPERACIONESRELACIONAL: EXPRESIONES igualigual EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
+        | EXPRESIONES negacionigual EXPRESIONES  {$$=$1 + " " + $2 + " " + $3 ;}  
+        | EXPRESIONES menorigual EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;}  
+        | EXPRESIONES menorque EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
+        | EXPRESIONES mayorigual EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
+        | EXPRESIONES mayorque EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
 ;
 
-OPERADORESLOGICOS:  notlogico EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES andlogico EXPRESIONES    {console.log($1);$$=$1;} 
-        | EXPRESIONES orlogico EXPRESIONES    {console.log($1);$$=$1;} 
+OPERADORESLOGICOS:  notlogico EXPRESIONES    {$$=$1 + " " + $2 ;} 
+        | EXPRESIONES andlogico EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
+        | EXPRESIONES orlogico EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
 ;
 
-OPERADORTERNARIO: OPERACIONESRELACIONAL siginterrogacion ASIGNACIONES dospuntos ASIGNACIONES    {console.log($1);$$=$1;} 
-;
-
-
-AGRUPACION: parentesisabre EXPRESIONES parentesiscierra    {console.log($1);$$=$1;} 
+OPERADORTERNARIO: OPERACIONESRELACIONAL siginterrogacion ASIGNACIONES dospuntos ASIGNACIONES    {$$=$1 +" "+ $2 +" "+ $3 +$4 + " " + $5;} 
 ;
 
 
-CASTEAR: parentesisabre TIPODATO parentesiscierra ASIGNACIONES    {console.log($1);$$=$1;} 
+AGRUPACION: parentesisabre EXPRESIONES parentesiscierra    {$$=$1 + " " + $2 + " " + $3;} 
 ;
 
-INCREYDECRE: EXPRESIONES sigincremento    {console.log($1);$$=$1;} 
-        | EXPRESIONES sigdecremento    {console.log($1);$$=$1;} 
+
+CASTEAR: parentesisabre TIPODATO parentesiscierra EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+;
+
+INCREYDECRE: EXPRESIONES sigincremento    {$$=$1 + $2;} 
+        | EXPRESIONES sigdecremento      {$$=$1 + $2;} 
 ;
 
 SENTENCIAS: SENTIF    {console.log($1);$$=$1;} 
@@ -302,3 +306,8 @@ FCSTR: EXPRESIONES sigpunto rescstr parentesisabre parentesiscierra    {console.
 
 FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {console.log($1);$$=$1;} 
 ;
+
+
+
+//FALTA AGREGAR ASIGNACIONES DE VECTORES YA QUE SE ME OLVIDO AGREGARLO A LA GRAMATICA
+//cuando toda la gramatica ya no contenga errores, entonces actualizar el bnf
