@@ -3,10 +3,7 @@ const parser = require("./analizador/gramatica.js");
 
 //con alt + 96 se obtiene la comilla invertida para multilinea
 let entrada =`
-for(int i = 0; r < 3; i++){
-int a = 10;
-int b = 20;
-}
+double varios = ((5.5*6)+5/(-4+5)*pow(4,6));
 `;
 let resultado = parser.parse(entrada);
 //console.log(resultado);

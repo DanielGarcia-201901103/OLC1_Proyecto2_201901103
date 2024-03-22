@@ -113,13 +113,13 @@ CODIGO: CODIGO INSTRUCCION                   { $$ = $1+ " " +$2;}
             |INSTRUCCION                     { $$ = $1;}
 ;
 
-INSTRUCCION: DECLARACIONES            {$$=$1;}
+INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
         | SENTENCIAS                  {console.log($1); $$=$1;}  
-        | FUNCIONES                   {$$=$1;}    
-        | METODOS                     {$$=$1;}    
-        | LLAMADAS sigpuntoycoma      {$$=$1;}    
-        | FCOUT                       {$$=$1;}    
-        | FEXECUTE                    {$$=$1;} 
+        | FUNCIONES                   {console.log($1); $$=$1;}    
+        | METODOS                     {console.log($1); $$=$1;}    
+        | LLAMADAS sigpuntoycoma      {console.log($1); $$=$1;}    
+        | FCOUT                       {console.log($1); $$=$1;}    
+        | FEXECUTE                    {console.log($1); $$=$1;} 
 ;
 
 DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma            {$$=$1 + " "+ $2 + $3;} 
@@ -216,6 +216,7 @@ SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS F
 ;
 
 CONTENIDOS: resbreak sigpuntoycoma    {$$=$1 + $2;} 
+        | rescontinue sigpuntoycoma    {$$=$1 + $2;} 
         | RETORNOS    {$$=$1;} 
         | CODIGO    {$$=$1;} 
 ;
@@ -239,7 +240,7 @@ SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS    {$$=$1 + " " + $2 + " " + $
 SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra   {$$=$1 + " "+ $2 + $3+$4+" "+$5+" "+ $6+ " " +$7;} 
 ;
 
-SENTFOR: resfor parentesisabre DECLARACIONES sigpuntoycoma EXPRESIONES sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra {$$=$1+$2+" "+$3+" "+$4+" "+$5+" "+$6+" "+$7+" " +$8+$9+" "+$10+" "+$11;} 
+SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra {$$=$1+$2+" "+$3+" "+$4+" "+$5+" "+$6+" "+$7+" " +$8+$9+" "+$10;} 
 ;
 
 SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma {$$=$1 + $2 +" "+ $3 + " " + $4 + $5 + $6 + " " + $7 + " " + $8 + $9 ;} 
@@ -262,8 +263,8 @@ SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra    {$$=$1 + " " + $2 + 
         | parentesisabre  parentesiscierra    {$$=$1 + $2;} 
 ;
 
-PARAMETROS: TIPODATO id    {$$=$1+ $2;} 
-        | TIPODATO id signocoma PARAMETROS    {$$=$1 + " " +  $2 +" " + $3 + " "  +  $4;} 
+PARAMETROS: TIPODATO EXPRESIONES    {$$=$1+ $2;} 
+        | TIPODATO EXPRESIONES signocoma PARAMETROS    {$$=$1 + " " +  $2 +" " + $3 + " "  +  $4;} 
 ;
 
 METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra    {$$=$1 + " " + $2 + " "+$3 + $4 + " " + $5+ " " + $6;} 

@@ -36,4 +36,5 @@ footer{
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
+  background: linear-gradient(90deg, rgb(59, 77, 71), rgb(126, 115, 7), rgb(69, 148, 122));
 }
