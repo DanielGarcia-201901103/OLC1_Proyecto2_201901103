@@ -16,3 +16,9 @@ h2{
 .botonE{
     background-color: rgb(59, 77, 71);
 }
+
+.conjuntoBotones{
+    display: flex;
+    justify-content:  center;
+    margin: 10px;
+}

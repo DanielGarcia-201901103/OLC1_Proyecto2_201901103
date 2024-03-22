@@ -20,15 +20,15 @@ const CodeEditorWindow = ({ onChange, code }) => {
 
   return (
     <>
-      <div>
+      <div className="conjuntoBotones">
       <ButtonGroup aria-label="Basic example">
       <Button className="gbotones" >Crear Archivo</Button>{' '}
       <Button className="gbotones">Abrir Archivo</Button>{' '}
       <Button className="gbotones">Guardar Archivo</Button>{' '}
+      <Button className="botonE" onClick={handleRunCode}>Ejecutar</Button>{' '}
       <Button className="gbotonesR">Reporte Errores</Button>{' '}
       <Button className="gbotonesR">Reporte Tabla Simbolos</Button>{' '}
       <Button className="gbotonesR">Generar Arbol AST</Button>{' '}
-      <Button className="botonE" onClick={handleRunCode}>Ejecutar</Button>{' '}
       </ButtonGroup>
       </div>
     <div className="code-editor-container">
