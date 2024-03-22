@@ -1,3 +1,18 @@
 h2{
     color: chartreuse;
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.gbotones{
+    background-color: rgb(69, 148, 122);
+}
+.gbotonesR{
+    background-color: rgb(126, 115, 7);
+
+}
+.botonE{
+    background-color: rgb(59, 77, 71);
 }
