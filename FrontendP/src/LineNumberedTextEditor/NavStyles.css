@@ -1,0 +1,8 @@
+.custom-nav {
+    display: flex;
+    justify-content: space-between; /* Puedes ajustar el alineamiento según tus necesidades */
+  }
+
+  .nav-link {
+    color:  rgb(168, 138, 104); /* Cambia el color del texto según tu preferencia */
+  }

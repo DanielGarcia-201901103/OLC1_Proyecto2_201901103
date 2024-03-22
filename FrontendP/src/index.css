@@ -47,15 +47,3 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-
-
-footer{
-  padding-top: 40px;
-  background-color: rgb(168, 138, 104);
-  font-family: inherit;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-  font-weight: bold;
-}

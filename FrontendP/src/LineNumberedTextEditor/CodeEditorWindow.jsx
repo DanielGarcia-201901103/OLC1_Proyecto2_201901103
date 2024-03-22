@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
+import "./CodeEditorWindow.css";
 
 const CodeEditorWindow = ({ onChange, code }) => {
   const [inputValue, setInputValue] = useState(code || "");
