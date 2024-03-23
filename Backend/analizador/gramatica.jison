@@ -310,3 +310,8 @@ FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {$$=$1 + " " + $2 + " " + 
 
 //FALTA AGREGAR ASIGNACIONES DE VECTORES YA QUE SE ME OLVIDO AGREGARLO A LA GRAMATICA
 //cuando toda la gramatica ya no contenga errores, entonces actualizar el bnf
+
+//video https://www.youtube.com/watch?v=YcUUTyJ2DiE
+//conferencia
+//https://drive.google.com/file/d/1kiTbuTNiIu5q12Lol7CIWp8bFmxv4sKQ/view
+//https://github.com/JoseMore99/Conferencia-AST          

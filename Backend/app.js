@@ -13,7 +13,8 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 //Routes 
-
+const indexRoutes = require('./routes/index.routes.js');
+app.use('/', indexRoutes);
 
 //Si no reconoce la ruta enviá el error
 app.use((req, res, next) => {

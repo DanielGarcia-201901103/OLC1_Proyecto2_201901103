@@ -13,10 +13,25 @@ const CodeEditorWindow = ({ onChange, code }) => {
     onChange("code", value);
   };
 
-  const handleRunCode = () => {
+  const handleRunCode = async (e) => {
+    e.preventDefault();
+    await fetch('http://localhost:4000/analizar', {
+    method: 'POST',
+    mode: 'cors',
+    body: JSON.stringify({ texto: inputValue }),
+    headers:{
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json()).then(data => validar(data));
+
     // Aquí puedes implementar la lógica para ejecutar el código y actualizar la salida
-    setOutputValue(inputValue); // Ejemplo: establecer la salida como el valor de entrada
+     // Ejemplo: establecer la salida como el valor de entrada
   };
+  const validar = (data) =>{
+    console.log(data.salida);
+    setOutputValue(data.salida);
+  }
 
   return (
     <>

@@ -80,7 +80,3 @@ instruccion
 	| CADENAT   {console.log($1); $$ = $1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
-//video https://www.youtube.com/watch?v=YcUUTyJ2DiE
-//conferencia
-//https://drive.google.com/file/d/1kiTbuTNiIu5q12Lol7CIWp8bFmxv4sKQ/view
-//https://github.com/JoseMore99/Conferencia-AST          
