@@ -1,6 +1,7 @@
 const MyError = require('./myerror');
 const fs = require('fs');
 let tablaErrores = [];
+const urlReporte = '../Backend/analisisSem/ReportesArchivos/ReporteErrores.html';
 
 function addError(tipo, descripcion, linea, columna) {
     let verror = new MyError(tipo, descripcion, linea, columna);
@@ -66,40 +67,43 @@ function generarTabla() {
     </body>
     </html>`;
         //escribir archivo 
-        escribirArchivo("../ReportesArchivos/ReporteErrores.html", txtrep);
+        escribirArchivo(txtrep);
         limpiarTabla();
     } catch (error) {
         console.error('Error al generar la tabla de errores:', error);
     }
     }
-
-    function escribirArchivo(rutaArchivo, contenido) {
-        try {
-            // Cambiar permisos para escritura
-            fs.chmodSync(rutaArchivo, 0o666); // 0o666 representa permisos de lectura y escritura para todos los usuarios
-            // Escribir en el archivo
-            fs.writeFileSync(rutaArchivo, contenido);
+    
+    function escribirArchivo(contenido) {
+        fs.writeFile(urlReporte, contenido, (error)=>{
+            if (error) {
+                console.error('Error al escribir el archivo:', error);
+            }
             console.log('Archivo escrito correctamente.');
-          } catch (error) {
-            console.error('Error al escribir el archivo:', error);
-          }
+        });
     }
 
     function limpiarTabla() {
         tablaErrores = [];
     }
-
+//https://www.youtube.com/watch?v=jmHkMwmzcSI
+//https://www.youtube.com/watch?v=Qm0GlyS_qU8
+//https://www.w3schools.com/nodejs/ref_fs.asp
     function openReporteErr(){
-        fetch("../ReportesArchivos/ReporteErrores.html").then(response => {
-            if (!response.ok) {
-                return 'El archivo no existe o no se puede acceder.';
-            }
-            window.open("../ReportesArchivos/ReporteErrores.html", '_blank');
-            return 'Archivo abierto correctamente.';
-        }).catch(error => {
-            return 'Error al verificar el archivo';
+        import('open').then((open) => {
+            // Abrir el archivo en el navegador
+            open.default(urlReporte)
+            .then(() => {
+                console.log('Archivo abierto en el navegador');
+            })
+            .catch((err) => {
+                console.error('Error al abrir el archivo:', err);
+            });
+        }).catch((err) => {
+            console.error('Error al importar el módulo:', err);
         });
     }
+
     module.exports = {
         addError,
         generarTabla,
