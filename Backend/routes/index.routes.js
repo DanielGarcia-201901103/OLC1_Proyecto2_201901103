@@ -5,7 +5,7 @@ const indexController = require('../controller/index.controller');
 
 router.get("/", indexController.index);
 router.post("/analizar", indexController.analizar);
-router.get("/errores", indexController.erroresT);
+router.get("/erroresT", indexController.erroresT);
 router.get("/simbolos", indexController.simbolosT);
 router.get("/arbol", indexController.arbol);
 // falta el abrir archivo, crear archivo y guardar archivo

@@ -1,4 +1,4 @@
-class Error{
+class MyError{
     constructor(tipo, descripcion, linea, columna){
         this.tipo = tipo;
         this.descripcion = descripcion;
@@ -31,3 +31,5 @@ class Error{
     }
     
 }
+
+module.exports = MyError;

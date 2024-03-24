@@ -6,14 +6,12 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { saveAs } from 'file-saver'; // Importa la función saveAs de FileSaver.js
 
 
-const CodeEditorWindow = ({ onChange, code }) => {
-  const [inputValue, setInputValue] = useState(code || "");
+const CodeEditorWindow = () => {
+  const [inputValue, setInputValue] = useState( "");
   const [outputValue, setOutputValue] = useState("");
-  const [inputUrl, setUrl] = useState("");
 
   const handleEditorChange = (value) => {
     setInputValue(value);
-    onChange("code", value);
   };
 
   const handleRunCode = async (e) => {
@@ -40,8 +38,6 @@ const CodeEditorWindow = ({ onChange, code }) => {
     const file = e.target.files[0]; // Obtiene el archivo seleccionado por el usuario
     const fileContent = await readFileContent(file); // Lee el contenido del archivo
     setInputValue(fileContent); // Actualiza el estado con el contenido del archivo
-    console.log(file.name);
-    setUrl(file.name);
   };
 
   const readFileContent = (file) => {
@@ -61,11 +57,27 @@ const CodeEditorWindow = ({ onChange, code }) => {
   const handleCreateFile = () => {
     const emptyContent = ""; // Contenido en blanco para el archivo
     setInputValue(emptyContent)
-    
+
     const blob = new Blob([emptyContent], { type: 'text/plain;charset=utf-8' }); // Crea un Blob con el contenido en blanco
     saveAs(blob, "nuevoArchivo.sc"); // Guarda el archivo con la extensión .sc y el nombre "nuevoArchivo"
   };
+  const handleOpenReportErrors = async (e) => {
+    e.preventDefault();
+    await fetch('http://localhost:4000/erroresT', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+      }
+  }).then(response => response.json()).then(data => validare(data));
 
+    // Aquí puedes implementar la lógica para ejecutar el código y actualizar la salida
+     // Ejemplo: establecer la salida como el valor de entrada
+  };
+  const validare = (data) =>{
+    console.log(data.salida);
+  }; 
   return (
     <>
       <div className="conjuntoBotones">
@@ -75,7 +87,7 @@ const CodeEditorWindow = ({ onChange, code }) => {
       <input id="fileInput" type="file"  accept=".sc" style={{ display: 'none', borderradius: "5px" }} onChange={handleOpenFile} />
       <Button className="gbotones" onClick={handleSaveFile} >Guardar Archivo</Button>{' '}
       <Button className="botonE" onClick={handleRunCode}>Ejecutar</Button>{' '}
-      <Button className="gbotonesR">Reporte Errores</Button>{' '}
+      <Button className="gbotonesR" onClick={handleOpenReportErrors}>Reporte Errores</Button>{' '}
       <Button className="gbotonesR">Reporte Tabla Simbolos</Button>{' '}
       <Button className="gbotonesR">Generar Arbol AST</Button>{' '}
       </ButtonGroup>
@@ -88,7 +100,7 @@ const CodeEditorWindow = ({ onChange, code }) => {
           width={`100%`}
           value={inputValue}
           theme="vs-dark"
-          defaultValue="// some comment"
+          defaultValue="// Ingresa tu código aquí"
           onChange={handleEditorChange}
         />
       </div>

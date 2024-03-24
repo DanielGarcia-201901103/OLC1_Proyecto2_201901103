@@ -1,4 +1,6 @@
 const analiza = require('../analizador/gramatica');
+const {openReporteErr, generarTabla} = require('../analisisSem/manejoErrores');
+
 const index = (req, res) => {
     res.status(200).json({ message: 'Hello World :)' });
 }
@@ -17,6 +19,11 @@ const erroresT = (req, res)=>{
     //si los errores existen se crea el archivo
     //se abre el archivo y se envía la respuesta 
     //hacia el frontend
+    generarTabla();
+    console.log('Generando tabla de errores...');
+    let respuesta = openReporteErr();
+    console.log('Respuesta:', respuesta);
+    res.status(200).json({ message: 'Analizando...', salida: respuesta });
 }
 
 const simbolosT  =  (req, res)=>{

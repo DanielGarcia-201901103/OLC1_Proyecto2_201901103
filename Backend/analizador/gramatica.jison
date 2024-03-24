@@ -8,6 +8,7 @@
 //const {Print} = require('./instrucciones/print')
 //const {Bloque} = require('./instrucciones/bloque')
 //const {If} = require('./instrucciones/If')
+const {addError} = require('../analisisSem/manejoErrores');
 %}
 
 %lex
@@ -89,7 +90,11 @@
 \"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 
 <<EOF>>             return 'EOF';
-.                   {console.log(yylloc.first_line, yylloc.first_columm, 'Lexico', yytext)}
+.                   {addError('Error léxico', "Caracter no reconocido\" " + yytext +" \" ", yylloc.first_line, yylloc.first_columm); }
+// La siguiente linea es donde se manejan los errores lexicos
+//.  { console.error('Error léxico: \"' + yytext + '\", linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);  }
+//console.log(yylloc.first_line, yylloc.first_columm, 'Lexico', yytext)
+
 /lex
 
 %left 'orlogico'
@@ -127,8 +132,9 @@ DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma            {$$=$1 + " "+ $
         | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma { $$=$1 + " "+ $2 + " "+ $3 +$4;}  
         | id sigincremento sigpuntoycoma  { $$= $1 + " "+ $2 + " "+ $3;} 
         | id sigdecremento sigpuntoycoma  {$$=$1 + " "+ $2 + " "+ $3;} 
+        | error sigpuntoycoma {addError('Error sintáctico', 'No se reconoce' + yytext, this._$.first_line, this._$.first_column);}
 ;
- 
+ ////console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);
 TIPODATO: resint       {$$=$1;} 
         | resdouble    {$$=$1;} 
         | resbool    {$$=$1;} 
@@ -306,10 +312,12 @@ FCSTR: EXPRESIONES sigpunto rescstr parentesisabre parentesiscierra    {$$=$1 + 
 FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
-
+//la siguiente linea es la que maneja los errores sintacticos
+// | error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 
 //FALTA AGREGAR ASIGNACIONES DE VECTORES YA QUE SE ME OLVIDO AGREGARLO A LA GRAMATICA
 //cuando toda la gramatica ya no contenga errores, entonces actualizar el bnf
+//https://drive.google.com/drive/u/0/search?q=laboratorio%20compiladores
 
 //video https://www.youtube.com/watch?v=YcUUTyJ2DiE
 //conferencia
