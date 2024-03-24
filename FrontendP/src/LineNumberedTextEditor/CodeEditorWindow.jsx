@@ -3,10 +3,13 @@ import Editor from "@monaco-editor/react";
 import "./CodeEditorWindow.css";
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { saveAs } from 'file-saver'; // Importa la función saveAs de FileSaver.js
+
 
 const CodeEditorWindow = ({ onChange, code }) => {
   const [inputValue, setInputValue] = useState(code || "");
   const [outputValue, setOutputValue] = useState("");
+  const [inputUrl, setUrl] = useState("");
 
   const handleEditorChange = (value) => {
     setInputValue(value);
@@ -31,15 +34,46 @@ const CodeEditorWindow = ({ onChange, code }) => {
   const validar = (data) =>{
     console.log(data.salida);
     setOutputValue(data.salida);
-  }
+  };
+
+  const handleOpenFile = async (e) => {
+    const file = e.target.files[0]; // Obtiene el archivo seleccionado por el usuario
+    const fileContent = await readFileContent(file); // Lee el contenido del archivo
+    setInputValue(fileContent); // Actualiza el estado con el contenido del archivo
+    console.log(file.name);
+    setUrl(file.name);
+  };
+
+  const readFileContent = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = (e) => reject(e);
+      reader.readAsText(file);
+    });
+  };
+
+  const handleSaveFile = () => {
+    const blob = new Blob([inputValue], { type: 'text/plain;charset=utf-8' }); // Crea un Blob con el contenido del editor
+    saveAs(blob, "archivo.sc"); // Guarda el archivo con el nombre "archivo.txt"
+  };
+
+  const handleCreateFile = () => {
+    const emptyContent = ""; // Contenido en blanco para el archivo
+    setInputValue(emptyContent)
+    
+    const blob = new Blob([emptyContent], { type: 'text/plain;charset=utf-8' }); // Crea un Blob con el contenido en blanco
+    saveAs(blob, "nuevoArchivo.sc"); // Guarda el archivo con la extensión .sc y el nombre "nuevoArchivo"
+  };
 
   return (
     <>
       <div className="conjuntoBotones">
       <ButtonGroup aria-label="Basic example">
-      <Button className="gbotones" >Crear Archivo</Button>{' '}
-      <Button className="gbotones">Abrir Archivo</Button>{' '}
-      <Button className="gbotones">Guardar Archivo</Button>{' '}
+      <Button className="gbotones" onClick={handleCreateFile}>Crear Archivo</Button>{' '} 
+      <Button className="gbotonIn" as="label" htmlFor="fileInput">Abrir Archivo</Button>{' '}
+      <input id="fileInput" type="file"  accept=".sc" style={{ display: 'none', borderradius: "5px" }} onChange={handleOpenFile} />
+      <Button className="gbotones" onClick={handleSaveFile} >Guardar Archivo</Button>{' '}
       <Button className="botonE" onClick={handleRunCode}>Ejecutar</Button>{' '}
       <Button className="gbotonesR">Reporte Errores</Button>{' '}
       <Button className="gbotonesR">Reporte Tabla Simbolos</Button>{' '}
