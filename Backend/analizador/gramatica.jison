@@ -87,11 +87,11 @@ const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 
 
 ("true"|"false")\b      return 'bool';
-[0-9]+[.][0-9]+\b    return 'decimal';
+[0-9]+[.][0-9]+\b       return 'decimal';
 [0-9]+\b                return 'numero';
 ([a-zA-Z])[a-zA-Z0-9_]*	return 'id';
-\'[^\']\'               return 'caracter';
-\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
+\'[^\']\'               { yytext = yytext.substr(1,yyleng-2); return 'caracter';}
+\"[^\"]*\"		{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 
 <<EOF>>             return 'EOF';
 .                   {addError('Error léxico', "Caracter no reconocido\" " + yytext +" \" ", yylloc.first_line, yylloc.first_columm); }

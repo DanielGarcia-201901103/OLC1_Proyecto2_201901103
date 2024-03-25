@@ -1,5 +1,5 @@
-const Instruccion = require('../instruccion.js')
-
+const Instruccion = require('../instruccion.js');
+global.obimpresiones = [];
 class Print extends Instruccion{
     constructor(expresion){
         super();
@@ -12,7 +12,8 @@ class Print extends Instruccion{
             console.log('Error semantico: No se puede imprimir con error. ', this.expresion.valor);
             return;
         }
-        console.log(valor);
+        //console.log(valor);
+        obimpresiones.push(valor);
     }
 }
 

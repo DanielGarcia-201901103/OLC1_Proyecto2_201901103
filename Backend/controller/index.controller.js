@@ -1,6 +1,6 @@
 const analiza = require('../analizador/gramatica');
 const {openReporteErr, generarTabla} = require('../analisisSem/manejoErrores');
-
+require('../interprete/instruccion/print');
 const index = (req, res) => {
     res.status(200).json({ message: 'Hello World :)' });
 }
@@ -12,9 +12,9 @@ const analizar = (req, res) => {
     let resultado = analiza.parse(texto);
     resultado.forEach(instruccion =>{
         instruccion.interpretar(null);
-    
     })
-    res.status(200).json({ message: 'Analizando...', salida: resultado });
+    res.status(200).json({ message: 'Analizando...', salida: obimpresiones });
+    obimpresiones = [];
 }
 
 const erroresT = (req, res)=>{
@@ -50,5 +50,6 @@ module.exports = {
     analizar,
     erroresT,
     simbolosT,
-    arbol 
+    arbol,
+    
 };

@@ -30,8 +30,11 @@ const CodeEditorWindow = () => {
      // Ejemplo: establecer la salida como el valor de entrada
   };
   const validar = (data) =>{
-    console.log(data.salida);
-    setOutputValue(data.salida);
+    let texts = "";
+    for (let i = 0; i < data.salida.length; i++) {
+      texts += data.salida[i] + "\n";
+    }
+    setOutputValue(texts);
   };
 
   const handleOpenFile = async (e) => {

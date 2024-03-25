@@ -29,7 +29,7 @@ class Aritmetica extends Instruccion{
                     return Number( this.valor);
                 } else if(this.op1.tipo == 'int' && this.op2.tipo == 'booleano'){
                     this.tipo = 'int';
-                    if(valor2 == 'true'){
+                    if(valor2 == true){
                         valor2 = 1;
                     }else{
                         valor2 = 0;
@@ -38,27 +38,38 @@ class Aritmetica extends Instruccion{
                     return Number( this.valor);
                 } else if(this.op1.tipo == 'booleano' && this.op2.tipo == 'int'){
                     this.tipo = 'int';
-                    if(valor2 == 'true'){
-                        valor2 = 1;
+                    if(valor1 == true){
+                        valor1 = 1;
                     }else{
-                        valor2 = 0;
+                        valor1 = 0;
                     }
                     this.valor = valor1 + valor2;
                     return Number( this.valor);
-                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
+                } // el int + char o char + int funciona, pero el problema es que el char admite numeros como number
+                else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
                     // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
                     this.tipo = 'int';
-                    this.valor = valor1 + valor2;
-                
+                    this.valor = valor1 + valor2.charCodeAt(0);
+                    console.log('valor2: ', typeof(valor2));
+                    console.log(this.valor);
                     return Number( this.valor);
-                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'string'){
-                    //el valor int hay que convertirlo a ascii y concatenar los strings y devolver la cadena
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'int'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1 + valor2.charCodeAt(0);
+                    console.log('valor2: ', typeof(valor2));
+                    console.log(this.valor);
+                    return Number( this.valor);
+                } 
+                else if(this.op1.tipo == 'int' && this.op2.tipo == 'string'){
                     this.tipo = 'string';
-                    this.valor = valor1 + valor2;
-                
+                    this.valor = String.fromCharCode(valor1) + valor2;
                     return this.valor;
-                }
-                else{
+                } else if(this.op1.tipo == 'string' && this.op2.tipo == 'int'){
+                    this.tipo = 'string';
+                    this.valor = valor1 + String.fromCharCode(valor2);
+                    return this.valor;
+                } else{
                     this.tipo = 'Error';
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
