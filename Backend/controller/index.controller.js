@@ -10,6 +10,10 @@ const analizar = (req, res) => {
     const { texto } = req.body;
     //envia el texto a analizar y devuelve el resultado para poder enviarlo a la consola salida del frontend
     let resultado = analiza.parse(texto);
+    resultado.forEach(instruccion =>{
+        instruccion.interpretar(null);
+    
+    })
     res.status(200).json({ message: 'Analizando...', salida: resultado });
 }
 

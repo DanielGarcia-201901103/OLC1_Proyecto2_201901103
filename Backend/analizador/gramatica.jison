@@ -9,6 +9,8 @@
 //const {Bloque} = require('./instrucciones/bloque')
 //const {If} = require('./instrucciones/If')
 const {addError} = require('../analisisSem/manejoErrores');
+const Dato = require("../interprete/expresion/Dato.js");
+const Print = require("../interprete/instruccion/Print.js");
 %}
 
 %lex
@@ -111,11 +113,11 @@ const {addError} = require('../analisisSem/manejoErrores');
 
 %%
 
-INI: CODIGO EOF                              {return $1;}
+INI: CODIGO EOF                              {$$ = $1; return $$;}
 ;
 
-CODIGO: CODIGO INSTRUCCION                   { $$ = $1+ " " +$2;}
-            |INSTRUCCION                     { $$ = $1;}
+CODIGO: CODIGO INSTRUCCION                   { $$ = $1; $$.push($2);}
+            |INSTRUCCION                     { $$ = []; $$.push($1);}
 ;
 
 INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
@@ -150,15 +152,15 @@ ASIGNACIONES: OTRASEXPRESIONES {$$=$1;}
         | EXPRESIONES  {$$=$1;} 
 ;
 
-EXPRESIONES: OPERACIONES    {$$=$1;} 
+EXPRESIONES: OPERACIONES           {$$=$1;} 
         | OPERACIONESRELACIONAL    {$$=$1;} 
-        | OPERADORESLOGICOS    {$$=$1;} 
-        | id    {$$=$1;} 
-        | caracter    {$$=$1;} 
-        | cadena    {$$=$1;} 
-        | bool    {$$=$1;} 
-        | decimal    {$$=$1;} 
-        | numero    {$$=$1;} 
+        | OPERADORESLOGICOS        {$$=$1;} 
+        | id                       {$$= new Dato($1, "identificador");} 
+        | caracter                 {$$= new Dato($1, "char");} 
+        | cadena                   {$$= new Dato($1, "string");} 
+        | bool                     {$$= new Dato($1, "booleano");} 
+        | decimal                  {$$= new Dato($1, "double");} 
+        | numero                   {$$= new Dato($1, "int");} 
 ;
 OTRASEXPRESIONES: CASTEAR    {$$=$1;} 
         | OPERADORTERNARIO    {$$=$1;}  
@@ -284,7 +286,7 @@ CONTENIDOSMETOD: resbreak sigpuntoycoma    {$$=$1 + $2;}
 LLAMADAS: id SNPARAMETROS    {$$=$1 + " " + $2;} 
 ;
 
-FCOUT: rescout menormenor ASIGNACIONES sigpuntoycoma    {$$=$1 + " " + $2 + " " + $3 + $4;} 
+FCOUT: rescout menormenor ASIGNACIONES sigpuntoycoma    {$$= new Print($3) ;} 
         | rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {$$=$1 + " " + $2 + " " + $3 + " "+ $4 + " " + $5 + $6;} 
 ;
 
