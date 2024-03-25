@@ -18,28 +18,45 @@ class Aritmetica extends Instruccion{
                 if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
                     this.tipo = 'int';
                     this.valor = valor1 + valor2;
-                
                     return Number( this.valor);
                 } else if(this.op1.tipo == 'int' && this.op2.tipo == 'double'){
                     this.tipo = 'double';
                     this.valor = valor1 + valor2;
-                
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'int'){
+                    this.tipo = 'double';
+                    this.valor = valor1 + valor2;
                     return Number( this.valor);
                 } else if(this.op1.tipo == 'int' && this.op2.tipo == 'booleano'){
                     this.tipo = 'int';
+                    if(valor2 == 'true'){
+                        valor2 = 1;
+                    }else{
+                        valor2 = 0;
+                    }
                     this.valor = valor1 + valor2;
-                
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'booleano' && this.op2.tipo == 'int'){
+                    this.tipo = 'int';
+                    if(valor2 == 'true'){
+                        valor2 = 1;
+                    }else{
+                        valor2 = 0;
+                    }
+                    this.valor = valor1 + valor2;
                     return Number( this.valor);
                 } else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
                     this.tipo = 'int';
                     this.valor = valor1 + valor2;
                 
                     return Number( this.valor);
                 } else if(this.op1.tipo == 'int' && this.op2.tipo == 'string'){
+                    //el valor int hay que convertirlo a ascii y concatenar los strings y devolver la cadena
                     this.tipo = 'string';
                     this.valor = valor1 + valor2;
                 
-                    return Number( this.valor);
+                    return this.valor;
                 }
                 else{
                     this.tipo = 'Error';
