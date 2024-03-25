@@ -177,7 +177,7 @@ OTRASEXPRESIONES: CASTEAR    {$$=$1;}
         | FCSTR   {$$=$1;} 
 ; 
 
-OPERACIONES: menos EXPRESIONES %prec Umenos    {$$=$1 + $2;} 
+OPERACIONES: menos EXPRESIONES %prec Umenos    {$$= new Aritmetica($2, $2 , $1 + "unario" );} 
         | EXPRESIONES mas EXPRESIONES    {$$= new Aritmetica($1,$3,$2) ;} 
         | EXPRESIONES menos EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
         | EXPRESIONES por EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 

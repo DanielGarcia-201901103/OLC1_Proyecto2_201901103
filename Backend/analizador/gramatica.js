@@ -143,8 +143,8 @@ break;
 case 34:
 this.$= new Dato($$[$0], "int");
 break;
-case 46: case 66: case 67: case 74: case 75: case 89: case 90: case 93: case 97: case 101: case 102:
-this.$=$$[$0-1] + $$[$0];
+case 46:
+this.$= new Aritmetica($$[$0], $$[$0] , $$[$0-1] + "unario" );
 break;
 case 47: case 48: case 49: case 50: case 52:
 this.$= new Aritmetica($$[$0-2],$$[$0],$$[$0-1]) ;
@@ -166,6 +166,9 @@ this.$=$$[$0-2] + " " + $$[$0-1] + " " + $$[$0];
 break;
 case 65: case 84: case 107: case 108: case 109: case 111: case 112: case 114:
 this.$=$$[$0-3] + " " + $$[$0-2] + " " + $$[$0-1] + " " + $$[$0];
+break;
+case 66: case 67: case 74: case 75: case 89: case 90: case 93: case 97: case 101: case 102:
+this.$=$$[$0-1] + $$[$0];
 break;
 case 73:
 this.$=$$[$0-6] +" "+ $$[$0-5] + $$[$0-4] +$$[$0-3] + $$[$0-2] + " " +$$[$0-1] + " " + $$[$0];
