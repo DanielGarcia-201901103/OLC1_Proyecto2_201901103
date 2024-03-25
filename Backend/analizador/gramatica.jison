@@ -11,6 +11,8 @@
 const {addError} = require('../analisisSem/manejoErrores');
 const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
+const Aritmetica = require("../interprete/expresion/Aritmetica.js");
+
 %}
 
 %lex
@@ -176,12 +178,12 @@ OTRASEXPRESIONES: CASTEAR    {$$=$1;}
 ; 
 
 OPERACIONES: menos EXPRESIONES %prec Umenos    {$$=$1 + $2;} 
-        | EXPRESIONES mas EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
-        | EXPRESIONES menos EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
-        | EXPRESIONES por EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
-        | EXPRESIONES dividir EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
-        | respotencia parentesisabre EXPRESIONES signocoma EXPRESIONES parentesiscierra  {$$=$1 + $2 + " " + $3 + " " + $4 +" " + $5 + $6;} 
-        | EXPRESIONES modulo EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
+        | EXPRESIONES mas EXPRESIONES    {$$= new Aritmetica($1,$3,$2) ;} 
+        | EXPRESIONES menos EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
+        | EXPRESIONES por EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
+        | EXPRESIONES dividir EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
+        | respotencia parentesisabre EXPRESIONES signocoma EXPRESIONES parentesiscierra  {$$= new Aritmetica($3,$5,$1);} 
+        | EXPRESIONES modulo EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
         | AGRUPACION   {$$=$1;} 
 ;
 

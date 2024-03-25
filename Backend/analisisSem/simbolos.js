@@ -46,3 +46,5 @@ class Simbolo{
     }
     
 }
+
+module.exports = Simbolo;

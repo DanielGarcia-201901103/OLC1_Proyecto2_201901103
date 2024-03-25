@@ -6,8 +6,8 @@ class Aritmetica extends Instruccion{
         this.op1 = op1;
         this.op2 = op2;
         this.operador = operador;
-        this.tipo = 'NULL';
-        this.valor = null;
+        this.tipo = 'Error';
+        this.valor = 'null';
     }
 
     interpretar(entorno){
@@ -19,41 +19,93 @@ class Aritmetica extends Instruccion{
                     this.tipo = 'int';
                     this.valor = valor1 + valor2;
                 
-                    return Number(valor);
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'double'){
+                    this.tipo = 'double';
+                    this.valor = valor1 + valor2;
+                
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'booleano'){
+                    this.tipo = 'int';
+                    this.valor = valor1 + valor2;
+                
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
+                    this.tipo = 'int';
+                    this.valor = valor1 + valor2;
+                
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'string'){
+                    this.tipo = 'string';
+                    this.valor = valor1 + valor2;
+                
+                    return Number( this.valor);
                 }
                 else{
-
+                    this.tipo = 'Error';
+                    //este es un error semantico : error de tipo de dato
+                    //agregar a la lista de errores
+                    return this.valor;
                 }
             case '-':
                 if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
                     this.tipo = 'int';
                     this.valor = valor1 - valor2;
                 
-                    return Number(valor);
+                    return Number( this.valor);
+                }
+                else{
+                    this.tipo = 'Error';
+                    //este es un error semantico : error de tipo de dato
+                    return this.valor;
                 }
             case '*':
                 if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
                     this.tipo = 'int';
                     this.valor = valor1 * valor2;
                 
-                    return Number(valor);
+                    return Number( this.valor);
+                }
+                else{
+                    this.tipo = 'Error';
+                    //este es un error semantico : error de tipo de dato
+                    return this.valor;
                 }
             case '/':
                 if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
                     this.tipo = 'int';
                     this.valor = valor1 / valor2;
                 
-                    return Number(valor);
+                    return Number( this.valor);
                 }
                 else{
-
+                    this.tipo = 'Error';
+                    //este es un error semantico : error de tipo de dato
+                    return this.valor;
                 }
             case '%':
                 if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
                     this.tipo = 'int';
                     this.valor = valor1 % valor2;
                 
-                    return Number(valor);
+                    return Number( this.valor);
+                }
+                else{
+                    this.tipo = 'Error';
+                    //este es un error semantico : error de tipo de dato
+                    return this.valor;
+                }
+            case 'pow':
+                if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
+                    this.tipo = 'int';
+                    this.valor = Math.pow(valor1,valor2); // ó valor1 ** valor2
+                    
+                    return Number( this.valor);
+                }
+                else{
+                    this.tipo = 'Error';
+                    //este es un error semantico : error de tipo de dato
+                    return this.valor;
                 }
         }
     }

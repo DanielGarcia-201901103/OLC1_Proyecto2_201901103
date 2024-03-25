@@ -86,9 +86,7 @@ function generarTabla() {
     function limpiarTabla() {
         tablaErrores = [];
     }
-//https://www.youtube.com/watch?v=jmHkMwmzcSI
-//https://www.youtube.com/watch?v=Qm0GlyS_qU8
-//https://www.w3schools.com/nodejs/ref_fs.asp
+    
     function openReporteErr(){
         import('open').then((open) => {
             // Abrir el archivo en el navegador
