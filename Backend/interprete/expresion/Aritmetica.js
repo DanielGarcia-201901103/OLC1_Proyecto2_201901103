@@ -1,4 +1,4 @@
-const Instruccion = require('../instruccion.js')
+const Instruccion = require('../Instruccion.js')
 
 class Aritmetica extends Instruccion{
     constructor(op1, op2, operador){

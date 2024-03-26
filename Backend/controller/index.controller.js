@@ -1,6 +1,7 @@
 const analiza = require('../analizador/gramatica');
 const {openReporteErr, generarTabla} = require('../analisisSem/manejoErrores');
 require('../interprete/instruccion/print');
+
 const index = (req, res) => {
     res.status(200).json({ message: 'Hello World :)' });
 }

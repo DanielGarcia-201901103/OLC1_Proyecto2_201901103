@@ -1,5 +1,6 @@
-const Instruccion = require('../instruccion.js');
+const Instruccion = require('../Instruccion.js');
 global.obimpresiones = [];
+
 class Print extends Instruccion{
     constructor(expresion){
         super();

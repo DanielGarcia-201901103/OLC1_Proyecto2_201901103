@@ -12,6 +12,8 @@ const {addError} = require('../analisisSem/manejoErrores');
 const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
+const Relacional = require("../interprete/expresion/Relacional.js");
+
 
 %}
 
@@ -33,6 +35,7 @@ const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 "/"                 return 'dividir';
 "*"                 return 'por';
 "%"                 return 'modulo';
+"!="                return 'negacionigual';
 "!"                 return 'notlogico';
 "("                 return 'parentesisabre';
 ")"                 return 'parentesiscierra';
@@ -47,7 +50,6 @@ const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 "."                 return 'sigpunto';
 "?"                 return 'siginterrogacion';
 ":"                 return 'dospuntos';
-"!="                return 'negacionigual';
 "<="                return 'menorigual';
 ">="                return 'mayorigual';
 "<<"                return 'menormenor';
@@ -177,22 +179,22 @@ OTRASEXPRESIONES: CASTEAR    {$$=$1;}
         | FCSTR   {$$=$1;} 
 ; 
 
-OPERACIONES: menos EXPRESIONES %prec Umenos    {$$= new Aritmetica($2, $2 , $1 + "unario" );} 
-        | EXPRESIONES mas EXPRESIONES    {$$= new Aritmetica($1,$3,$2) ;} 
-        | EXPRESIONES menos EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
-        | EXPRESIONES por EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
-        | EXPRESIONES dividir EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
+OPERACIONES: menos EXPRESIONES %prec Umenos                                              {$$= new Aritmetica($2, $2 , $1 + "unario" );} 
+        | EXPRESIONES mas EXPRESIONES                                                    {$$= new Aritmetica($1,$3,$2) ;} 
+        | EXPRESIONES menos EXPRESIONES                                                  {$$= new Aritmetica($1,$3,$2) ;} 
+        | EXPRESIONES por EXPRESIONES                                                    {$$= new Aritmetica($1,$3,$2) ;} 
+        | EXPRESIONES dividir EXPRESIONES                                                {$$= new Aritmetica($1,$3,$2) ;} 
         | respotencia parentesisabre EXPRESIONES signocoma EXPRESIONES parentesiscierra  {$$= new Aritmetica($3,$5,$1);} 
-        | EXPRESIONES modulo EXPRESIONES   {$$= new Aritmetica($1,$3,$2) ;} 
-        | AGRUPACION   {$$=$1;} 
+        | EXPRESIONES modulo EXPRESIONES                                                 {$$= new Aritmetica($1,$3,$2) ;} 
+        | AGRUPACION                                                                     {$$=$1;} 
 ;
 
-OPERACIONESRELACIONAL: EXPRESIONES igualigual EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
-        | EXPRESIONES negacionigual EXPRESIONES  {$$=$1 + " " + $2 + " " + $3 ;}  
-        | EXPRESIONES menorigual EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;}  
-        | EXPRESIONES menorque EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
-        | EXPRESIONES mayorigual EXPRESIONES   {$$=$1 + " " + $2 + " " + $3 ;} 
-        | EXPRESIONES mayorque EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
+OPERACIONESRELACIONAL: EXPRESIONES igualigual EXPRESIONES   {$$= new Relacional($1,$3,$2);} 
+        | EXPRESIONES negacionigual EXPRESIONES             {$$= new Relacional($1,$3,$2);}  
+        | EXPRESIONES menorigual EXPRESIONES                {$$= new Relacional($1,$3,$2);}  
+        | EXPRESIONES menorque EXPRESIONES                  {$$= new Relacional($1,$3,$2);} 
+        | EXPRESIONES mayorigual EXPRESIONES                {$$= new Relacional($1,$3,$2);} 
+        | EXPRESIONES mayorque EXPRESIONES                  {$$= new Relacional($1,$3,$2);} 
 ;
 
 OPERADORESLOGICOS:  notlogico EXPRESIONES    {$$=$1 + " " + $2 ;} 
