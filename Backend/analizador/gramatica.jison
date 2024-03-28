@@ -329,3 +329,5 @@ FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {$$=$1 + " " + $2 + " " + 
 //conferencia
 //https://drive.google.com/file/d/1kiTbuTNiIu5q12Lol7CIWp8bFmxv4sKQ/view
 //https://github.com/JoseMore99/Conferencia-AST          
+
+//clase del año pasado https://www.youtube.com/watch?v=Cr-faHppq4M

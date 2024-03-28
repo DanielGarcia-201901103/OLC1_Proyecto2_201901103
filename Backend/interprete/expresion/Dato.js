@@ -12,6 +12,10 @@ class Dato extends Instruccion{
             case 'int':
                 return Number(this.valor);
             case 'string':
+                //this.valor = this.valor.replace(/\\"/g, '"');
+                //console.log('valor: ', this.valor); //    no  me sustituye el de las comillas
+                //.replace("\\\"","\"")
+                this.valor = this.valor.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\'/g, "'").replace(/\\\\/g, '\\');
                 return this.valor;
             case 'booleano':
                 if(this.valor == 'true'){
