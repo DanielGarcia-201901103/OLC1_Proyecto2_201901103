@@ -1,5 +1,6 @@
 const analiza = require('../analizador/gramatica');
 const {openReporteErr, generarTabla} = require('../analisisSem/manejoErrores');
+const Entorno = require('../analisisSem/Entorno');
 require('../interprete/instruccion/print');
 
 const index = (req, res) => {
@@ -11,8 +12,9 @@ const analizar = (req, res) => {
     const { texto } = req.body;
     //envia el texto a analizar y devuelve el resultado para poder enviarlo a la consola salida del frontend
     let resultado = analiza.parse(texto);
+    let entorno = new Entorno('global', null);
     resultado.forEach(instruccion =>{
-        instruccion.interpretar(null);
+        instruccion.interpretar(entorno);
     })
     res.status(200).json({ message: 'Analizando...', salida: obimpresiones });
     obimpresiones = [];

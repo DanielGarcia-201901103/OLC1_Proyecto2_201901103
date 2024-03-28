@@ -11,8 +11,8 @@ class Aritmetica extends Instruccion{
     }
 
     interpretar(entorno){
-        let valor1 = this.op1.interpretar(null);
-        let valor2 = this.op2.interpretar(null);
+        let valor1 = this.op1.interpretar(entorno);
+        let valor2 = this.op2.interpretar(entorno);
         switch(this.operador){
             case '+':
                 if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){

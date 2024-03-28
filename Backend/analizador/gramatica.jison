@@ -13,7 +13,7 @@ const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 const Relacional = require("../interprete/expresion/Relacional.js");
-
+const Asignacion = require("../interprete/instruccion/Asignacion.js");
 
 %}
 
@@ -330,4 +330,4 @@ FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {$$=$1 + " " + $2 + " " + 
 //https://drive.google.com/file/d/1kiTbuTNiIu5q12Lol7CIWp8bFmxv4sKQ/view
 //https://github.com/JoseMore99/Conferencia-AST          
 
-//clase del año pasado https://www.youtube.com/watch?v=Cr-faHppq4M
+//clase del año pasado https://www.youtube.com/watch?v=Cr-faHppq4M    me quedé en el minuto 1:15:59
