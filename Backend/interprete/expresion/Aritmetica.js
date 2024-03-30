@@ -45,21 +45,15 @@ class Aritmetica extends Instruccion{
                     }
                     this.valor = valor1 + valor2;
                     return Number( this.valor);
-                } // el int + char o char + int funciona, pero el problema es que el char admite numeros como number
-                else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
+                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
                     // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
                     this.tipo = 'int';
                     this.valor = valor1 + valor2.charCodeAt(0);
-                    console.log('valor2: ', typeof(valor2));
-                    console.log(this.valor);
                     return Number( this.valor);
-                } 
-                else if(this.op1.tipo == 'char' && this.op2.tipo == 'int'){
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'int'){
                     // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
                     this.tipo = 'int';
                     this.valor = valor1.charCodeAt(0) + valor2;
-                    console.log('valor2: ', typeof(valor1));
-                    console.log(this.valor);
                     return Number( this.valor);
                 } else if(this.op1.tipo == 'int' && this.op2.tipo == 'string'){
                     this.tipo = 'string';
@@ -121,7 +115,32 @@ class Aritmetica extends Instruccion{
                     this.tipo = 'string';
                     this.valor = valor1 + valor2;
                     return this.valor;
-                }  //queda pendiente los que llevan caracter char
+                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'double';
+                    this.valor = valor1 + valor2.charCodeAt(0);
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'double'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'double';
+                    this.valor = valor1.charCodeAt(0) + valor2;
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'string';
+                    this.valor = valor1 + valor2;
+                    return this.valor;
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'string'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'string';
+                    this.valor = valor1 + valor2;
+                    return this.valor;
+                } else if(this.op1.tipo == 'string' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'string';
+                    this.valor = valor1 + valor2;
+                    return this.valor;
+                }   //queda pendiente los que llevan caracter char
                 else{
                     this.tipo = 'Error';
                     //este es un error semantico : error de tipo de dato
@@ -182,8 +201,27 @@ class Aritmetica extends Instruccion{
                     }
                     this.valor = valor1 - valor2;
                     return Number( this.valor);
-                } // Faltan las validaciones para caracter
-                else{
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'double'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'double';
+                    this.valor = valor1.charCodeAt(0)  - valor2;
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'int'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1.charCodeAt(0) - valor2;
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1 - valor2.charCodeAt(0);
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1 - valor2.charCodeAt(0);
+                    return Number( this.valor);
+                } else{
                     this.tipo = 'Error';
                     //este es un error semantico : error de tipo de dato
                     return this.valor;
@@ -204,6 +242,26 @@ class Aritmetica extends Instruccion{
                 } else if(this.op1.tipo == 'double' && this.op2.tipo == 'double'){
                     this.tipo = 'double';
                     this.valor = valor1 * valor2;
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'double'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'double';
+                    this.valor = valor1.charCodeAt(0) * valor2;
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'int'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1.charCodeAt(0) * valor2;
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1 * valor2.charCodeAt(0);
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1 * valor2.charCodeAt(0);
                     return Number( this.valor);
                 } else if(this.op1.tipo == 'int' && this.op2.tipo == null){
                     this.tipo = 'int';
@@ -232,8 +290,27 @@ class Aritmetica extends Instruccion{
                     this.tipo = 'double';
                     this.valor = valor1 / valor2;
                     return Number( this.valor);
-                } // Faltan las validaciones para caracter
-                else{
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'double'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'double';
+                    this.valor = valor1.charCodeAt(0) / valor2;
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'char' && this.op2.tipo == 'int'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1.charCodeAt(0) / valor2;
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1 / valor2.charCodeAt(0);
+                    return Number( this.valor);
+                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'char'){
+                    // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
+                    this.tipo = 'int';
+                    this.valor = valor1 / valor2.charCodeAt(0);
+                    return Number( this.valor);
+                } else{
                     this.tipo = 'Error';
                     //este es un error semantico : error de tipo de dato
                     return this.valor;
