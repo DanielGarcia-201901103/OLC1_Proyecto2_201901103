@@ -15,6 +15,7 @@ const CodeEditorWindow = () => {
   };
 
   const handleRunCode = async (e) => {
+    setOutputValue("");
     e.preventDefault();
     await fetch('http://localhost:4000/analizar', {
     method: 'POST',
@@ -32,7 +33,7 @@ const CodeEditorWindow = () => {
   const validar = (data) =>{
     let texts = "";
     for (let i = 0; i < data.salida.length; i++) {
-      texts += data.salida[i] + "\n";
+      texts += data.salida[i];
     }
     setOutputValue(texts);
   };

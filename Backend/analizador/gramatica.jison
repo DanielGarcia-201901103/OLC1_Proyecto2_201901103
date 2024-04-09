@@ -117,11 +117,11 @@ const Asignacion = require("../interprete/instruccion/Asignacion.js");
 
 %%
 
-INI: CODIGO EOF                              {$$ = $1; return $$;}
+INI: CODIGO EOF                          {$$ = $1; return $$;}
 ;
 
-CODIGO: CODIGO INSTRUCCION                   { $$ = $1; $$.push($2);}
-            |INSTRUCCION                     { $$ = []; $$.push($1);}
+CODIGO: CODIGO INSTRUCCION               { $$ = $1; $$.push($2);}
+        |INSTRUCCION                     { $$ = []; $$.push($1);}
 ;
 
 INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
@@ -133,14 +133,13 @@ INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
         | FEXECUTE                    {console.log($1); $$=$1;} 
 ;
 
-DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma            {$$=$1 + " "+ $2 + $3;} 
-        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    {$$=$1 + " "+ $2 + $3 + " "+$4+$5;} 
-        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma { $$=$1 + " "+ $2 + " "+ $3 +$4;}  
-        | id sigincremento sigpuntoycoma  { $$= $1 + " "+ $2 + " "+ $3;} 
-        | id sigdecremento sigpuntoycoma  {$$=$1 + " "+ $2 + " "+ $3;} 
+DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$=$1 + " "+ $2 + $3;} 
+        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    { $$=$1 + " "+ $2 + $3 + " "+$4+$5;} 
+        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$=$1 + " "+ $2 + " "+ $3 +$4;}  
+        | id sigincremento sigpuntoycoma                                  { $$= $1 + " "+ $2 + " "+ $3;} 
+        | id sigdecremento sigpuntoycoma                                  { $$=$1 + " "+ $2 + " "+ $3;} 
         | error sigpuntoycoma {addError('Error sintáctico', 'No se reconoce' + yytext, this._$.first_line, this._$.first_column);}
 ;
- ////console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);
 TIPODATO: resint       {$$=$1;} 
         | resdouble    {$$=$1;} 
         | resbool    {$$=$1;} 
@@ -159,12 +158,12 @@ ASIGNACIONES: OTRASEXPRESIONES {$$=$1;}
 EXPRESIONES: OPERACIONES           {$$=$1;} 
         | OPERACIONESRELACIONAL    {$$=$1;} 
         | OPERADORESLOGICOS        {$$=$1;} 
-        | id                       {$$= new Dato($1, "identificador");} 
-        | caracter                 {$$= new Dato($1, "char");} 
-        | cadena                   {$$= new Dato($1, "string");} 
-        | bool                     {$$= new Dato($1, "booleano");} 
-        | decimal                  {$$= new Dato($1, "double");} 
-        | numero                   {$$= new Dato($1, "int");} 
+        | id                       {$$= new Dato($1, "identificador", @1.first_line, @1.first_column);} 
+        | caracter                 {$$= new Dato($1, "char", @1.first_line, @1.first_column);} 
+        | cadena                   {$$= new Dato($1, "string", @1.first_line, @1.first_column);} 
+        | bool                     {$$= new Dato($1, "booleano", @1.first_line, @1.first_column);} 
+        | decimal                  {$$= new Dato($1, "double", @1.first_line, @1.first_column);} 
+        | numero                   {$$= new Dato($1, "int", @1.first_line, @1.first_column);} 
 ;
 OTRASEXPRESIONES: CASTEAR    {$$=$1;} 
         | OPERADORTERNARIO    {$$=$1;}  
@@ -179,22 +178,22 @@ OTRASEXPRESIONES: CASTEAR    {$$=$1;}
         | FCSTR   {$$=$1;} 
 ; 
 
-OPERACIONES: menos EXPRESIONES %prec Umenos                                              {$$= new Aritmetica($2, $2 , $1 + "unario" );} 
-        | EXPRESIONES mas EXPRESIONES                                                    {$$= new Aritmetica($1,$3,$2) ;} 
-        | EXPRESIONES menos EXPRESIONES                                                  {$$= new Aritmetica($1,$3,$2) ;} 
-        | EXPRESIONES por EXPRESIONES                                                    {$$= new Aritmetica($1,$3,$2) ;} 
-        | EXPRESIONES dividir EXPRESIONES                                                {$$= new Aritmetica($1,$3,$2) ;} 
-        | respotencia parentesisabre EXPRESIONES signocoma EXPRESIONES parentesiscierra  {$$= new Aritmetica($3,$5,$1);} 
-        | EXPRESIONES modulo EXPRESIONES                                                 {$$= new Aritmetica($1,$3,$2) ;} 
-        | AGRUPACION                                                                     {$$=$1;} 
+OPERACIONES: menos EXPRESIONES %prec Umenos                                              {$$= new Aritmetica($2, $2 , $1 + "unario", @1.first_line, @1.first_column );} 
+        | EXPRESIONES mas EXPRESIONES                                                    {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 
+        | EXPRESIONES menos EXPRESIONES                                                  {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 
+        | EXPRESIONES por EXPRESIONES                                                    {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 
+        | EXPRESIONES dividir EXPRESIONES                                                {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 
+        | respotencia parentesisabre EXPRESIONES signocoma EXPRESIONES parentesiscierra  {$$= new Aritmetica($3,$5,$1, @1.first_line, @1.first_column) ;} 
+        | EXPRESIONES modulo EXPRESIONES                                                 {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 
+        | AGRUPACION                                                                     {$$= $1;} 
 ;
 
-OPERACIONESRELACIONAL: EXPRESIONES igualigual EXPRESIONES   {$$= new Relacional($1,$3,$2);} 
-        | EXPRESIONES negacionigual EXPRESIONES             {$$= new Relacional($1,$3,$2);}  
-        | EXPRESIONES menorigual EXPRESIONES                {$$= new Relacional($1,$3,$2);}  
-        | EXPRESIONES menorque EXPRESIONES                  {$$= new Relacional($1,$3,$2);} 
-        | EXPRESIONES mayorigual EXPRESIONES                {$$= new Relacional($1,$3,$2);} 
-        | EXPRESIONES mayorque EXPRESIONES                  {$$= new Relacional($1,$3,$2);} 
+OPERACIONESRELACIONAL: EXPRESIONES igualigual EXPRESIONES   {$$= new Relacional($1,$3,$2, @1.first_line, @1.first_column);} 
+        | EXPRESIONES negacionigual EXPRESIONES             {$$= new Relacional($1,$3,$2, @1.first_line, @1.first_column);}  
+        | EXPRESIONES menorigual EXPRESIONES                {$$= new Relacional($1,$3,$2, @1.first_line, @1.first_column);}  
+        | EXPRESIONES menorque EXPRESIONES                  {$$= new Relacional($1,$3,$2, @1.first_line, @1.first_column);} 
+        | EXPRESIONES mayorigual EXPRESIONES                {$$= new Relacional($1,$3,$2, @1.first_line, @1.first_column);} 
+        | EXPRESIONES mayorque EXPRESIONES                  {$$= new Relacional($1,$3,$2, @1.first_line, @1.first_column);} 
 ;
 
 OPERADORESLOGICOS:  notlogico EXPRESIONES    {$$=$1 + " " + $2 ;} 
@@ -206,7 +205,7 @@ OPERADORTERNARIO: OPERACIONESRELACIONAL siginterrogacion ASIGNACIONES dospuntos 
 ;
 
 
-AGRUPACION: parentesisabre EXPRESIONES parentesiscierra    {$$=$1 + " " + $2 + " " + $3;} 
+AGRUPACION: parentesisabre EXPRESIONES parentesiscierra    {$$= $2;} 
 ;
 
 
@@ -290,8 +289,8 @@ CONTENIDOSMETOD: resbreak sigpuntoycoma    {$$=$1 + $2;}
 LLAMADAS: id SNPARAMETROS    {$$=$1 + " " + $2;} 
 ;
 
-FCOUT: rescout menormenor ASIGNACIONES sigpuntoycoma    {$$= new Print($3) ;} 
-        | rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {$$=$1 + " " + $2 + " " + $3 + " "+ $4 + " " + $5 + $6;} 
+FCOUT: rescout menormenor ASIGNACIONES sigpuntoycoma    {$$= new Print($3, false, @1.first_line, @1.first_column) ;} 
+        | rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {$$= new Print($3, true, @1.first_line, @1.first_column) ;} 
 ;
 
 FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra   {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
@@ -330,4 +329,5 @@ FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {$$=$1 + " " + $2 + " " + 
 //https://drive.google.com/file/d/1kiTbuTNiIu5q12Lol7CIWp8bFmxv4sKQ/view
 //https://github.com/JoseMore99/Conferencia-AST          
 
-//clase del año pasado https://www.youtube.com/watch?v=Cr-faHppq4M    me quedé en el minuto 1:15:59
+//clase del año pasado https://www.youtube.com/watch?v=Cr-faHppq4M   
+// me quedé en el minuto 44:44

@@ -119,41 +119,44 @@ break;
 case 16:
 addError('Error sintáctico', 'No se reconoce' + yytext, this._$.first_line, this._$.first_column);
 break;
-case 17: case 18: case 19: case 20: case 21: case 22: case 24: case 25: case 26: case 27: case 28: case 35: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 53: case 68: case 69: case 70: case 71: case 72: case 76: case 77: case 78: case 82: case 91: case 92: case 103:
+case 17: case 18: case 19: case 20: case 21: case 22: case 24: case 25: case 26: case 27: case 28: case 35: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 68: case 69: case 70: case 71: case 72: case 76: case 77: case 78: case 82: case 91: case 92: case 103:
 this.$=$$[$0];
 break;
 case 23:
 this.$=$$[$0-2] + " "+ $$[$0-1] + " " + $$[$0];
 break;
 case 29:
-this.$= new Dato($$[$0], "identificador");
+this.$= new Dato($$[$0], "identificador", _$[$0].first_line, _$[$0].first_column);
 break;
 case 30:
-this.$= new Dato($$[$0], "char");
+this.$= new Dato($$[$0], "char", _$[$0].first_line, _$[$0].first_column);
 break;
 case 31:
-this.$= new Dato($$[$0], "string");
+this.$= new Dato($$[$0], "string", _$[$0].first_line, _$[$0].first_column);
 break;
 case 32:
-this.$= new Dato($$[$0], "booleano");
+this.$= new Dato($$[$0], "booleano", _$[$0].first_line, _$[$0].first_column);
 break;
 case 33:
-this.$= new Dato($$[$0], "double");
+this.$= new Dato($$[$0], "double", _$[$0].first_line, _$[$0].first_column);
 break;
 case 34:
-this.$= new Dato($$[$0], "int");
+this.$= new Dato($$[$0], "int", _$[$0].first_line, _$[$0].first_column);
 break;
 case 46:
-this.$= new Aritmetica($$[$0], $$[$0] , $$[$0-1] + "unario" );
+this.$= new Aritmetica($$[$0], $$[$0] , $$[$0-1] + "unario", _$[$0-1].first_line, _$[$0-1].first_column );
 break;
 case 47: case 48: case 49: case 50: case 52:
-this.$= new Aritmetica($$[$0-2],$$[$0],$$[$0-1]) ;
+this.$= new Aritmetica($$[$0-2],$$[$0],$$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column) ;
 break;
 case 51:
-this.$= new Aritmetica($$[$0-3],$$[$0-1],$$[$0-5]);
+this.$= new Aritmetica($$[$0-3],$$[$0-1],$$[$0-5], _$[$0-5].first_line, _$[$0-5].first_column) ;
+break;
+case 53:
+this.$= $$[$0];
 break;
 case 54: case 55: case 56: case 57: case 58: case 59:
-this.$= new Relacional($$[$0-2],$$[$0],$$[$0-1]);
+this.$= new Relacional($$[$0-2],$$[$0],$$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 60:
 this.$=$$[$0-1] + " " + $$[$0] ;
@@ -164,8 +167,8 @@ break;
 case 63:
 this.$=$$[$0-4] +" "+ $$[$0-3] +" "+ $$[$0-2] +$$[$0-1] + " " + $$[$0];
 break;
-case 64: case 96:
-this.$=$$[$0-2] + " " + $$[$0-1] + " " + $$[$0];
+case 64:
+this.$= $$[$0-1];
 break;
 case 65: case 84: case 107: case 108: case 109: case 111: case 112: case 114:
 this.$=$$[$0-3] + " " + $$[$0-2] + " " + $$[$0-1] + " " + $$[$0];
@@ -206,6 +209,9 @@ break;
 case 95:
 this.$=$$[$0-5] + " "+ $$[$0-4] + " " + $$[$0-3] +$$[$0-2] + " " + $$[$0-1] + $$[$0];
 break;
+case 96:
+this.$=$$[$0-2] + " " + $$[$0-1] + " " + $$[$0];
+break;
 case 98:
 this.$=$$[$0-1]+ $$[$0];
 break;
@@ -219,10 +225,10 @@ case 104:
 this.$=$$[$0-1] + " " + $$[$0];
 break;
 case 105:
-this.$= new Print($$[$0-1]) ;
+this.$= new Print($$[$0-1], false,_$[$0-3].first_line, _$[$0-3].first_column) ;
 break;
 case 106:
-this.$=$$[$0-5] + " " + $$[$0-4] + " " + $$[$0-3] + " "+ $$[$0-2] + " " + $$[$0-1] + $$[$0];
+this.$= new Print($$[$0-3], true, _$[$0-5].first_line, _$[$0-5].first_column) ;
 break;
 case 110: case 113:
 this.$=$$[$0-4] + " " + $$[$0-3] + " " + $$[$0-2] + " " + $$[$0-1] + $$[$0];

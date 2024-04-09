@@ -1,13 +1,15 @@
 const Instruccion = require('../Instruccion.js')
 
 class Aritmetica extends Instruccion{
-    constructor(op1, op2, operador){
+    constructor(op1, op2, operador, fila, columna){
         super();
         this.op1 = op1;
         this.op2 = op2;
         this.operador = operador;
         this.tipo = 'Error';
         this.valor = 'null';
+        this.fila = fila;
+        this.columna = columna;
     }
 
     interpretar(entorno){

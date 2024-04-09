@@ -2,9 +2,12 @@ const Instruccion = require('../Instruccion.js');
 global.obimpresiones = [];
 
 class Print extends Instruccion{
-    constructor(expresion){
+    constructor(expresion,salto, fila, columna){
         super();
         this.expresion = expresion;
+        this.fila = fila;
+        this.columna = columna;
+        this.salto = salto;
     }
 
     interpretar(entorno){
@@ -14,7 +17,13 @@ class Print extends Instruccion{
             return;
         }
         //console.log(valor);
-        obimpresiones.push(valor);
+        if (this.salto = 'true'){
+            this.valor = valor.toString();
+            obimpresiones.push(valor + '\n');
+        }else{
+            this.valor = valor
+            obimpresiones.push(valor);
+        }
     }
 }
 
