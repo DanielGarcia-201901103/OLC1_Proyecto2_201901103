@@ -46,5 +46,12 @@ class Simbolo{
     }
     
 }
+const TipoSimbolo = {
+    VARIABLE: 'VARIABLE',
+    ARREGLO: 'ARREGLO',
+    FUNCION: 'FUNCION',
+    CLASE: 'CLASE'
+}
 
-module.exports = Simbolo;
+module.exports = {Simbolo,
+    TipoSimbolo};

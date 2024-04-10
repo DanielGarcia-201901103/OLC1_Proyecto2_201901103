@@ -1,4 +1,5 @@
 const Instruccion = require('../Instruccion.js');
+const {addError} = require('../../analisisSem/manejoErrores');
 global.obimpresiones = [];
 
 class Print extends Instruccion{
@@ -13,7 +14,8 @@ class Print extends Instruccion{
     interpretar(entorno){
         let valor = this.expresion.interpretar(entorno);
         if(this.expresion.tipo == 'Error'){
-            console.log('Error semantico: No se puede imprimir con error. ', this.expresion.valor);
+           // console.log('Error semantico: No se puede imprimir con error. ', this.expresion.valor);
+            addError('Error Semantico', 'No se puede imprimir con error'+ this.expresion.valor, this.fila, this.columna);
             return;
         }
         //console.log(valor);

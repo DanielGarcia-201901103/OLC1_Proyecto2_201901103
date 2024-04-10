@@ -1,5 +1,6 @@
 const Simbolo = require('./simbolos.js')
 const Funcion = require('./funcion.js')
+
 class Entorno{
     constructor(nombreentorno, anterior){
         this.tablasimbolos = {};
@@ -9,18 +10,24 @@ class Entorno{
     }
     
     addSimbolo(id, valor, tipo, tipodato, entorno, linea, columna){
+        if (id in this.tablasimbolos){
+            //error semantico de variable ya declarada
+            return;
+        }
         let simbolo = new Simbolo(id, valor ,tipo, tipodato, entorno, linea, columna);
         this.tablasimbolos[id] = simbolo;
     }
 
-    getSimbolos(id){
-        let entorno = this;
-        let valor =  entorno.tablasimbolos[id];
-        while (valor == undefined && this.anterior != null){
-            entorno = entorno.anterior;
-            valor = entorno.tablasimbolos[id];
+    getSimbolo(id){
+        let ent = this;
+        while (ent != null){
+            if(!(id in ent.tablasimbolos)){
+                ent = ent.anterior
+            }
+            return ent.tablasimbolos[id];
         }
-        return valor;
+        //error semantico variable no existe
+        //return tipo de dato error
     }
 
     addFuncion(nombre, parametros, instrucciones){

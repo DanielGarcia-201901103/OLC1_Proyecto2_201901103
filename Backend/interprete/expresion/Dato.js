@@ -1,4 +1,5 @@
-const Instruccion = require('../Instruccion.js')
+const Instruccion = require('../Instruccion.js');
+const {addError} = require('../../analisisSem/manejoErrores');
 
 class Dato extends Instruccion{
     constructor(valor, tipo, fila, columna){
@@ -32,7 +33,7 @@ class Dato extends Instruccion{
             case 'double':
                 return Number(this.valor);
             case 'Error':
-                console.log('Error semantico: No se puede interpretar un dato con error. ', this.valor);
+                addError('Error Semantico', 'Dato de tipo incorrecto '+ this.tipo +' - '+ this.valor, this.fila, this.columna);
                 return;
         }
     }

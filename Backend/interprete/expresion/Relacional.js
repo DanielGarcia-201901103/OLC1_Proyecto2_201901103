@@ -1,4 +1,5 @@
 const Instruccion = require("../Instruccion.js");
+const {addError} = require('../../analisisSem/manejoErrores');
 
 class Relacional extends Instruccion {
     constructor(op1, op2, operador, fila, columna) {
@@ -51,6 +52,7 @@ class Relacional extends Instruccion {
                     return this.valor;
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Relacional incorrecto: '+ valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y '+ this.op2.tipo, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
                     return this.valor;
@@ -90,6 +92,7 @@ class Relacional extends Instruccion {
                     return this.valor;
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Relacional incorrecto: '+ valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y '+ this.op2.tipo, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
                     return this.valor;
@@ -129,6 +132,7 @@ class Relacional extends Instruccion {
                     return this.valor;
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Relacional incorrecto: '+ valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y '+ this.op2.tipo, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
                     return this.valor;
@@ -168,6 +172,7 @@ class Relacional extends Instruccion {
                     return this.valor;
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Relacional incorrecto: '+ valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y '+ this.op2.tipo, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
                     return this.valor;
@@ -207,6 +212,7 @@ class Relacional extends Instruccion {
                     return this.valor;
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Relacional incorrecto: '+ valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y '+ this.op2.tipo, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
                     return this.valor;
@@ -246,6 +252,7 @@ class Relacional extends Instruccion {
                     return this.valor;
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Relacional incorrecto: '+ valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y '+ this.op2.tipo, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
                     return this.valor;

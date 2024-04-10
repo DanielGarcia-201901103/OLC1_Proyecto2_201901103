@@ -1,5 +1,5 @@
 const Instruccion = require('../Instruccion.js')
-
+const {addError} = require('../../analisisSem/manejoErrores');
 class Aritmetica extends Instruccion{
     constructor(op1, op2, operador, fila, columna){
         super();
@@ -145,6 +145,7 @@ class Aritmetica extends Instruccion{
                 }   //queda pendiente los que llevan caracter char
                 else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Operación de tipo incorrecta '+ this.valor, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
                     return this.valor;
@@ -225,6 +226,7 @@ class Aritmetica extends Instruccion{
                     return Number( this.valor);
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Operación de tipo incorrecta '+ this.valor, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     return this.valor;
                 }
@@ -272,6 +274,7 @@ class Aritmetica extends Instruccion{
                 } // Faltan las validaciones para caracter
                 else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Operación de tipo incorrecta '+ this.valor, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     return this.valor;
                 }
@@ -314,6 +317,7 @@ class Aritmetica extends Instruccion{
                     return Number( this.valor);
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Operación de tipo incorrecta '+ this.valor, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     return this.valor;
                 }
@@ -337,6 +341,7 @@ class Aritmetica extends Instruccion{
                 }
                 else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Operación de tipo incorrecta '+ this.valor, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     return this.valor;
                 }
@@ -360,6 +365,7 @@ class Aritmetica extends Instruccion{
                 }
                 else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Operación de tipo incorrecta '+ this.valor, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     return this.valor;
                 }
@@ -374,6 +380,7 @@ class Aritmetica extends Instruccion{
                     return Number( this.valor);
                 } else{
                     this.tipo = 'Error';
+                    addError('Error Semantico', 'Operación de tipo incorrecta '+ this.valor, this.fila, this.columna);
                     //este es un error semantico : error de tipo de dato
                     return this.valor;
                 }

@@ -12,9 +12,9 @@ const analizar = (req, res) => {
     const { texto } = req.body;
     //envia el texto a analizar y devuelve el resultado para poder enviarlo a la consola salida del frontend
     let resultado = analiza.parse(texto);
-    let entorno = new Entorno('global', null);
+    let entornoglobal = new Entorno('GLOBAL', null);
     resultado.forEach(instruccion =>{
-        instruccion.interpretar(entorno);
+        instruccion.interpretar(entornoglobal);
     })
     res.status(200).json({ message: 'Analizando...', salida: obimpresiones });
     obimpresiones = [];

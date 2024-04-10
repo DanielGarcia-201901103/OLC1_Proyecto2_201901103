@@ -6,6 +6,7 @@ const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 const Relacional = require("../interprete/expresion/Relacional.js");
 const Asignacion = require("../interprete/instruccion/Asignacion.js");
 const Logico = require("../interprete/expresion/Logicos.js");
+const If = require("../interprete/instruccion/If.js");
 %}
 
 %lex
@@ -93,13 +94,13 @@ const Logico = require("../interprete/expresion/Logicos.js");
 
 %left 'orlogico'
 %left 'andlogico'
-%left 'notlogico'
+%right 'notlogico'
 %left 'negacionigual' 'igualigual'
 %left 'menorigual' 'mayorigual' 'mayorque' 'menorque'
 %left 'mas', 'menos'
 %left 'dividir', 'por','modulo' 
 %left 'pow'
-%left Umenos 
+%right Umenos 
 
 %start INI
 
@@ -211,7 +212,7 @@ SENTENCIAS: SENTIF                                                    {$$=$1;}
         | SENTDOWHILE                                                 {$$=$1;}  
 ;
 
-SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$=$1 +" "+ $2 + $3 +$4 + $5 + " " +$6 + " " + $7;} 
+SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$=new If($3,$6, @1.first_line, @1.first_column);} 
 ;
 
 CONTENIDOS: resbreak sigpuntoycoma                                           {$$=$1 + $2;} 
@@ -318,4 +319,4 @@ FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma                            {$
 //https://github.com/JoseMore99/Conferencia-AST          
 
 //clase del año pasado https://www.youtube.com/watch?v=Cr-faHppq4M   
-// me quedé en el minuto 44:44
+// me quedé en el minuto 49:34
