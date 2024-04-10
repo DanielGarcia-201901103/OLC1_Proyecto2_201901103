@@ -1,13 +1,15 @@
 const Instruccion = require("../Instruccion.js");
 
 class Logico extends Instruccion {
-    constructor(op1, op2, operador) {
+    constructor(op1, op2, operador, fila, columna) {
         super();
         this.op1 = op1;
         this.op2 = op2;
         this.operador = operador;
         this.tipo = "Error";
         this.valor = "null";
+        this.fila = fila;
+        this.columna = columna;
     }
 
     interpretar(entorno) {
@@ -47,7 +49,15 @@ class Logico extends Instruccion {
                         this.valor = false;
                     }
                     return this.valor;
-                } else{
+                } else if(this.op1.tipo == 'booleano' && this.op2.tipo == 'booleano'){
+                    this.tipo = 'booleano';
+                    if (valor1 || valor2) {
+                        this.valor = true;
+                    } else {
+                        this.valor = false;
+                    }
+                    return this.valor;
+                }  else{
                     this.tipo = 'Error';
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores
@@ -79,6 +89,14 @@ class Logico extends Instruccion {
                     }
                     return this.valor;
                 } else if(this.op1.tipo == 'double' && this.op2.tipo == 'double'){
+                    this.tipo = 'booleano';
+                    if (valor1 && valor2) {
+                        this.valor = true;
+                    } else {
+                        this.valor = false;
+                    }
+                    return this.valor;
+                } else if(this.op1.tipo == 'booleano' && this.op2.tipo == 'booleano'){
                     this.tipo = 'booleano';
                     if (valor1 && valor2) {
                         this.valor = true;
@@ -121,7 +139,15 @@ class Logico extends Instruccion {
                         this.valor = false;
                     }
                     return this.valor;
-                } else{
+                } else if(this.op1.tipo == 'booleano' ){
+                    this.tipo = 'booleano';
+                    if (valor1) {
+                        this.valor = false;
+                    } else {
+                        this.valor = true;
+                    }
+                    return this.valor;
+                }  else{
                     this.tipo = 'Error';
                     //este es un error semantico : error de tipo de dato
                     //agregar a la lista de errores

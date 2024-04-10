@@ -17,11 +17,11 @@ class Print extends Instruccion{
             return;
         }
         //console.log(valor);
-        if (this.salto = 'true'){
+        if (this.salto == 'salto'){
             this.valor = valor.toString();
             obimpresiones.push(valor + '\n');
         }else{
-            this.valor = valor
+            this.valor = valor.toString();
             obimpresiones.push(valor);
         }
     }

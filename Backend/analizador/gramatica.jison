@@ -1,20 +1,11 @@
 %{
-//const {Aritmetica,tipoArit} = require('./expresion/Aritmetica')
-//const {Relacional,TipoRel} = require('./expresion/relaciones')
-//const {tipo} = require('./expresion/retorno')
-//const {Variable} = require('./expresion/variable')
-//const {Nativo,tipoNat} = require('./expresion/nativo')
-//const {Declarar} = require('./instrucciones/declarar')
-//const {Print} = require('./instrucciones/print')
-//const {Bloque} = require('./instrucciones/bloque')
-//const {If} = require('./instrucciones/If')
 const {addError} = require('../analisisSem/manejoErrores');
 const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 const Relacional = require("../interprete/expresion/Relacional.js");
 const Asignacion = require("../interprete/instruccion/Asignacion.js");
-
+const Logico = require("../interprete/expresion/Logicos.js");
 %}
 
 %lex
@@ -23,7 +14,7 @@ const Asignacion = require("../interprete/instruccion/Asignacion.js");
 
 %%
 
-[ \s\r\n\t]                //espacios en blanco
+\s+                 //espacios en blanco
 "//".*		//comentario simple	
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]  //comentario vlineas
 
@@ -96,11 +87,8 @@ const Asignacion = require("../interprete/instruccion/Asignacion.js");
 \"[^\"]*\"		{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 
 <<EOF>>             return 'EOF';
-.                   {addError('Error léxico', "Caracter no reconocido\" " + yytext +" \" ", yylloc.first_line, yylloc.first_columm); }
-// La siguiente linea es donde se manejan los errores lexicos
-//.  { console.error('Error léxico: \"' + yytext + '\", linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);  }
-//console.log(yylloc.first_line, yylloc.first_columm, 'Lexico', yytext)
 
+. {addError('Error léxico', 'Caracter no reconocido\" ' + yytext +' \" ', yylloc.first_line, yylloc.first_column); console.error('Error léxico: \"' + yytext + '\", linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);}
 /lex
 
 %left 'orlogico'
@@ -138,21 +126,21 @@ DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$=$
         | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$=$1 + " "+ $2 + " "+ $3 +$4;}  
         | id sigincremento sigpuntoycoma                                  { $$= $1 + " "+ $2 + " "+ $3;} 
         | id sigdecremento sigpuntoycoma                                  { $$=$1 + " "+ $2 + " "+ $3;} 
-        | error sigpuntoycoma {addError('Error sintáctico', 'No se reconoce' + yytext, this._$.first_line, this._$.first_column);}
+        | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
 ;
 TIPODATO: resint       {$$=$1;} 
         | resdouble    {$$=$1;} 
-        | resbool    {$$=$1;} 
-        | reschar    {$$=$1;} 
+        | resbool      {$$=$1;} 
+        | reschar      {$$=$1;} 
         | resstring    {$$=$1;} 
 ;
 
-LISTANVARIABLES: id    {$$=$1;} 
+LISTANVARIABLES: id                       {$$=$1;} 
         | id signocoma LISTANVARIABLES    {$$=$1 + " "+ $2 + " " + $3;} 
 ;
 
-ASIGNACIONES: OTRASEXPRESIONES {$$=$1;}  
-        | EXPRESIONES  {$$=$1;} 
+ASIGNACIONES: OTRASEXPRESIONES     {$$=$1;}  
+        | EXPRESIONES              {$$=$1;} 
 ;
 
 EXPRESIONES: OPERACIONES           {$$=$1;} 
@@ -165,17 +153,17 @@ EXPRESIONES: OPERACIONES           {$$=$1;}
         | decimal                  {$$= new Dato($1, "double", @1.first_line, @1.first_column);} 
         | numero                   {$$= new Dato($1, "int", @1.first_line, @1.first_column);} 
 ;
-OTRASEXPRESIONES: CASTEAR    {$$=$1;} 
-        | OPERADORTERNARIO    {$$=$1;}  
-        | INCREYDECRE    {$$=$1;}  
-        | LLAMADAS    {$$=$1;} 
-        | FTOLOWER    {$$=$1;}  
-        | FTOUPPER    {$$=$1;}  
-        | FROUND    {$$=$1;} 
-        | FLENGTH    {$$=$1;}  
-        | FTYPEOF    {$$=$1;}  
-        | FTOSTRING   {$$=$1;} 
-        | FCSTR   {$$=$1;} 
+OTRASEXPRESIONES: CASTEAR          {$$=$1;} 
+        | OPERADORTERNARIO         {$$=$1;}  
+        | INCREYDECRE              {$$=$1;}  
+        | LLAMADAS                 {$$=$1;} 
+        | FTOLOWER                 {$$=$1;}  
+        | FTOUPPER                 {$$=$1;}  
+        | FROUND                   {$$=$1;} 
+        | FLENGTH                  {$$=$1;}  
+        | FTYPEOF                  {$$=$1;}  
+        | FTOSTRING                {$$=$1;} 
+        | FCSTR                    {$$=$1;} 
 ; 
 
 OPERACIONES: menos EXPRESIONES %prec Umenos                                              {$$= new Aritmetica($2, $2 , $1 + "unario", @1.first_line, @1.first_column );} 
@@ -196,125 +184,125 @@ OPERACIONESRELACIONAL: EXPRESIONES igualigual EXPRESIONES   {$$= new Relacional(
         | EXPRESIONES mayorque EXPRESIONES                  {$$= new Relacional($1,$3,$2, @1.first_line, @1.first_column);} 
 ;
 
-OPERADORESLOGICOS:  notlogico EXPRESIONES    {$$=$1 + " " + $2 ;} 
-        | EXPRESIONES andlogico EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
-        | EXPRESIONES orlogico EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 ;} 
+OPERADORESLOGICOS:  notlogico EXPRESIONES      {$$= new Logico($2, $2 ,$1, @1.first_line, @1.first_column);} 
+        | EXPRESIONES andlogico EXPRESIONES    {$$= new Logico($1, $3 ,$2, @1.first_line, @1.first_column);} 
+        | EXPRESIONES orlogico EXPRESIONES     {$$= new Logico($1, $3 ,$2, @1.first_line, @1.first_column);} 
 ;
 
 OPERADORTERNARIO: OPERACIONESRELACIONAL siginterrogacion ASIGNACIONES dospuntos ASIGNACIONES    {$$=$1 +" "+ $2 +" "+ $3 +$4 + " " + $5;} 
 ;
 
 
-AGRUPACION: parentesisabre EXPRESIONES parentesiscierra    {$$= $2;} 
+AGRUPACION: parentesisabre EXPRESIONES parentesiscierra              {$$= $2;} 
 ;
 
 
-CASTEAR: parentesisabre TIPODATO parentesiscierra EXPRESIONES    {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+CASTEAR: parentesisabre TIPODATO parentesiscierra EXPRESIONES        {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
-INCREYDECRE: EXPRESIONES sigincremento    {$$=$1 + $2;} 
-        | EXPRESIONES sigdecremento      {$$=$1 + $2;} 
+INCREYDECRE: EXPRESIONES sigincremento                               {$$=$1 + $2;} 
+        | EXPRESIONES sigdecremento                                  {$$=$1 + $2;} 
 ;
 
-SENTENCIAS: SENTIF    {$$=$1;} 
-        | SENTSWITCH   {$$=$1;} 
-        | SENTWHILE   {$$=$1;}  
-        | SENTFOR    {$$=$1;} 
-        | SENTDOWHILE   {$$=$1;}  
+SENTENCIAS: SENTIF                                                    {$$=$1;} 
+        | SENTSWITCH                                                  {$$=$1;} 
+        | SENTWHILE                                                   {$$=$1;}  
+        | SENTFOR                                                     {$$=$1;} 
+        | SENTDOWHILE                                                 {$$=$1;}  
 ;
 
 SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$=$1 +" "+ $2 + $3 +$4 + $5 + " " +$6 + " " + $7;} 
 ;
 
-CONTENIDOS: resbreak sigpuntoycoma    {$$=$1 + $2;} 
-        | rescontinue sigpuntoycoma    {$$=$1 + $2;} 
-        | RETORNOS    {$$=$1;} 
-        | CODIGO    {$$=$1;} 
+CONTENIDOS: resbreak sigpuntoycoma                                           {$$=$1 + $2;} 
+        | rescontinue sigpuntoycoma                                          {$$=$1 + $2;} 
+        | RETORNOS                                                           {$$=$1;} 
+        | CODIGO                                                             {$$=$1;} 
 ;
 
-FINIF: llavecierra    {$$=$1;} 
-        | llavecierra reselse SENTIF    {$$=$1 + $2 +" " +$3;} 
-        | llavecierra reselse llaveabre CONTENIDOS llavecierra     {$$=$1 + $2 +$3 +" " + $4 + " " + $5;} 
+FINIF: llavecierra                                                           {$$=$1;} 
+        | llavecierra reselse SENTIF                                         {$$=$1 + $2 +" " +$3;} 
+        | llavecierra reselse llaveabre CONTENIDOS llavecierra               {$$=$1 + $2 +$3 +" " + $4 + " " + $5;} 
 ;
 
 SENTSWITCH: resswitch parentesisabre EXPRESIONES parentesiscierra llaveabre SWCASOS llavecierra    {$$=$1 +" "+$2 + " " + $3 + " " +$4+" "+$5+" "+$6+" " + $7;} 
 ;
 
-SWCASOS: SWCASE    {$$=$1;} 
-        | SWCASE SWCASOS    {$$=$1 + " " +$2;} 
+SWCASOS: SWCASE                                                               {$$=$1;} 
+        | SWCASE SWCASOS                                                      {$$=$1 + " " +$2;} 
 ;
 
-SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS    {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
-        | resdefault dospuntos CONTENIDOS    {$$=$1+ " " + $2 +" " + $3;} 
+SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS                             {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+        | resdefault dospuntos CONTENIDOS                                     {$$=$1+ " " + $2 +" " + $3;} 
 ;
 
-SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra   {$$=$1 + " "+ $2 + $3+$4+" "+$5+" "+ $6+ " " +$7;} 
+SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra                                     {$$=$1 + " "+ $2 + $3+$4+" "+$5+" "+ $6+ " " +$7;} 
 ;
 
 SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra {$$=$1+$2+" "+$3+" "+$4+" "+$5+" "+$6+" "+$7+" " +$8+$9+" "+$10;} 
 ;
 
-SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma {$$=$1 + $2 +" "+ $3 + " " + $4 + $5 + $6 + " " + $7 + " " + $8 + $9 ;} 
+SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma               {$$=$1 + $2 +" "+ $3 + " " + $4 + $5 + $6 + " " + $7 + " " + $8 + $9 ;} 
 ;
 
-CONTENIDOSCICLOS: resbreak sigpuntoycoma    {$$=$1 + $2;} 
-        | rescontinue sigpuntoycoma    {$$=$1 + $2;} 
-        | RETORNOS    {$$=$1;} 
-        | CODIGO    {$$=$1;} 
+CONTENIDOSCICLOS: resbreak sigpuntoycoma                                      {$$=$1 + $2;} 
+        | rescontinue sigpuntoycoma                                           {$$=$1 + $2;} 
+        | RETORNOS                                                            {$$=$1;} 
+        | CODIGO                                                              {$$=$1;} 
 ;
 
-RETORNOS: resreturn sigpuntoycoma    {$$=$1 + $2;} 
-        | resreturn ASIGNACIONES sigpuntoycoma    {$$=$1 + " " + $2 + " "+ $3;} 
+RETORNOS: resreturn sigpuntoycoma                                             {$$=$1 + $2;} 
+        | resreturn ASIGNACIONES sigpuntoycoma                                {$$=$1 + " " + $2 + " "+ $3;} 
 ;
 
 FUNCIONES: TIPODATO id SNPARAMETROS llaveabre CONTENIDOSCICLOS llavecierra    {$$=$1 + " "+ $2 + " " + $3 +$4 + " " + $5 + $6;} 
 ;
 
-SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra    {$$=$1 + " " + $2 + " " + $3;} 
-        | parentesisabre  parentesiscierra    {$$=$1 + $2;} 
+SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra                      {$$=$1 + " " + $2 + " " + $3;} 
+        | parentesisabre  parentesiscierra                                    {$$=$1 + $2;} 
 ;
 
-PARAMETROS: TIPODATO EXPRESIONES    {$$=$1+ $2;} 
-        | TIPODATO EXPRESIONES signocoma PARAMETROS    {$$=$1 + " " +  $2 +" " + $3 + " "  +  $4;} 
+PARAMETROS: TIPODATO EXPRESIONES                                              {$$=$1+ $2;} 
+        | TIPODATO EXPRESIONES signocoma PARAMETROS                           {$$=$1 + " " +  $2 +" " + $3 + " "  +  $4;} 
 ;
 
-METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra    {$$=$1 + " " + $2 + " "+$3 + $4 + " " + $5+ " " + $6;} 
+METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra        {$$=$1 + " " + $2 + " "+$3 + $4 + " " + $5+ " " + $6;} 
 ;
 
-CONTENIDOSMETOD: resbreak sigpuntoycoma    {$$=$1 + $2;} 
-        | rescontinue sigpuntoycoma    {$$=$1 + $2;} 
-        | CODIGO    {$$=$1;} 
+CONTENIDOSMETOD: resbreak sigpuntoycoma                                       {$$=$1 + $2;} 
+        | rescontinue sigpuntoycoma                                           {$$=$1 + $2;} 
+        | CODIGO                                                              {$$=$1;} 
 ;
 
-LLAMADAS: id SNPARAMETROS    {$$=$1 + " " + $2;} 
+LLAMADAS: id SNPARAMETROS                                                     {$$=$1 + " " + $2;} 
 ;
 
-FCOUT: rescout menormenor ASIGNACIONES sigpuntoycoma    {$$= new Print($3, false, @1.first_line, @1.first_column) ;} 
-        | rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {$$= new Print($3, true, @1.first_line, @1.first_column) ;} 
+FCOUT:  rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {$$= new Print($3, "salto", @1.first_line, @1.first_column) ;} 
+        | rescout menormenor ASIGNACIONES sigpuntoycoma                          {$$= new Print($3, "sinsalto", @1.first_line, @1.first_column) ;}      
 ;
 
-FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra   {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra             {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
-FTOUPPER: restoupper parentesisabre ASIGNACIONES parentesiscierra   {$$=$1 + " " + $2 + " " + $3 + " " + $4;}  
+FTOUPPER: restoupper parentesisabre ASIGNACIONES parentesiscierra             {$$=$1 + " " + $2 + " " + $3 + " " + $4;}  
 ;
 
-FROUND: resround parentesisabre ASIGNACIONES parentesiscierra   {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FROUND: resround parentesisabre ASIGNACIONES parentesiscierra                 {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
-FLENGTH: EXPRESIONES sigpunto reslength parentesisabre parentesiscierra    {$$=$1 + " " + $2 + " " + $3 + " " + $4 + $5;} 
+FLENGTH: EXPRESIONES sigpunto reslength parentesisabre parentesiscierra       {$$=$1 + " " + $2 + " " + $3 + " " + $4 + $5;} 
 ;
 
-FTYPEOF: restypeof parentesisabre ASIGNACIONES parentesiscierra    {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FTYPEOF: restypeof parentesisabre ASIGNACIONES parentesiscierra               {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
-FTOSTRING: restostring parentesisabre ASIGNACIONES parentesiscierra    {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FTOSTRING: restostring parentesisabre ASIGNACIONES parentesiscierra           {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
-FCSTR: EXPRESIONES sigpunto rescstr parentesisabre parentesiscierra    {$$=$1 + " " + $2 + " " + $3 + " " + $4 + $5;} 
+FCSTR: EXPRESIONES sigpunto rescstr parentesisabre parentesiscierra           {$$=$1 + " " + $2 + " " + $3 + " " + $4 + $5;} 
 ;
 
-FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma    {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma                            {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
 //la siguiente linea es la que maneja los errores sintacticos
