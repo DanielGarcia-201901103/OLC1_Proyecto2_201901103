@@ -26,6 +26,7 @@ class Entorno{
             }
             return ent.tablasimbolos[id];
         }
+        return ;
         //error semantico variable no existe
         //return tipo de dato error
     }
