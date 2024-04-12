@@ -38,6 +38,15 @@ class Dato extends Instruccion{
                 let data = this.valor.getTipo();
                 this.valor = data.valor;
                 this.tipo = data.tipo;
+                if(this.tipo == 'int' || this.tipo == 'double'){
+                    this.valor = Number(this.valor);
+                }else if (this.tipo == 'booleano'){
+                    this.valor = Boolean(this.valor);
+                } else if (this.tipo == 'string'){
+                    this.valor = this.valor.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\'/g, "'").replace(/\\\\/g, '\\');
+                } else if(this.tipo == 'char'){
+                    this.valor = this.valor;
+                }
                 console.log('valor: ', this.tipo, this.valor);
                 return this.valor ;
             case 'Error':
