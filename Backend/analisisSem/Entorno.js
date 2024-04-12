@@ -30,6 +30,19 @@ class Entorno{
         //error semantico variable no existe
         //return tipo de dato error
     }
+    actualizarSimbolo(id, act){
+        let ent = this;
+        while (ent != null){
+            if(!(id in ent.tablasimbolos)){
+                ent = ent.anterior
+            }
+            ent.tablasimbolos[id].setTipo(act);
+            return ;
+        }
+        //error semantico variable no existe
+        //return tipo de dato error
+        
+    }
 
     addFuncion(nombre, parametros, instrucciones){
         let simbolo = new Funcion(nombre, parametros, instrucciones);

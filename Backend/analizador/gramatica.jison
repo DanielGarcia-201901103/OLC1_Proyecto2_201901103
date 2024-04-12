@@ -1,10 +1,11 @@
 %{
-const {addError} = require('../analisisSem/manejoErrores');
+const {addError} = require("../analisisSem/manejoErrores");
 const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 const Relacional = require("../interprete/expresion/Relacional.js");
 const Asignacion = require("../interprete/instruccion/Asignacion.js");
+const Reasignacion = require("../interprete/instruccion/Reasignacion.js");
 const Logico = require("../interprete/expresion/Logicos.js");
 const If = require("../interprete/instruccion/If.js");
 %}
@@ -122,19 +123,19 @@ INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
         | FEXECUTE                    {console.log($1); $$=$1;} 
 ;
 
-DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$=$1 + " "+ $2 + $3;} 
+DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= new Asignacion($2, new Dato("sindato", $1, @1.first_line, @1.first_column), $1, @1.first_line, @1.first_column);} 
         | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    { $$= new Asignacion($2, $4, $1, @1.first_line, @1.first_column);} 
-        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$=$1 + " "+ $2 + " "+ $3 +$4;}  
+        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$= new Reasignacion($1, $3, @1.first_line, @1.first_column);}  
         | id sigincremento sigpuntoycoma                                  { $$= $1 + " "+ $2 + " "+ $3;} 
-        | id sigdecremento sigpuntoycoma                                  { $$=$1 + " "+ $2 + " "+ $3;} 
+        | id sigdecremento sigpuntoycoma                                  { $$= $1 + " "+ $2 + " "+ $3;} 
         | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
 ;
 
-TIPODATO: resint       {$$=$1;} 
-        | resdouble    {$$=$1;} 
-        | resbool      {$$=$1;} 
-        | reschar      {$$=$1;} 
-        | resstring    {$$=$1;} 
+TIPODATO: resint       {$$="int";} 
+        | resdouble    {$$="double";} 
+        | resbool      {$$="booleano";} 
+        | reschar      {$$= "char";} 
+        | resstring    {$$= "string";} 
 ;
 
 LISTANVARIABLES: id                       {$$ = []; $$.push($1);} 
@@ -148,7 +149,7 @@ ASIGNACIONES: EXPRESIONES              {$$=$1;}
 EXPRESIONES: OPERACIONES           {$$=$1;} 
         | OPERACIONESRELACIONAL    {$$=$1;} 
         | OPERADORESLOGICOS        {$$=$1;} 
-        | id                       {$$= new Dato($1, "identificador", @1.first_line, @1.first_column);} 
+        | id                       {$$= new Dato($1, "id", @1.first_line, @1.first_column); }
         | caracter                 {$$= new Dato($1, "char", @1.first_line, @1.first_column);} 
         | cadena                   {$$= new Dato($1, "string", @1.first_line, @1.first_column);} 
         | bool                     {$$= new Dato($1, "booleano", @1.first_line, @1.first_column);} 
