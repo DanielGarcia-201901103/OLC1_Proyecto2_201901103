@@ -1,5 +1,5 @@
-const Simbolo = require('./simbolos.js')
-const Funcion = require('./funcion.js')
+const Simbolo = require('./simbolos.js').Simbolo;
+const Funcion = require('./funcion.js').Funcion;
 
 class Entorno{
     constructor(nombreentorno, anterior){
@@ -9,12 +9,12 @@ class Entorno{
         this.nombreentorno = nombreentorno;
     }
     
-    addSimbolo(id, valor, tipo, tipodato, entorno, linea, columna){
+    addSimbolo(id, valor, tipo, entorno, linea, columna){
         if (id in this.tablasimbolos){
             //error semantico de variable ya declarada
             return;
         }
-        let simbolo = new Simbolo(id, valor ,tipo, tipodato, entorno, linea, columna);
+        let simbolo = new Simbolo(id, valor ,tipo, entorno, linea, columna);
         this.tablasimbolos[id] = simbolo;
     }
 

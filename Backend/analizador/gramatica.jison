@@ -123,12 +123,13 @@ INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
 ;
 
 DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$=$1 + " "+ $2 + $3;} 
-        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    { $$=$1 + " "+ $2 + $3 + " "+$4+$5;} 
+        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    { $$= new Asignacion($2, $4, $1, @1.first_line, @1.first_column);} 
         | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$=$1 + " "+ $2 + " "+ $3 +$4;}  
         | id sigincremento sigpuntoycoma                                  { $$= $1 + " "+ $2 + " "+ $3;} 
         | id sigdecremento sigpuntoycoma                                  { $$=$1 + " "+ $2 + " "+ $3;} 
         | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
 ;
+
 TIPODATO: resint       {$$=$1;} 
         | resdouble    {$$=$1;} 
         | resbool      {$$=$1;} 
@@ -136,12 +137,12 @@ TIPODATO: resint       {$$=$1;}
         | resstring    {$$=$1;} 
 ;
 
-LISTANVARIABLES: id                       {$$=$1;} 
-        | id signocoma LISTANVARIABLES    {$$=$1 + " "+ $2 + " " + $3;} 
+LISTANVARIABLES: id                       {$$ = []; $$.push($1);} 
+        | id signocoma LISTANVARIABLES    {$$ = $1; $$.push($2);} 
 ;
 
-ASIGNACIONES: OTRASEXPRESIONES     {$$=$1;}  
-        | EXPRESIONES              {$$=$1;} 
+ASIGNACIONES: EXPRESIONES              {$$=$1;}  
+        | OTRASEXPRESIONES     {$$=$1;}
 ;
 
 EXPRESIONES: OPERACIONES           {$$=$1;} 

@@ -32,6 +32,13 @@ class Dato extends Instruccion{
                 return this.valor;
             case 'double':
                 return Number(this.valor);
+            case 'identificador':
+                //validar en obtener del entorno
+                this.valor = entorno.getSimbolo(this.valor);
+                let data = this.valor.getTipo();
+                this.valor = data.valor;
+                this.tipo = data.tipo;
+                return data.valor;
             case 'Error':
                 addError('Error Semantico', 'Dato de tipo incorrecto '+ this.tipo +' - '+ this.valor, this.fila, this.columna);
                 return;
