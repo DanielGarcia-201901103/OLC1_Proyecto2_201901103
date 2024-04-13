@@ -3,6 +3,7 @@ const {addError} = require("../analisisSem/manejoErrores");
 const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
+const IncrementoDecremento = require("../interprete/expresion/IncrementoDecremento.js");
 const Relacional = require("../interprete/expresion/Relacional.js");
 const Asignacion = require("../interprete/instruccion/Asignacion.js");
 const Reasignacion = require("../interprete/instruccion/Reasignacion.js");
@@ -126,8 +127,8 @@ INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
 DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= new Asignacion($2, new Dato("sindato", $1, @1.first_line, @1.first_column), $1, @1.first_line, @1.first_column);} 
         | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    { $$= new Asignacion($2, $4, $1, @1.first_line, @1.first_column);} 
         | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$= new Reasignacion($1, $3, @1.first_line, @1.first_column);}  
-        | id sigincremento sigpuntoycoma                                  { $$= $1 + " "+ $2 + " "+ $3;} 
-        | id sigdecremento sigpuntoycoma                                  { $$= $1 + " "+ $2 + " "+ $3;} 
+        | id sigincremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Dato($1, "id", @1.first_line, @1.first_column),"++", @1.first_line, @1.first_column); } 
+        | id sigdecremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Dato($1, "id", @1.first_line, @1.first_column),"--", @1.first_line, @1.first_column); } 
         | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
 ;
 
@@ -204,8 +205,8 @@ AGRUPACION: parentesisabre EXPRESIONES parentesiscierra              {$$= $2;}
 CASTEAR: parentesisabre TIPODATO parentesiscierra EXPRESIONES        {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
-INCREYDECRE: EXPRESIONES sigincremento                               {$$=$1 + $2;} 
-        | EXPRESIONES sigdecremento                                  {$$=$1 + $2;} 
+INCREYDECRE: EXPRESIONES sigincremento                               {console.log($1); $$=new IncrementoDecremento($1,"++", @1.first_line, @1.first_column); } 
+        | EXPRESIONES sigdecremento                                  {console.log($1); $$=new IncrementoDecremento($1,"--", @1.first_line, @1.first_column); } 
 ;
 
 SENTENCIAS: SENTIF                                                    {$$=$1;} 

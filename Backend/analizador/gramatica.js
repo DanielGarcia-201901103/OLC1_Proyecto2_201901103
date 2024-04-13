@@ -110,8 +110,11 @@ break;
 case 13:
  this.$= new Reasignacion($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column);
 break;
-case 14: case 15:
- this.$= $$[$0-2] + " "+ $$[$0-1] + " "+ $$[$0];
+case 14:
+ this.$= new IncrementoDecremento($$[$0-2],new Dato($$[$0-2], "id", _$[$0-2].first_line, _$[$0-2].first_column),"++", _$[$0-2].first_line, _$[$0-2].first_column); 
+break;
+case 15:
+ this.$= new IncrementoDecremento($$[$0-2],new Dato($$[$0-2], "id", _$[$0-2].first_line, _$[$0-2].first_column),"--", _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 16:
  addError('Error sintáctico', 'No se reconoce' + $$[$0-1], this._$.first_line, this._$.first_column);
@@ -191,11 +194,17 @@ break;
 case 66: case 86: case 109: case 110: case 111: case 113: case 114: case 116:
 this.$=$$[$0-3] + " " + $$[$0-2] + " " + $$[$0-1] + " " + $$[$0];
 break;
-case 67: case 68: case 76: case 77: case 91: case 92: case 95: case 99: case 103: case 104:
-this.$=$$[$0-1] + $$[$0];
+case 67:
+console.log($$[$0-1]); this.$=new IncrementoDecremento($$[$0-1],"++", _$[$0-1].first_line, _$[$0-1].first_column); 
+break;
+case 68:
+console.log($$[$0-1]); this.$=new IncrementoDecremento($$[$0-1],"--", _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 75:
 this.$=new If($$[$0-4],$$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column);
+break;
+case 76: case 77: case 91: case 92: case 95: case 99: case 103: case 104:
+this.$=$$[$0-1] + $$[$0];
 break;
 case 81:
 this.$=$$[$0-2] + $$[$0-1] +" " +$$[$0];
@@ -507,6 +516,7 @@ const {addError} = require("../analisisSem/manejoErrores");
 const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
+const IncrementoDecremento = require("../interprete/expresion/IncrementoDecremento.js");
 const Relacional = require("../interprete/expresion/Relacional.js");
 const Asignacion = require("../interprete/instruccion/Asignacion.js");
 const Reasignacion = require("../interprete/instruccion/Reasignacion.js");
