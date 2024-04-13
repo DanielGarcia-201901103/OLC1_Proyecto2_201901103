@@ -1,5 +1,5 @@
 const Instruccion = require("../Instruccion.js");
-const {addError} = require('../../analisisSem/manejoErrores');
+const { addError } = require('../../analisisSem/manejoErrores');
 
 class Logico extends Instruccion {
     constructor(op1, op2, operador, fila, columna) {
@@ -14,149 +14,153 @@ class Logico extends Instruccion {
     }
 
     interpretar(entorno) {
-        let valor1 = this.op1.interpretar(entorno);
-        let valor2 = this.op2.interpretar(entorno);
-        switch (this.operador) {
-            case '||':
-                if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
-                    this.tipo = 'booleano';
-                    if (valor1 || valor2) {
-                        this.valor = true;
+        try {
+            let valor1 = this.op1.interpretar(entorno);
+            let valor2 = this.op2.interpretar(entorno);
+            switch (this.operador) {
+                case '||':
+                    if (this.op1.tipo == 'int' && this.op2.tipo == 'int') {
+                        this.tipo = 'booleano';
+                        if (valor1 || valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'int' && this.op2.tipo == 'double') {
+                        this.tipo = 'booleano';
+                        if (valor1 || valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'double' && this.op2.tipo == 'int') {
+                        this.tipo = 'booleano';
+                        if (valor1 || valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'double' && this.op2.tipo == 'double') {
+                        this.tipo = 'booleano';
+                        if (valor1 || valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'booleano' && this.op2.tipo == 'booleano') {
+                        this.tipo = 'booleano';
+                        if (valor1 || valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
                     } else {
-                        this.valor = false;
+                        this.tipo = 'Error';
+                        addError('Error Semantico', 'Logico incorrecto: ' + valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y ' + this.op2.tipo, this.fila, this.columna);
+                        //este es un error semantico : error de tipo de dato
+                        //agregar a la lista de errores
+                        return this.valor;
                     }
-                    return this.valor;
-                } else if(this.op1.tipo == 'int' && this.op2.tipo == 'double'){
-                    this.tipo = 'booleano';
-                    if (valor1 || valor2) {
-                        this.valor = true;
+                case '&&':
+                    if (this.op1.tipo == 'int' && this.op2.tipo == 'int') {
+                        this.tipo = 'booleano';
+                        if (valor1 && valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'int' && this.op2.tipo == 'double') {
+                        this.tipo = 'booleano';
+                        if (valor1 && valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'double' && this.op2.tipo == 'int') {
+                        this.tipo = 'booleano';
+                        if (valor1 && valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'double' && this.op2.tipo == 'double') {
+                        this.tipo = 'booleano';
+                        if (valor1 && valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'booleano' && this.op2.tipo == 'booleano') {
+                        this.tipo = 'booleano';
+                        if (valor1 && valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
                     } else {
-                        this.valor = false;
+                        this.tipo = 'Error';
+                        addError('Error Semantico', 'Logico incorrecto: ' + valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y ' + this.op2.tipo, this.fila, this.columna);
+                        //este es un error semantico : error de tipo de dato
+                        //agregar a la lista de errores
+                        return this.valor;
                     }
-                    return this.valor;
-                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'int'){
-                    this.tipo = 'booleano';
-                    if (valor1 || valor2) {
-                        this.valor = true;
+                case '!':
+                    if (this.op1.tipo == 'int' && this.op2.tipo == 'int') {
+                        this.tipo = 'booleano';
+                        this.valor = !valor1;
+                        return this.valor;
+                    } else if (this.op1.tipo == 'int' && this.op2.tipo == 'double') {
+                        this.tipo = 'booleano';
+                        if (valor1 < valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'double' && this.op2.tipo == 'int') {
+                        this.tipo = 'booleano';
+                        if (valor1 < valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'double' && this.op2.tipo == 'double') {
+                        this.tipo = 'booleano';
+                        if (valor1 < valor2) {
+                            this.valor = true;
+                        } else {
+                            this.valor = false;
+                        }
+                        return this.valor;
+                    } else if (this.op1.tipo == 'booleano') {
+                        this.tipo = 'booleano';
+                        if (valor1) {
+                            this.valor = false;
+                        } else {
+                            this.valor = true;
+                        }
+                        return this.valor;
                     } else {
-                        this.valor = false;
+                        this.tipo = 'Error';
+                        addError('Error Semantico', 'Logico incorrecto: ' + valor1 + ' es de tipo: ' + this.op1.tipo, this.fila, this.columna);
+                        //este es un error semantico : error de tipo de dato
+                        //agregar a la lista de errores
+                        return this.valor;
                     }
-                    return this.valor;
-                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'double'){
-                    this.tipo = 'booleano';
-                    if (valor1 || valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                } else if(this.op1.tipo == 'booleano' && this.op2.tipo == 'booleano'){
-                    this.tipo = 'booleano';
-                    if (valor1 || valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                }  else{
-                    this.tipo = 'Error';
-                    addError('Error Semantico', 'Logico incorrecto: '+ valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y '+ this.op2.tipo, this.fila, this.columna);
-                    //este es un error semantico : error de tipo de dato
-                    //agregar a la lista de errores
-                    return this.valor;
-                }
-            case '&&':
-                if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
-                    this.tipo = 'booleano';
-                    if (valor1 && valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                }  else if(this.op1.tipo == 'int' && this.op2.tipo == 'double'){
-                    this.tipo = 'booleano';
-                    if (valor1 && valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'int'){
-                    this.tipo = 'booleano';
-                    if (valor1 && valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'double'){
-                    this.tipo = 'booleano';
-                    if (valor1 && valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                } else if(this.op1.tipo == 'booleano' && this.op2.tipo == 'booleano'){
-                    this.tipo = 'booleano';
-                    if (valor1 && valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                } else{
-                    this.tipo = 'Error';
-                    addError('Error Semantico', 'Logico incorrecto: '+ valor1 + ' o ' + valor2 + ' es de tipo: ' + this.op1.tipo + ' y '+ this.op2.tipo, this.fila, this.columna);
-                    //este es un error semantico : error de tipo de dato
-                    //agregar a la lista de errores
-                    return this.valor;
-                }
-            case '!':
-                if(this.op1.tipo == 'int' && this.op2.tipo == 'int'){
-                    this.tipo = 'booleano';
-                    this.valor = !valor1;
-                    return this.valor;
-                }  else if(this.op1.tipo == 'int' && this.op2.tipo == 'double'){
-                    this.tipo = 'booleano';
-                    if (valor1 < valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'int'){
-                    this.tipo = 'booleano';
-                    if (valor1 < valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                } else if(this.op1.tipo == 'double' && this.op2.tipo == 'double'){
-                    this.tipo = 'booleano';
-                    if (valor1 < valor2) {
-                        this.valor = true;
-                    } else {
-                        this.valor = false;
-                    }
-                    return this.valor;
-                } else if(this.op1.tipo == 'booleano' ){
-                    this.tipo = 'booleano';
-                    if (valor1) {
-                        this.valor = false;
-                    } else {
-                        this.valor = true;
-                    }
-                    return this.valor;
-                }  else{
-                    this.tipo = 'Error';
-                    addError('Error Semantico', 'Logico incorrecto: '+ valor1 + ' es de tipo: ' + this.op1.tipo, this.fila, this.columna);
-                    //este es un error semantico : error de tipo de dato
-                    //agregar a la lista de errores
-                    return this.valor;
-                }
+            }
+        } catch (error) {
+            addError('Error', 'Error al interpretar el logico' + error, this.fila, this.columna);
         }
     }
 }

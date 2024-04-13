@@ -143,7 +143,8 @@ LISTANVARIABLES: id                       {$$ = []; $$.push($1);}
 ;
 
 ASIGNACIONES: EXPRESIONES              {$$=$1;}  
-        | OTRASEXPRESIONES     {$$=$1;}
+        | OTRASEXPRESIONES             {$$=$1;}
+        | error                        { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
 ;
 
 EXPRESIONES: OPERACIONES           {$$=$1;} 
@@ -211,8 +212,9 @@ SENTENCIAS: SENTIF                                                    {$$=$1;}
         | SENTSWITCH                                                  {$$=$1;} 
         | SENTWHILE                                                   {$$=$1;}  
         | SENTFOR                                                     {$$=$1;} 
-        | SENTDOWHILE                                                 {$$=$1;}  
-;
+        | SENTDOWHILE                                                 {$$=$1;} 
+        | error                        { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
+ ;
 
 SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$=new If($3,$6, @1.first_line, @1.first_column);} 
 ;

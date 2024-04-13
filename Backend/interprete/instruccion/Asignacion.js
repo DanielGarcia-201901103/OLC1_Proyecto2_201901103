@@ -1,5 +1,6 @@
 const Instruccion = require("../Instruccion.js");
 const Entorno = require('../../analisisSem/Entorno.js');
+const { addError } = require('../../analisisSem/manejoErrores');
 
 class Asignacion extends Instruccion{
     constructor(id, expresion, tipo, linea, columna){
@@ -12,10 +13,10 @@ class Asignacion extends Instruccion{
     }
 
     interpretar(entorno){
-
+        try{
         this.expresion.interpretar(entorno);
         if(this.expresion.tipo != this.tipo){
-            console.error('Error de tipos en la declaración de variable');
+            addError('Error Semantico', 'Error de tipos en la declaración de variable: ' + this.tipo, this.linea, this.columna);
             //error semantico
             return this;
         }
@@ -51,6 +52,9 @@ class Asignacion extends Instruccion{
         //esto hay que corregirlo para que acepete el valor de la variable
         //entorno.addSimbolo(this.id,this.expresion ,this.tipo, this.tipodato, entorno.nombreentorno, this.linea, this.columna);
         return this;
+    }catch(error){
+        addError('Error', 'Ha ocurrido un error ', this.linea, this.columna);
+    }
     }
 }
 
