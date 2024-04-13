@@ -10,6 +10,7 @@ const Asignacion = require("../interprete/instruccion/Asignacion.js");
 const Reasignacion = require("../interprete/instruccion/Reasignacion.js");
 const Logico = require("../interprete/expresion/Logicos.js");
 const If = require("../interprete/instruccion/If.js");
+const Castear = require("../interprete/otrasexpresiones/Castear.js"); 
 %}
 
 %lex
@@ -203,7 +204,7 @@ AGRUPACION: parentesisabre EXPRESIONES parentesiscierra              {$$= $2;}
 ;
 
 
-CASTEAR: parentesisabre TIPODATO parentesiscierra EXPRESIONES        {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+CASTEAR: parentesisabre TIPODATO parentesiscierra EXPRESIONES        {$$=new Castear($4,$2, @1.first_line, @1.first_column);} 
 ;
 
 INCREYDECRE: EXPRESIONES sigincremento                               { $$= new IncrementoDecremento2($1,"++", @1.first_line, @1.first_column, $1.tipo, $1.valor); } 

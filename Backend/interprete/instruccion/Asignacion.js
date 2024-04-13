@@ -28,7 +28,7 @@ class Asignacion extends Instruccion{
                         entorno.addSimbolo(this.id[i], this.expresion ,this.tipo, entorno.nombreentorno, this.linea, this.columna);
                     }
                 } else if (this.expresion.tipo == "double"){
-                    this.expresion.valor = 0.0;
+                    this.expresion.valor = parseFloat(0).toFixed(2);
                     for(let i = 0; i < this.id.length; i++){
                         entorno.addSimbolo(this.id[i], this.expresion ,this.tipo, entorno.nombreentorno, this.linea, this.columna);
                     }

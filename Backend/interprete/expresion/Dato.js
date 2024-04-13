@@ -32,7 +32,7 @@ class Dato extends Instruccion {
                 case 'char':
                     return this.valor;
                 case 'double':
-                    return Number(this.valor);
+                    return Number(parseFloat(this.valor));
                 case 'id':
                     //validar en obtener del entorno
                     this.valor = entorno.getSimbolo(this.valor);

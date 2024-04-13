@@ -86,7 +86,6 @@ class IncrementoDecremento2 extends Instruccion {
                         return this.valor;
                 }
             } else {
-                console.log("entrando al else");
                 switch (this.operador) {
                     case '++':
                         if (this.op1.tipo == 'int') {
