@@ -195,10 +195,10 @@ case 66: case 86: case 109: case 110: case 111: case 113: case 114: case 116:
 this.$=$$[$0-3] + " " + $$[$0-2] + " " + $$[$0-1] + " " + $$[$0];
 break;
 case 67:
-console.log($$[$0-1]); this.$=new IncrementoDecremento($$[$0-1],"++", _$[$0-1].first_line, _$[$0-1].first_column); 
+ console.log($$[$0-1].valor);this.$= new IncrementoDecremento2($$[$0-1],"++", _$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1].tipo, $$[$0-1].valor); 
 break;
 case 68:
-console.log($$[$0-1]); this.$=new IncrementoDecremento($$[$0-1],"--", _$[$0-1].first_line, _$[$0-1].first_column); 
+ this.$= new IncrementoDecremento2($$[$0-1],"--", _$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1].tipo, $$[$0-1].valor); 
 break;
 case 75:
 this.$=new If($$[$0-4],$$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column);
@@ -517,6 +517,7 @@ const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 const IncrementoDecremento = require("../interprete/expresion/IncrementoDecremento.js");
+const IncrementoDecremento2 = require("../interprete/expresion/IncrementoDecremento2.js");
 const Relacional = require("../interprete/expresion/Relacional.js");
 const Asignacion = require("../interprete/instruccion/Asignacion.js");
 const Reasignacion = require("../interprete/instruccion/Reasignacion.js");

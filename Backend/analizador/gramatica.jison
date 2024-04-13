@@ -4,6 +4,7 @@ const Dato = require("../interprete/expresion/Dato.js");
 const Print = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 const IncrementoDecremento = require("../interprete/expresion/IncrementoDecremento.js");
+const IncrementoDecremento2 = require("../interprete/expresion/IncrementoDecremento2.js");
 const Relacional = require("../interprete/expresion/Relacional.js");
 const Asignacion = require("../interprete/instruccion/Asignacion.js");
 const Reasignacion = require("../interprete/instruccion/Reasignacion.js");
@@ -205,8 +206,8 @@ AGRUPACION: parentesisabre EXPRESIONES parentesiscierra              {$$= $2;}
 CASTEAR: parentesisabre TIPODATO parentesiscierra EXPRESIONES        {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
 ;
 
-INCREYDECRE: EXPRESIONES sigincremento                               {console.log($1); $$=new IncrementoDecremento($1,"++", @1.first_line, @1.first_column); } 
-        | EXPRESIONES sigdecremento                                  {console.log($1); $$=new IncrementoDecremento($1,"--", @1.first_line, @1.first_column); } 
+INCREYDECRE: EXPRESIONES sigincremento                               { $$= new IncrementoDecremento2($1,"++", @1.first_line, @1.first_column, $1.tipo, $1.valor); } 
+        | EXPRESIONES sigdecremento                                  { $$= new IncrementoDecremento2($1,"--", @1.first_line, @1.first_column, $1.tipo, $1.valor); } 
 ;
 
 SENTENCIAS: SENTIF                                                    {$$=$1;} 

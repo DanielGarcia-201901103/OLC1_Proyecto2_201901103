@@ -26,7 +26,7 @@ class IncrementoDecremento extends Instruccion {
                         let data = simbolo.getTipo();
                         data.valor = Number(this.valor);
                         data.tipo = this.tipo;
-                        entorno.actualizarSimbolo(this.id[i], data);
+                        entorno.actualizarSimbolo(this.id, data);
 
                         return Number(this.valor);
                     } else if (this.op1.tipo == 'double') {
@@ -36,7 +36,7 @@ class IncrementoDecremento extends Instruccion {
                         let data = simbolo.getTipo();
                         data.valor = Number(this.valor);
                         data.tipo = this.tipo;
-                        entorno.actualizarSimbolo(this.id[i], data);
+                        entorno.actualizarSimbolo(this.id, data);
                         return Number(this.valor);
                     } else {
                         this.tipo = 'Error';
@@ -53,7 +53,7 @@ class IncrementoDecremento extends Instruccion {
                         let data = simbolo.getTipo();
                         data.valor = Number(this.valor);
                         data.tipo = this.tipo;
-                        entorno.actualizarSimbolo(this.id[i], data);
+                        entorno.actualizarSimbolo(this.id, data);
                         return Number(this.valor);
                     } else if (this.op1.tipo == 'double') {
                         this.tipo = 'double';
@@ -62,11 +62,11 @@ class IncrementoDecremento extends Instruccion {
                         let data = simbolo.getTipo();
                         data.valor = Number(this.valor);
                         data.tipo = this.tipo;
-                        entorno.actualizarSimbolo(this.id[i], data);
+                        entorno.actualizarSimbolo(this.id, data);
                         return Number(this.valor);
                     } else {
                         this.tipo = 'Error';
-                        addError('Error Semantico', 'Operación de tipo incorrecta, no se puede incrementar ' + this.valor, this.fila, this.columna);
+                        addError('Error Semantico', 'Operación de tipo incorrecta, no se puede hacer decremento ' + this.valor, this.fila, this.columna);
                         //este es un error semantico : error de tipo de dato
                         //agregar a la lista de errores
                         return this.valor;
