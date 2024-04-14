@@ -32,14 +32,16 @@ class Dato extends Instruccion {
                 case 'char':
                     return this.valor;
                 case 'double':
-                    return Number(parseFloat(this.valor));
+                    return Number(this.valor);
                 case 'id':
                     //validar en obtener del entorno
                     this.valor = entorno.getSimbolo(this.valor);
                     let data = this.valor.getTipo();
                     this.valor = data.valor;
                     this.tipo = data.tipo;
-                    if (this.tipo == 'int' || this.tipo == 'double') {
+                    if (this.tipo == 'int') {
+                        this.valor = Number(this.valor);
+                    } else if (this.tipo == 'double') {
                         this.valor = Number(this.valor);
                     } else if (this.tipo == 'booleano') {
                         this.valor = Boolean(this.valor);

@@ -28,7 +28,7 @@ class Castear extends Instruccion {
                 case 'double':
                     if(this.expresion.tipo == 'int'){
                         this.expresion.tipo = 'double';
-                        this.valor = parseFloat(valor1).toFixed(2);
+                        this.valor = parseFloat(valor1);
                         return this.valor;
                     }else if(this.expresion.tipo == 'char'){
                         this.expresion.tipo = 'double';
@@ -53,24 +53,6 @@ class Castear extends Instruccion {
                         console.log('valor: ', this.valor);
                         return this.valor;
                     }
-                case 'id':
-                    //validar en obtener del entorno
-                    /* */
-                    console.log("Estoy en id para castear: ", this.valor1);
-                    this.valor = entorno.getSimbolo(this.valor1);
-                    let data = this.valor.getTipo();
-                    this.valor = data.valor;
-                    this.tipo = data.tipo;
-                    console.log("Estoy en id para castear: ", this.valor);
-                    console.log("Estoy en id para castear: ", this.tipo);
-                    if (this.tipo == 'int' || this.tipo == 'double') {
-                        this.valor = Number(this.valor);
-                    } else if (this.tipo == 'string') {
-                        this.valor = this.valor.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\'/g, "'").replace(/\\\\/g, '\\');
-                    } else if (this.tipo == 'char') {
-                        this.valor = this.valor;
-                    }
-                    return this.valor;
                 case 'Error':
                     addError('Error Semantico', 'Error de casteo incorrecto: ' + this.expresion.tipo + " a "+this.tipo, this.fila, this.columna);
                     return;
