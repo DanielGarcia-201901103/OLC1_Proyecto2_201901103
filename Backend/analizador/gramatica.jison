@@ -11,6 +11,8 @@ const Reasignacion = require("../interprete/instruccion/Reasignacion.js");
 const Logico = require("../interprete/expresion/Logicos.js");
 const If = require("../interprete/instruccion/If.js");
 const Castear = require("../interprete/otrasexpresiones/Castear.js"); 
+const Ftolower = require("../interprete/otrasexpresiones/Ftolower.js"); 
+const Ftoupper = require("../interprete/otrasexpresiones/Ftoupper.js"); 
 %}
 
 %lex
@@ -289,10 +291,10 @@ FCOUT:  rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {$$=
         | rescout menormenor ASIGNACIONES sigpuntoycoma                          {$$= new Print($3, "sinsalto", @1.first_line, @1.first_column) ;}      
 ;
 
-FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra             {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra             {$$= new Ftolower($3, @1.first_line, @1.first_column);} 
 ;
 
-FTOUPPER: restoupper parentesisabre ASIGNACIONES parentesiscierra             {$$=$1 + " " + $2 + " " + $3 + " " + $4;}  
+FTOUPPER: restoupper parentesisabre ASIGNACIONES parentesiscierra             {$$= new Ftoupper($3, @1.first_line, @1.first_column);}  
 ;
 
 FROUND: resround parentesisabre ASIGNACIONES parentesiscierra                 {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
