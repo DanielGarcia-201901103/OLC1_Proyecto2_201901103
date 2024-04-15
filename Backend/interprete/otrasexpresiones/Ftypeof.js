@@ -17,19 +17,31 @@ class Ftypeof extends Instruccion {
             
             if (this.op1.tipo == 'string') {
                 this.tipo = 'string';
-                this.valor = 'std::string';
+                this.valor = 'std::string --> Cadena';
                 return this.valor;
             } else if (this.op1.tipo == 'int') {
                 this.tipo = 'string';
-                this.valor = 'int';
+                this.valor = 'int --> Entero';
                 return this.valor;
-            } else {
+            } else if (this.op1.tipo == 'double') {
+                this.tipo = 'string';
+                this.valor = 'double --> Doble';
+                return this.valor;
+            } else if (this.op1.tipo == 'booleano') {
+                this.tipo = 'string';
+                this.valor = 'bool --> Booleano';
+                return this.valor;
+            } else if (this.op1.tipo == 'char') {
+                this.tipo = 'string';
+                this.valor = 'char --> Caracter';
+                return this.valor;
+            }else {
                 this.tipo = 'Error';
-                addError('Error Semantico', 'tolower incorrecto: se esperaba un tipo std::string en vez de ' + valor1 + ' es de tipo: ' + this.op1.tipo, this.fila, this.columna);
+                addError('Error Semantico', 'typeof incorrecto: se esperaba un tipo de dato valido ' + valor1 + ' es de tipo: ' + this.op1.tipo, this.fila, this.columna);
                 return this.valor;
             }
         } catch (error) {
-            addError('Error', 'Error al interpretar la funcion tolower' + error, this.fila, this.columna);
+            addError('Error', 'Error al interpretar la funcion typeof' + error, this.fila, this.columna);
         }
     }
 }

@@ -24,7 +24,7 @@ class Flength extends Instruccion {
                 return this.valor;
             }
         } catch (error) {
-            addError('Error', 'Error al interpretar la funcion tolower' + error, this.fila, this.columna);
+            addError('Error', 'Error al interpretar la funcion length' + error, this.fila, this.columna);
         }
     }
 }
