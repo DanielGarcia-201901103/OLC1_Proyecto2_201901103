@@ -17,6 +17,7 @@ const Flength = require("../interprete/otrasexpresiones/Flength.js");
 const Fround = require("../interprete/otrasexpresiones/Fround.js"); 
 const Ftypeof = require("../interprete/otrasexpresiones/Ftypeof.js"); 
 const Ftostring = require("../interprete/otrasexpresiones/Ftostring.js"); 
+const {addVariables, limpiarlistVariables, getLVariables, concatenarlista} = require("../interprete/instruccion/listId.js");
 %}
 
 %lex
@@ -132,9 +133,9 @@ INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
         | FEXECUTE                    {console.log($1); $$=$1;} 
 ;
 
-DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= new Asignacion($2, new Dato("sindato", $1, @1.first_line, @1.first_column), $1, @1.first_line, @1.first_column);} 
-        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    { $$= new Asignacion($2, $4, $1, @1.first_line, @1.first_column);} 
-        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$= new Reasignacion($1, $3, @1.first_line, @1.first_column);}  
+DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= new Asignacion($2, new Dato("sindato", $1, @1.first_line, @1.first_column), $1, @1.first_line, @1.first_column); limpiarlistVariables();} 
+        | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    { $$= new Asignacion($2, $4, $1, @1.first_line, @1.first_column); limpiarlistVariables();} 
+        | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$= new Reasignacion($1, $3, @1.first_line, @1.first_column); limpiarlistVariables();}  
         | id sigincremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Dato($1, "id", @1.first_line, @1.first_column),"++", @1.first_line, @1.first_column); } 
         | id sigdecremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Dato($1, "id", @1.first_line, @1.first_column),"--", @1.first_line, @1.first_column); } 
         | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
@@ -147,8 +148,8 @@ TIPODATO: resint       {$$="int";}
         | resstring    {$$= "string";} 
 ;
 
-LISTANVARIABLES: id                       {$$ = []; $$.push($1);} 
-        | id signocoma LISTANVARIABLES    {$$ = $1; $$.push($2);} 
+LISTANVARIABLES:  id signocoma LISTANVARIABLES    {  addVariables($1); concatenarlista($3); $$=getLVariables();} 
+        |   id   {addVariables($1); $$=getLVariables();} 
 ;
 
 ASIGNACIONES: EXPRESIONES              {$$=$1;}  
