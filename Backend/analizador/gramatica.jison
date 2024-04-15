@@ -13,6 +13,8 @@ const If = require("../interprete/instruccion/If.js");
 const Castear = require("../interprete/otrasexpresiones/Castear.js"); 
 const Ftolower = require("../interprete/otrasexpresiones/Ftolower.js"); 
 const Ftoupper = require("../interprete/otrasexpresiones/Ftoupper.js"); 
+const Flength = require("../interprete/otrasexpresiones/Flength.js"); 
+const Fround = require("../interprete/otrasexpresiones/Fround.js"); 
 %}
 
 %lex
@@ -297,10 +299,10 @@ FTOLOWER: restolower parentesisabre ASIGNACIONES parentesiscierra             {$
 FTOUPPER: restoupper parentesisabre ASIGNACIONES parentesiscierra             {$$= new Ftoupper($3, @1.first_line, @1.first_column);}  
 ;
 
-FROUND: resround parentesisabre ASIGNACIONES parentesiscierra                 {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FROUND: resround parentesisabre ASIGNACIONES parentesiscierra                 {$$= new Fround($3, @1.first_line, @1.first_column);} 
 ;
 
-FLENGTH: EXPRESIONES sigpunto reslength parentesisabre parentesiscierra       {$$=$1 + " " + $2 + " " + $3 + " " + $4 + $5;} 
+FLENGTH: EXPRESIONES sigpunto reslength parentesisabre parentesiscierra       {$$=new Flength($1, @1.first_line, @1.first_column);} 
 ;
 
 FTYPEOF: restypeof parentesisabre ASIGNACIONES parentesiscierra               {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 

@@ -1,7 +1,7 @@
 const Instruccion = require("../Instruccion.js");
 const { addError } = require('../../analisisSem/manejoErrores.js');
 
-class Fround extends Instruccion {
+class Flength extends Instruccion {
     constructor(op1, fila, columna) {
         super();
         this.op1 = op1;
@@ -14,17 +14,13 @@ class Fround extends Instruccion {
     interpretar(entorno) {
         try {
             let valor1 = this.op1.interpretar(entorno);
-            if (this.op1.tipo == 'int') {
-                this.tipo = 'double';
-                this.valor = Math.round(valor1);
+            if (this.op1.tipo == 'string') {
+                this.tipo = 'int';
+                this.valor = Number(valor1.length);
                 return this.valor;
-            } else if(this.op1.tipo == 'double'){
-                this.tipo = 'double';
-                this.valor = Math.round(valor1);
-                return this.valor;
-            }else {
+            } else {
                 this.tipo = 'Error';
-                addError('Error Semantico', 'round: se esperaba un valor numerico de tipo double ' + valor1 + ' es de tipo: ' + this.op1.tipo, this.fila, this.columna);
+                addError('Error Semantico', 'length: se esperaba un tipo std::string o vectores en vez de ' + valor1 + ' es de tipo: ' + this.op1.tipo, this.fila, this.columna);
                 return this.valor;
             }
         } catch (error) {
@@ -34,4 +30,4 @@ class Fround extends Instruccion {
 }
 
 
-module.exports = Fround;
+module.exports = Flength;
