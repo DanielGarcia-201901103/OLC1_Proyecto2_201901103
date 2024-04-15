@@ -16,6 +16,7 @@ const Ftoupper = require("../interprete/otrasexpresiones/Ftoupper.js");
 const Flength = require("../interprete/otrasexpresiones/Flength.js"); 
 const Fround = require("../interprete/otrasexpresiones/Fround.js"); 
 const Ftypeof = require("../interprete/otrasexpresiones/Ftypeof.js"); 
+const Ftostring = require("../interprete/otrasexpresiones/Ftostring.js"); 
 %}
 
 %lex
@@ -309,7 +310,7 @@ FLENGTH: EXPRESIONES sigpunto reslength parentesisabre parentesiscierra       {$
 FTYPEOF: restypeof parentesisabre ASIGNACIONES parentesiscierra               {$$=new Ftypeof($3, @1.first_line, @1.first_column);} 
 ;
 
-FTOSTRING: restostring parentesisabre ASIGNACIONES parentesiscierra           {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FTOSTRING: restostring parentesisabre ASIGNACIONES parentesiscierra           {$$=new Ftostring($3, @1.first_line, @1.first_column);} 
 ;
 
 FCSTR: EXPRESIONES sigpunto rescstr parentesisabre parentesiscierra           {$$=$1 + " " + $2 + " " + $3 + " " + $4 + $5;} 

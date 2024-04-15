@@ -68,7 +68,6 @@ function generarTabla() {
     </html>`;
         //escribir archivo 
         escribirArchivo(txtrep);
-        limpiarTabla();
     } catch (error) {
         console.error('Error al generar la tabla de errores:', error);
     }

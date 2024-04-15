@@ -1,5 +1,5 @@
 const analiza = require('../analizador/gramatica');
-const {openReporteErr, generarTabla} = require('../analisisSem/manejoErrores');
+const {openReporteErr, generarTabla, limpiarTabla} = require('../analisisSem/manejoErrores');
 const Entorno = require('../analisisSem/Entorno');
 require('../interprete/instruccion/print');
 
@@ -8,6 +8,7 @@ const index = (req, res) => {
 }
 
 const analizar = (req, res) => {
+    limpiarTabla();
     //obteniendo la información que se envía desde la consola de entrada
     const { texto } = req.body;
     //envia el texto a analizar y devuelve el resultado para poder enviarlo a la consola salida del frontend
