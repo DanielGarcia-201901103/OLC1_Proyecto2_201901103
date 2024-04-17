@@ -140,7 +140,7 @@ break;
 case 23:
 addVariables($$[$0]); this.$=getLVariables();
 break;
-case 24: case 25: case 27: case 28: case 29: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 69: case 70: case 71: case 72: case 73: case 78: case 79: case 80: case 84: case 93: case 94: case 105:
+case 24: case 25: case 27: case 28: case 29: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 69: case 70: case 71: case 72: case 73: case 80: case 81: case 84: case 93: case 94: case 105:
 this.$=$$[$0];
 break;
 case 26: case 74:
@@ -173,7 +173,7 @@ break;
 case 52:
 this.$= new Aritmetica($$[$0-3],$$[$0-1],$$[$0-5], _$[$0-5].first_line, _$[$0-5].first_column) ;
 break;
-case 54:
+case 54: case 78: case 79:
 this.$= $$[$0];
 break;
 case 55: case 56: case 57: case 58: case 59: case 60:
@@ -201,16 +201,16 @@ case 68:
  this.$= new IncrementoDecremento2($$[$0-1],"--", _$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1].tipo, $$[$0-1].valor); 
 break;
 case 75:
-this.$=new If($$[$0-4],$$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column);
+this.$= new If($$[$0-4], $$[$0-1], $$[$0] ,_$[$0-6].first_line, _$[$0-6].first_column);
 break;
-case 76: case 77: case 91: case 92: case 95: case 99: case 103: case 104:
-this.$=$$[$0-1] + $$[$0];
+case 76:
+ this.$= new BBreak(_$[$0-1].first_line, _$[$0-1].first_column);
 break;
-case 81:
-this.$=$$[$0-2] + $$[$0-1] +" " +$$[$0];
+case 77:
+this.$= $$[$0-1] + $$[$0];
 break;
 case 82:
-this.$=$$[$0-4] + $$[$0-3] +$$[$0-2] +" " + $$[$0-1] + " " + $$[$0];
+this.$=$$[$0-1];
 break;
 case 83:
 this.$=$$[$0-6] +" "+$$[$0-5] + " " + $$[$0-4] + " " +$$[$0-3]+" "+$$[$0-2]+" "+$$[$0-1]+" " + $$[$0];
@@ -225,13 +225,19 @@ case 87:
 this.$=$$[$0-2]+ " " + $$[$0-1] +" " + $$[$0];
 break;
 case 88:
-this.$=$$[$0-6] + " "+ $$[$0-5] + $$[$0-4]+$$[$0-3]+" "+$$[$0-2]+" "+ $$[$0-1]+ " " +$$[$0];
+this.$= new Bwhile($$[$0-4],$$[$0-1],  _$[$0-6].first_line, _$[$0-6].first_column);
 break;
 case 89:
 this.$=$$[$0-9]+$$[$0-8]+" "+$$[$0-7]+" "+$$[$0-6]+" "+$$[$0-5]+" "+$$[$0-4]+" "+$$[$0-3]+" " +$$[$0-2]+$$[$0-1]+" "+$$[$0];
 break;
 case 90:
 this.$=$$[$0-8] + $$[$0-7] +" "+ $$[$0-6] + " " + $$[$0-5] + $$[$0-4] + $$[$0-3] + " " + $$[$0-2] + " " + $$[$0-1] + $$[$0] ;
+break;
+case 91: case 103:
+this.$= new BBreak(_$[$0-1].first_line, _$[$0-1].first_column);
+break;
+case 92: case 95: case 99: case 104:
+this.$=$$[$0-1] + $$[$0];
 break;
 case 96:
 this.$=$$[$0-2] + " " + $$[$0-1] + " "+ $$[$0];
@@ -544,6 +550,8 @@ const Asignacion = require("../interprete/instruccion/Asignacion.js");
 const Reasignacion = require("../interprete/instruccion/Reasignacion.js");
 const Logico = require("../interprete/expresion/Logicos.js");
 const If = require("../interprete/instruccion/If.js");
+const Bwhile = require("../interprete/instruccion/Bwhile.js");
+const BBreak = require("../interprete/instruccion/BBreak.js");
 const Castear = require("../interprete/otrasexpresiones/Castear.js"); 
 const Ftolower = require("../interprete/otrasexpresiones/Ftolower.js"); 
 const Ftoupper = require("../interprete/otrasexpresiones/Ftoupper.js"); 

@@ -10,6 +10,8 @@ const Asignacion = require("../interprete/instruccion/Asignacion.js");
 const Reasignacion = require("../interprete/instruccion/Reasignacion.js");
 const Logico = require("../interprete/expresion/Logicos.js");
 const If = require("../interprete/instruccion/If.js");
+const Bwhile = require("../interprete/instruccion/Bwhile.js");
+const BBreak = require("../interprete/instruccion/BBreak.js");
 const Castear = require("../interprete/otrasexpresiones/Castear.js"); 
 const Ftolower = require("../interprete/otrasexpresiones/Ftolower.js"); 
 const Ftoupper = require("../interprete/otrasexpresiones/Ftoupper.js"); 
@@ -226,18 +228,18 @@ SENTENCIAS: SENTIF                                                    {$$=$1;}
         | error                        { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
  ;
 
-SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$=new If($3,$6, @1.first_line, @1.first_column);} 
+SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column);} 
 ;
 
-CONTENIDOS: resbreak sigpuntoycoma                                           {$$=$1 + $2;} 
-        | rescontinue sigpuntoycoma                                          {$$=$1 + $2;} 
-        | RETORNOS                                                           {$$=$1;} 
-        | CODIGO                                                             {$$=$1;} 
+CONTENIDOS: resbreak sigpuntoycoma                                           { $$= new BBreak(@1.first_line, @1.first_column);} 
+        | rescontinue sigpuntoycoma                                          {$$= $1 + $2;} 
+        | RETORNOS                                                           {$$= $1;} 
+        | CODIGO                                                             {$$= $1;} 
 ;
 
 FINIF: llavecierra                                                           {$$=$1;} 
-        | llavecierra reselse SENTIF                                         {$$=$1 + $2 +" " +$3;} 
-        | llavecierra reselse llaveabre CONTENIDOS llavecierra               {$$=$1 + $2 +$3 +" " + $4 + " " + $5;} 
+        | llavecierra reselse SENTIF                                         {$$=$3;} 
+        | llavecierra reselse llaveabre CONTENIDOS llavecierra               {$$=$4;} 
 ;
 
 SENTSWITCH: resswitch parentesisabre EXPRESIONES parentesiscierra llaveabre SWCASOS llavecierra    {$$=$1 +" "+$2 + " " + $3 + " " +$4+" "+$5+" "+$6+" " + $7;} 
@@ -251,7 +253,7 @@ SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS                             {$
         | resdefault dospuntos CONTENIDOS                                     {$$=$1+ " " + $2 +" " + $3;} 
 ;
 
-SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra                                     {$$=$1 + " "+ $2 + $3+$4+" "+$5+" "+ $6+ " " +$7;} 
+SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra                                     {$$= new Bwhile($3, $6,  @1.first_line, @1.first_column);} 
 ;
 
 SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra {$$=$1+$2+" "+$3+" "+$4+" "+$5+" "+$6+" "+$7+" " +$8+$9+" "+$10;} 
@@ -260,7 +262,7 @@ SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDEC
 SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma               {$$=$1 + $2 +" "+ $3 + " " + $4 + $5 + $6 + " " + $7 + " " + $8 + $9 ;} 
 ;
 
-CONTENIDOSCICLOS: resbreak sigpuntoycoma                                      {$$=$1 + $2;} 
+CONTENIDOSCICLOS: resbreak sigpuntoycoma                                      {$$= new BBreak(@1.first_line, @1.first_column);} 
         | rescontinue sigpuntoycoma                                           {$$=$1 + $2;} 
         | RETORNOS                                                            {$$=$1;} 
         | CODIGO                                                              {$$=$1;} 
@@ -284,7 +286,7 @@ PARAMETROS: TIPODATO EXPRESIONES                                              {$
 METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra        {$$=$1 + " " + $2 + " "+$3 + $4 + " " + $5+ " " + $6;} 
 ;
 
-CONTENIDOSMETOD: resbreak sigpuntoycoma                                       {$$=$1 + $2;} 
+CONTENIDOSMETOD: resbreak sigpuntoycoma                                       {$$= new BBreak(@1.first_line, @1.first_column);} 
         | rescontinue sigpuntoycoma                                           {$$=$1 + $2;} 
         | CODIGO                                                              {$$=$1;} 
 ;

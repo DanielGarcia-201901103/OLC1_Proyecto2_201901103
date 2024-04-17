@@ -5,6 +5,7 @@ class Dato extends Instruccion {
     constructor(valor, tipo, fila, columna) {
         super();
         this.valor = valor;
+        this.id = valor;
         this.tipo = tipo;
         this.fila = fila;
         this.columna = columna;
@@ -35,7 +36,7 @@ class Dato extends Instruccion {
                     return Number(this.valor);
                 case 'id':
                     //validar en obtener del entorno
-                    this.valor = entorno.getSimbolo(this.valor);
+                    this.valor = entorno.getSimbolo(this.id);
                     let data = this.valor.getTipo();
                     this.valor = data.valor;
                     this.tipo = data.tipo;
