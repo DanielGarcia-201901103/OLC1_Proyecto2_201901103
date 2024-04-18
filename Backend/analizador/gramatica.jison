@@ -20,6 +20,7 @@ const Fround = require("../interprete/otrasexpresiones/Fround.js");
 const Ftypeof = require("../interprete/otrasexpresiones/Ftypeof.js"); 
 const Ftostring = require("../interprete/otrasexpresiones/Ftostring.js"); 
 const {addVariables, limpiarlistVariables, getLVariables, concatenarlista} = require("../interprete/instruccion/listId.js");
+const Oid = require("../interprete/expresion/Oid.js");
 %}
 
 %lex
@@ -138,8 +139,8 @@ INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
 DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= new Asignacion($2, new Dato("sindato", $1, @1.first_line, @1.first_column), $1, @1.first_line, @1.first_column); limpiarlistVariables();} 
         | TIPODATO LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma    { $$= new Asignacion($2, $4, $1, @1.first_line, @1.first_column); limpiarlistVariables();} 
         | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$= new Reasignacion($1, $3, @1.first_line, @1.first_column); limpiarlistVariables();}  
-        | id sigincremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Dato($1, "id", @1.first_line, @1.first_column),"++", @1.first_line, @1.first_column); } 
-        | id sigdecremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Dato($1, "id", @1.first_line, @1.first_column),"--", @1.first_line, @1.first_column); } 
+        | id sigincremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Oid($1, "id", @1.first_line, @1.first_column, "id"),"++", @1.first_line, @1.first_column); } 
+        | id sigdecremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Oid($1, "id", @1.first_line, @1.first_column, "id"),"--", @1.first_line, @1.first_column); } 
         | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
 ;
 
@@ -162,7 +163,7 @@ ASIGNACIONES: EXPRESIONES              {$$=$1;}
 EXPRESIONES: OPERACIONES           {$$=$1;} 
         | OPERACIONESRELACIONAL    {$$=$1;} 
         | OPERADORESLOGICOS        {$$=$1;} 
-        | id                       {$$= new Dato($1, "id", @1.first_line, @1.first_column); }
+        | id                       {$$= new Oid($1, "id", @1.first_line, @1.first_column, "id"); }
         | caracter                 {$$= new Dato($1, "char", @1.first_line, @1.first_column);} 
         | cadena                   {$$= new Dato($1, "string", @1.first_line, @1.first_column);} 
         | bool                     {$$= new Dato($1, "booleano", @1.first_line, @1.first_column);} 
@@ -216,8 +217,8 @@ AGRUPACION: parentesisabre EXPRESIONES parentesiscierra              {$$= $2;}
 CASTEAR: parentesisabre TIPODATO parentesiscierra EXPRESIONES        {$$=new Castear($4,$2, @1.first_line, @1.first_column);} 
 ;
 
-INCREYDECRE: EXPRESIONES sigincremento                               { $$= new IncrementoDecremento2($1,"++", @1.first_line, @1.first_column, $1.tipo, $1.valor); } 
-        | EXPRESIONES sigdecremento                                  { $$= new IncrementoDecremento2($1,"--", @1.first_line, @1.first_column, $1.tipo, $1.valor); } 
+INCREYDECRE: EXPRESIONES sigincremento                               { $$= new IncrementoDecremento2($1,"++", @1.first_line, @1.first_column, $1.tipoid, $1.id); } 
+        | EXPRESIONES sigdecremento                                  { $$= new IncrementoDecremento2($1,"--", @1.first_line, @1.first_column, $1.tipoid, $1.id); } 
 ;
 
 SENTENCIAS: SENTIF                                                    {$$=$1;} 
@@ -228,7 +229,7 @@ SENTENCIAS: SENTIF                                                    {$$=$1;}
         | error                        { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
  ;
 
-SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column);} 
+SENTIF: resif parentesisabre ASIGNACIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column);} 
 ;
 
 CONTENIDOS: resbreak sigpuntoycoma                                           { $$= new BBreak(@1.first_line, @1.first_column);} 
