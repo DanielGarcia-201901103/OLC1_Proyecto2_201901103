@@ -22,6 +22,7 @@ const Ftostring = require("../interprete/otrasexpresiones/Ftostring.js");
 const {addVariables, limpiarlistVariables, getLVariables, concatenarlista} = require("../interprete/instruccion/listId.js");
 const Oid = require("../interprete/expresion/Oid.js");
 const Bdowhile = require("../interprete/instruccion/Bdowhile.js");
+const Continu = require("../interprete/instruccion/Continu.js");
 %}
 
 %lex
@@ -233,10 +234,13 @@ SENTENCIAS: SENTIF                                                    {$$=$1;}
 SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column);} 
 ;
 
-CONTENIDOS: resbreak sigpuntoycoma                                           { $$= new BBreak(@1.first_line, @1.first_column);} 
-        | rescontinue sigpuntoycoma                                          {$$= $1 + $2;} 
+CONTENIDOS: CONTENIDOS CONTEIF                          { $$ = $1; $$.push($2);} 
+        | CONTEIF                                       { $$ = []; $$.push($1);}
+; 
+CONTEIF: resbreak sigpuntoycoma                                              {$$= new BBreak(@1.first_line, @1.first_column);} 
+        | rescontinue sigpuntoycoma                                          {$$= new Continu(@1.first_line, @1.first_column);} 
         | RETORNOS                                                           {$$= $1;} 
-        | CODIGO                                                             {$$= $1;} 
+        | INSTRUCCION                                                        {$$= $1;} 
 ;
 
 FINIF: llavecierra                                                           {$$=$1;} 
@@ -264,10 +268,13 @@ SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDEC
 SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma               {$$= new Bdowhile($3, $7,  @1.first_line, @1.first_column);} 
 ;
 
-CONTENIDOSCICLOS: resbreak sigpuntoycoma                                      {$$= new BBreak(@1.first_line, @1.first_column);} 
-        | rescontinue sigpuntoycoma                                           {$$=$1 + $2;} 
+CONTENIDOSCICLOS: CONTENIDOSCICLOS CONTENIDOCICL                          { $$ = $1; $$.push($2);}
+        | CONTENIDOCICL                                                   { $$ = []; $$.push($1);}
+;
+CONTENIDOCICL:resbreak sigpuntoycoma                                      {$$= new BBreak(@1.first_line, @1.first_column);} 
+        | rescontinue sigpuntoycoma                                           {$$= new Continu(@1.first_line, @1.first_column);} 
         | RETORNOS                                                            {$$=$1;} 
-        | CODIGO                                                              {$$=$1;} 
+        | INSTRUCCION                                                              {$$=$1;} 
 ;
 
 RETORNOS: resreturn sigpuntoycoma                                             {$$=$1 + $2;} 
@@ -288,9 +295,12 @@ PARAMETROS: TIPODATO EXPRESIONES                                              {$
 METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra        {$$=$1 + " " + $2 + " "+$3 + $4 + " " + $5+ " " + $6;} 
 ;
 
-CONTENIDOSMETOD: resbreak sigpuntoycoma                                       {$$= new BBreak(@1.first_line, @1.first_column);} 
-        | rescontinue sigpuntoycoma                                           {$$=$1 + $2;} 
-        | CODIGO                                                              {$$=$1;} 
+CONTENIDOSMETOD: CONTENIDOSMETOD CONTMETOD                                    { $$ = $1; $$.push($2);} 
+        | CONTMETOD                                                           { $$ = []; $$.push($1);}
+;
+CONTMETOD: resbreak sigpuntoycoma                                             {$$= new BBreak(@1.first_line, @1.first_column);} 
+        | rescontinue sigpuntoycoma                                           {$$= new Continu(@1.first_line, @1.first_column);} 
+        | INSTRUCCION                                                         {$$=$1;} 
 ;
 
 LLAMADAS: id SNPARAMETROS                                                     {$$=$1 + " " + $2;} 

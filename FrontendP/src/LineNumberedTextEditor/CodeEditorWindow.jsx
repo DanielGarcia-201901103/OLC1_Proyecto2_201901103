@@ -7,7 +7,7 @@ import { saveAs } from 'file-saver'; // Importa la función saveAs de FileSaver.
 
 
 const CodeEditorWindow = () => {
-  const [inputValue, setInputValue] = useState( "");
+  const [inputValue, setInputValue] = useState("");
   const [outputValue, setOutputValue] = useState("");
 
   const handleEditorChange = (value) => {
@@ -16,21 +16,24 @@ const CodeEditorWindow = () => {
 
   const handleRunCode = async (e) => {
     setOutputValue("");
-    e.preventDefault();
-    await fetch('http://localhost:4000/analizar', {
-    method: 'POST',
-    mode: 'cors',
-    body: JSON.stringify({ texto: inputValue }),
-    headers:{
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json'
-    }
-  }).then(response => response.json()).then(data => validar(data));
+    if (inputValue != "") {
+      e.preventDefault();
+      await fetch('http://localhost:4000/analizar', {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({ texto: inputValue }),
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json()).then(data => validar(data));
 
-    // Aquí puedes implementar la lógica para ejecutar el código y actualizar la salida
-     // Ejemplo: establecer la salida como el valor de entrada
+      // Aquí puedes implementar la lógica para ejecutar el código y actualizar la salida
+      // Ejemplo: establecer la salida como el valor de entrada
+    }
+
   };
-  const validar = (data) =>{
+  const validar = (data) => {
     let texts = "";
     for (let i = 0; i < data.salida.length; i++) {
       texts += data.salida[i];
@@ -71,55 +74,55 @@ const CodeEditorWindow = () => {
       method: 'GET',
       mode: 'cors',
       headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json'
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
       }
-  }).then(response => response.json()).then(data => validare(data));
+    }).then(response => response.json()).then(data => validare(data));
 
     // Aquí puedes implementar la lógica para ejecutar el código y actualizar la salida
-     // Ejemplo: establecer la salida como el valor de entrada
+    // Ejemplo: establecer la salida como el valor de entrada
   };
-  const validare = (data) =>{
+  const validare = (data) => {
     console.log(data.salida);
-  }; 
+  };
   return (
     <>
       <div className="conjuntoBotones">
-      <ButtonGroup aria-label="Basic example">
-      <Button className="gbotones" onClick={handleCreateFile}>Crear Archivo</Button>{' '} 
-      <Button className="gbotonIn" as="label" htmlFor="fileInput">Abrir Archivo</Button>{' '}
-      <input id="fileInput" type="file"  accept=".sc" style={{ display: 'none', borderradius: "5px" }} onChange={handleOpenFile} />
-      <Button className="gbotones" onClick={handleSaveFile} >Guardar Archivo</Button>{' '}
-      <Button className="botonE" onClick={handleRunCode}>Ejecutar</Button>{' '}
-      <Button className="gbotonesR" onClick={handleOpenReportErrors}>Reporte Errores</Button>{' '}
-      <Button className="gbotonesR">Reporte Tabla Simbolos</Button>{' '}
-      <Button className="gbotonesR">Generar Arbol AST</Button>{' '}
-      </ButtonGroup>
+        <ButtonGroup aria-label="Basic example">
+          <Button className="gbotones" onClick={handleCreateFile}>Crear Archivo</Button>{' '}
+          <Button className="gbotonIn" as="label" htmlFor="fileInput">Abrir Archivo</Button>{' '}
+          <input id="fileInput" type="file" accept=".sc" style={{ display: 'none', borderradius: "5px" }} onChange={handleOpenFile} />
+          <Button className="gbotones" onClick={handleSaveFile} >Guardar Archivo</Button>{' '}
+          <Button className="botonE" onClick={handleRunCode}>Ejecutar</Button>{' '}
+          <Button className="gbotonesR" onClick={handleOpenReportErrors}>Reporte Errores</Button>{' '}
+          <Button className="gbotonesR">Reporte Tabla Simbolos</Button>{' '}
+          <Button className="gbotonesR">Generar Arbol AST</Button>{' '}
+        </ButtonGroup>
       </div>
-    <div className="code-editor-container">
-      <div className="code-editor-left">
-        <h2>Entrada</h2>
-        <Editor
-          height="50vh"
-          width={`100%`}
-          value={inputValue}
-          theme="vs-dark"
-          defaultValue="// Ingresa tu código aquí"
-          onChange={handleEditorChange}
-        />
+      <div className="code-editor-container">
+        <div className="code-editor-left">
+          <h2>Entrada</h2>
+          <Editor
+            height="50vh"
+            width={`100%`}
+            value={inputValue}
+            theme="vs-dark"
+            defaultValue="// Ingresa tu código aquí"
+            onChange={handleEditorChange}
+          />
+        </div>
+        <div className="code-editor-right">
+          <h2>Consola</h2>
+          <textarea
+            className="output-console"
+            value={outputValue}
+            readOnly
+            rows={inputValue.split("\n").length}
+            cols={50}
+            placeholder="Output"
+          />
+        </div>
       </div>
-      <div className="code-editor-right">
-        <h2>Consola</h2>
-        <textarea
-          className="output-console"
-          value={outputValue}
-          readOnly
-          rows={inputValue.split("\n").length}
-          cols={50}
-          placeholder="Output"
-        />
-      </div>
-    </div>
     </>
   );
 };
