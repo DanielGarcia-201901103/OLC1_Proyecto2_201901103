@@ -21,6 +21,7 @@ const Ftypeof = require("../interprete/otrasexpresiones/Ftypeof.js");
 const Ftostring = require("../interprete/otrasexpresiones/Ftostring.js"); 
 const {addVariables, limpiarlistVariables, getLVariables, concatenarlista} = require("../interprete/instruccion/listId.js");
 const Oid = require("../interprete/expresion/Oid.js");
+const Bdowhile = require("../interprete/instruccion/Bdowhile.js");
 %}
 
 %lex
@@ -223,13 +224,13 @@ INCREYDECRE: EXPRESIONES sigincremento                               { $$= new I
 
 SENTENCIAS: SENTIF                                                    {$$=$1;} 
         | SENTSWITCH                                                  {$$=$1;} 
+        | SENTDOWHILE                                                 {$$=$1;} 
         | SENTWHILE                                                   {$$=$1;}  
         | SENTFOR                                                     {$$=$1;} 
-        | SENTDOWHILE                                                 {$$=$1;} 
         | error                        { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
  ;
 
-SENTIF: resif parentesisabre ASIGNACIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column);} 
+SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column);} 
 ;
 
 CONTENIDOS: resbreak sigpuntoycoma                                           { $$= new BBreak(@1.first_line, @1.first_column);} 
@@ -260,7 +261,7 @@ SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTEN
 SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra {$$=$1+$2+" "+$3+" "+$4+" "+$5+" "+$6+" "+$7+" " +$8+$9+" "+$10;} 
 ;
 
-SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma               {$$=$1 + $2 +" "+ $3 + " " + $4 + $5 + $6 + " " + $7 + " " + $8 + $9 ;} 
+SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma               {$$= new Bdowhile($3, $7,  @1.first_line, @1.first_column);} 
 ;
 
 CONTENIDOSCICLOS: resbreak sigpuntoycoma                                      {$$= new BBreak(@1.first_line, @1.first_column);} 

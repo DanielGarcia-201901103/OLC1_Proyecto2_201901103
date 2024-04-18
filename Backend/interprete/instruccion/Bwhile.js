@@ -16,25 +16,43 @@ class Bwhile extends Instruccion {
             let entornowhile = new Entorno('WHILE', entorno);
             this.condicion.interpretar(entornowhile);
             if (this.condicion.tipo != 'booleano') {
-                addError('Error Semantico', 'La condición debe ser de tipo bool ', this.linea, this.columna);
+                addError('Error Semantico', 'La condición del while debe ser de tipo bool ', this.linea, this.columna);
                 //error semantico la condicion no es de tipo boolean
                 return this;
             }
-            //this.instruccioneswhile.interpretar(entornowhile);
+            /*//Este while ya funciona
             while(this.condicion.valor == true){
                 this.instruccioneswhile.forEach(instruccion => {
                     instruccion.interpretar(entornowhile);
                 });
                 this.condicion.interpretar(entornowhile);
-                console.log(this.condicion)
+            }*/
+
+            while(this.condicion.valor == true){
+                let resultado = 'WHILE';
+                for (let i = 0; i < this.instruccioneswhile.length; i++) {
+                    let instruccion = this.instruccioneswhile[i]
+                    instruccion.interpretar(entornowhile);
+                    if(instruccion.tipo == 'break'){
+                        resultado = 'break';
+                        break;
+                    }else if(instruccion.tipo == 'continue'){
+                        resultado = 'continue';
+                        break;
+                    }
+                }
+    
+                if(resultado == 'break'){
+                    break;
+                }else if(resultado == 'continue'){
+                    continue;
+                }
+    
+                this.condicion.interpretar(entornowhile);
             }
-            /*
-            La condicion no se actualiza, basicamente obtiene el valor y lo actualiza dentro del while, pero en la condición se mantiene 
-            el valor 0, como que solo se actualizase pero no guardara el valor correcto, por lo que se encicla el dato, agregué un id a la 
-            clase de Dato para mantener el nombre del id dentro de la funcionalidad, falta corregir el if también   */
             return this;
         } catch (error) {
-            addError('Error', 'Ha ocurrido un error en la interpretación del if ' + error, this.linea, this.columna);
+            addError('Error', 'Ha ocurrido un error en la interpretación del while ' + error, this.linea, this.columna);
         }
     }
 }

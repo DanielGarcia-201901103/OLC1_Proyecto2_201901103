@@ -18,7 +18,6 @@ class IncrementoDecremento extends Instruccion {
             let valor1 = this.op1.interpretar(entorno);
             switch (this.operador) {
                 case '++':
-                    console.log('estoy en incremento valor1: ', valor1);
                     if (this.op1.tipo == 'int' ) {
                         this.tipo = 'int';
                         this.valor = valor1 + 1;

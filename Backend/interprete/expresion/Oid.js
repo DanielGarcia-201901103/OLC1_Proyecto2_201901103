@@ -14,7 +14,6 @@ class Oid extends Instruccion {
 
     interpretar(entorno) {
         try {
-                console.log('estoy dentro de id: ', this.id);
                 //validar en obtener del entorno
                 this.valor = entorno.getSimbolo(this.id);
                 let data = this.valor.getTipo();
@@ -31,7 +30,6 @@ class Oid extends Instruccion {
                 } else if (this.tipo == 'char') {
                     this.valor = this.valor;
                 }
-                console.log('valor de id: ', this.valor);
                 return this.valor;
             
         } catch (error) {

@@ -16,20 +16,22 @@ class If extends Instruccion {
         try {
             let entornoif = new Entorno('IF', entorno);
             this.condicion.interpretar(entornoif);
+            
             if (this.condicion.tipo != 'booleano') {
                 addError('Error Semantico', 'La condición no es de tipo bool', this.linea, this.columna);
                 return this;
             }
-            
-            if (Boolean(this.condicion.valor)) {
+            console.log("probando en el ifffff " + this.condicion.valor)
+            if (this.condicion.valor == true) {
                 console.log(this.instruccionesif.length)
                 for(let i=0; i< this.instruccionesif.length;i++){
                     let instruc = this.instruccionesif[i];
-                    console.log("antes de interpretar"+ instruc)
                     instruc.interpretar(entornoif);
-                    console.log("en if "+instruc.tipo)
                     if(instruc.tipo == 'break'){
                         this.tipo = 'break';
+                        break;
+                    } else if(instruc.tipo == 'continue'){
+                        this.tipo = 'continue';
                         break;
                     }
                 }
@@ -57,5 +59,5 @@ class If extends Instruccion {
         }
     }
 }
-
+//https://github.com/AlexIngGuerra/OLC1-1S2024/blob/main/clase_12/server/interprete/instruccion/If.js
 module.exports = If;
