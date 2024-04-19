@@ -8,6 +8,7 @@ class soloelse extends Instruccion {
         this.instruccioneselse = instruccioneselse;
         this.linea = linea;
         this.columna = columna;
+        this.nombreelse = 'else';
     }
 
     interpretar(entorno) {

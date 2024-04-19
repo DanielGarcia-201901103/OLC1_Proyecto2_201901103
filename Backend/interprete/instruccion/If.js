@@ -51,56 +51,72 @@ class If extends Instruccion {
 */
             } else {
 
-                console.log("probando en el  if si es lista o no" + Array.isArray(this.otrasinstruccionesif));
-                if(Array.isArray(this.otrasinstruccionesif) == false){
-                    if (this.otrasinstruccionesif == '}') {
-                        console.log("estoy dentro de if con }")
-                        return this
-                    }
-                    console.log("tiene que ejecutar el else")
-                    let resultado = this.otrasinstruccionesif.instruccioneselse.forEach(instruccion => {
-                        instruccion.interpretar(entornoif);
-                        console.log("validando en if"+ instruccion.tipo);
-                        if(instruccion.tipo == 'break'){
-                            this.tipo = 'break';
-                            return 'break';
-                        }
-                    });
-                    if(resultado == 'break'){
-                        this.tipo = 'break';
-                        return this;
-                    }
 
-                }
-                if(Array.isArray(this.otrasinstruccionesif) == true){
-                for (let i = 0; i < this.otrasinstruccionesif.length; i++) {
-                    let instruc = this.otrasinstruccionesif[i];
-                    instruc.condicion.interpretar(entornoif);
-                    console.log("probando en if para interpretar el else if   -- ", Array.isArray(instruc))
+                if (this.otrasinstruccionesif[0] == '}') {
+                    console.log("estoy dentro de if con }")
+                    return this
+                } else {
 
-                    if (instruc.condicion.valor == true) {
-                        instruc.instruccionesif.forEach(instruccion => {
+                    if (this.otrasinstruccionesif[0].nombreelse == 'else') {
+                        console.log("tiene que ejecutar el else")
+                        let resultado = this.otrasinstruccionesif[0].instruccioneselse.forEach(instruccion => {
                             instruccion.interpretar(entornoif);
-                            console.log("buscando el else para ejecutarlo ---" + instruccion.otrasinstruccionesif)
+                            if (instruccion.tipo == 'break') {
+                                this.tipo = 'break';
+                                return 'break';
+                            }
                         });
-                        if (instruc.tipo == 'break') {
+                        if (resultado == 'break') {
                             this.tipo = 'break';
-                            break;
-                        } else if (instruc.tipo == 'continue') {
-                            this.tipo = 'continue';
-                            break;
+                            return this;
                         }
-                        break;
+                    } else {
+
+                        for (let i = 0; i < this.otrasinstruccionesif.length; i++) {
+                            let instruc = this.otrasinstruccionesif[i];
+                            instruc.condicion.interpretar(entornoif);
+                            console.log("probando en if para interpretar el else if   -- ", instruc.otrasinstruccionesif)
+                            
+                            if (instruc.condicion.valor == true) {
+                                instruc.instruccionesif.forEach(instruccion => {
+                                    instruccion.interpretar(entornoif);
+                                    console.log("buscando el else para ejecutarlo ---" + instruccion.otrasinstruccionesif)
+                                });
+                                if (instruc.tipo == 'break') {
+                                    this.tipo = 'break';
+                                    break;
+                                } else if (instruc.tipo == 'continue') {
+                                    this.tipo = 'continue';
+                                    break;
+                                }
+                                break;
+                            }
+                            if (instruc.otrasinstruccionesif[0] == '}') {
+                                console.log("estoy dentro de if con }")
+                                return this
+                            } else {
+                                if (instruc.otrasinstruccionesif[0].nombreelse == 'else') {
+                                    console.log("tiene que ejecutar el else")
+                                    let resultado = instruc.otrasinstruccionesif[0].instruccioneselse.forEach(instruccion => {
+                                        instruccion.interpretar(entornoif);
+                                        if (instruccion.tipo == 'break') {
+                                            this.tipo = 'break';
+                                            return 'break';
+                                        }
+                                    });
+                                    if (resultado == 'break') {
+                                        this.tipo = 'break';
+                                        return this;
+                                    }
+                                    break;
+                                }
+                            }
+
+                        }
                     }
 
                 }
-                }
 
-
-
-
-
-                
                 //this.otrasinstruccionesif.condicion.interpretar(entornoif);
 
 

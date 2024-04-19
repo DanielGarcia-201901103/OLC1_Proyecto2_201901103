@@ -245,9 +245,9 @@ CONTEIF: resbreak sigpuntoycoma                                              {$$
         | INSTRUCCION                                                        {$$= $1;} 
 ;
 
-FINIF: llavecierra                                                                                            {$$=$1;} 
+FINIF: llavecierra                                                                                            {$$=[$1];} 
         | llavecierra reselse resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {addELSEif(new elseif($5, $8, $9 ,@1.first_line, @1.first_column)); $$= getElSEIF();} 
-        | llavecierra reselse llaveabre CONTENIDOS llavecierra                                                {$$= new soloelse($4, @1.first_line, @1.first_column);} 
+        | llavecierra reselse llaveabre CONTENIDOS llavecierra                                                {$$= [new soloelse($4, @1.first_line, @1.first_column)];} 
 ;
 
 SENTSWITCH: resswitch parentesisabre EXPRESIONES parentesiscierra llaveabre SWCASOS llavecierra    {$$=$1 +" "+$2 + " " + $3 + " " +$4+" "+$5+" "+$6+" " + $7;} 

@@ -10,6 +10,7 @@ class elseif extends Instruccion {
         this.otrasinstruccionesif = otrasinstruccionesif;
         this.linea = linea;
         this.columna = columna;
+        this.nombreelse = 'elseif';
     }
 
     interpretar(entorno) {
@@ -52,8 +53,8 @@ class elseif extends Instruccion {
 */
             } else {
                 console.log("acá ando probando en el else if si entra ")
-                if(this.otrasinstruccionesif == '}'){
-                    console.log("estoy dentro de if con }")
+                if(this.otrasinstruccionesif[0] == '}'){
+                    console.log("estoy dentro de else if con }")
                     return this
                 }
 

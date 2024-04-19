@@ -140,7 +140,7 @@ break;
 case 23:
 addVariables($$[$0]); this.$=getLVariables();
 break;
-case 24: case 25: case 27: case 28: case 29: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 69: case 70: case 71: case 72: case 73: case 82: case 86: case 97: case 98: case 111:
+case 24: case 25: case 27: case 28: case 29: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 69: case 70: case 71: case 72: case 73: case 86: case 97: case 98: case 111:
 this.$=$$[$0];
 break;
 case 26: case 74:
@@ -209,11 +209,14 @@ break;
 case 79: case 96: case 110:
 this.$= new Continu(_$[$0-1].first_line, _$[$0-1].first_column);
 break;
+case 82:
+this.$=[$$[$0]];
+break;
 case 83:
 addELSEif(new elseif($$[$0-4], $$[$0-1], $$[$0] ,_$[$0-8].first_line, _$[$0-8].first_column)); this.$= getElSEIF();
 break;
 case 84:
-this.$= new soloelse($$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column);
+this.$= [new soloelse($$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column)];
 break;
 case 85:
 this.$=$$[$0-6] +" "+$$[$0-5] + " " + $$[$0-4] + " " +$$[$0-3]+" "+$$[$0-2]+" "+$$[$0-1]+" " + $$[$0];
