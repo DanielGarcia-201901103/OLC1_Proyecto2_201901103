@@ -2,7 +2,7 @@ const Instruccion = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
 
-class If extends Instruccion {
+class elseif extends Instruccion {
     constructor(condicion, instruccionesif, otrasinstruccionesif, linea, columna) {
         super();
         this.condicion = condicion;
@@ -14,13 +14,14 @@ class If extends Instruccion {
 
     interpretar(entorno) {
         try {
-            let entornoif = new Entorno('IF', entorno);
+            let entornoif = new Entorno('ELSEIF', entorno);
             this.condicion.interpretar(entornoif);
-            
+            console.log("estoy en else if nueva clase " + this.condicion.tipo)
             if (this.condicion.tipo != 'booleano') {
                 addError('Error Semantico', 'La condición no es de tipo bool', this.linea, this.columna);
                 return this;
             }
+            console.log("estoy en else if nueva clase " + this.condicion.valor)
             if (this.condicion.valor == true) {
                 
                 console.log(this.instruccionesif.length)
@@ -51,53 +52,29 @@ class If extends Instruccion {
 */
             } else {
                 
-                console.log("probando en el else if " + this.otrasinstruccionesif.length);
+                console.log("probando en el else if " + this.otrasinstruccionesif);
                 if(this.otrasinstruccionesif == '}'){
                     console.log("estoy dentro de if con }")
                     return this
                 }
-                //this.otrasinstruccionesif.condicion.interpretar(entornoif);
-
-                for(let i=0; i< this.otrasinstruccionesif.length;i++){
-                    let instruc = this.otrasinstruccionesif[i];
-                    instruc.condicion.interpretar(entornoif);
-                    console.log("probando en if para interpretar el else if ", instruc.condicion.valor)
-                    if(instruc.condicion.valor == true){
-                        instruc.instruccionesif.forEach(instruccion => {
-                            instruccion.interpretar(entornoif);
-                        });
-                        if(instruc.tipo == 'break'){
-                            this.tipo = 'break';
-                            break;
-                        } else if(instruc.tipo == 'continue'){
-                            this.tipo = 'continue';
-                            break;
-                        }
-                    }
-                    }
-                    
-                /*
-                console.log("probando en if para interpretar el else if ", this.otrasinstruccionesif.condicion.valor)
-                if(this.otrasinstruccionesif.condicion.valor == true){
+                this.otrasinstruccionesif.interpretar(entornoif);
+                
+                console.log("probnado ", this.otrasinstruccionesif)
+                if(String(this.otrasinstruccionesif.condicion.valor).toLowerCase() == 'true'){
                     console.log("estoy dentro del else if")
                     this.otrasinstruccionesif.instruccionesif.forEach(instruccion => {
                         instruccion.interpretar(entornoif);
                     });
-                }else{
-                    console.log("estoy dentro del else if")
-                    this.otrasinstruccionesif.otrasinstruccionesif.forEach(instruccion => {
-                        instruccion.interpretar(entornoif);
-                    });
-                }*/
+                }
                 
             }
         //guardar el entorno
             return this;
     
         } catch (error) {
-            addError('Error', 'Ha ocurrido un error en la interpretación del if ' + error, this.linea, this.columna);
+            addError('Error', 'Ha ocurrido un error en la interpretación del else if ' + error, this.linea, this.columna);
         }
     }
 }
 //https://github.com/AlexIngGuerra/OLC1-1S2024/blob/main/clase_12/server/interprete/instruccion/If.js
-module.exports = If;
+module.exports = elseif;

@@ -19,10 +19,11 @@ const Flength = require("../interprete/otrasexpresiones/Flength.js");
 const Fround = require("../interprete/otrasexpresiones/Fround.js"); 
 const Ftypeof = require("../interprete/otrasexpresiones/Ftypeof.js"); 
 const Ftostring = require("../interprete/otrasexpresiones/Ftostring.js"); 
-const {addVariables, limpiarlistVariables, getLVariables, concatenarlista} = require("../interprete/instruccion/listId.js");
+const {addVariables, limpiarlistVariables, getLVariables, concatenarlista , addELSEif, getElSEIF, limpiarElSEIF} = require("../interprete/instruccion/listId.js");
 const Oid = require("../interprete/expresion/Oid.js");
 const Bdowhile = require("../interprete/instruccion/Bdowhile.js");
 const Continu = require("../interprete/instruccion/Continu.js");
+const elseif = require("../interprete/instruccion/elseif.js");
 %}
 
 %lex
@@ -231,7 +232,7 @@ SENTENCIAS: SENTIF                                                    {$$=$1;}
         | error                        { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
  ;
 
-SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column);} 
+SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column); limpiarElSEIF();} 
 ;
 
 CONTENIDOS: CONTENIDOS CONTEIF                          { $$ = $1; $$.push($2);} 
@@ -243,9 +244,9 @@ CONTEIF: resbreak sigpuntoycoma                                              {$$
         | INSTRUCCION                                                        {$$= $1;} 
 ;
 
-FINIF: llavecierra                                                           {$$=$1;} 
-        | llavecierra reselse SENTIF                                         {$$=$3;} 
-        | llavecierra reselse llaveabre CONTENIDOS llavecierra               {$$=$4;} 
+FINIF: llavecierra                                                                                            {$$=$1;} 
+        | llavecierra reselse resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {addELSEif(new elseif($5, $8, $9 ,@1.first_line, @1.first_column)); $$= getElSEIF();} 
+        | llavecierra reselse llaveabre CONTENIDOS llavecierra                                                {$$=$4;} 
 ;
 
 SENTSWITCH: resswitch parentesisabre EXPRESIONES parentesiscierra llaveabre SWCASOS llavecierra    {$$=$1 +" "+$2 + " " + $3 + " " +$4+" "+$5+" "+$6+" " + $7;} 
@@ -348,3 +349,8 @@ FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma                            {$
 
 //clase del año pasado https://www.youtube.com/watch?v=Cr-faHppq4M   
 // me quedé en el minuto 1:20:00
+
+
+
+//MANEJAR EL ELSE IGUAL QUE EL ELSE IF PERO A DIFERENCIA QUE NO VA A TENER CONDICION, SINO QUE SIMPLEMENTE INTERPRETA EL CONTENIDO 
+// AGREGAR LA EJECUCIÓN DEL ELSE EN EL ELSE IF Y EN EL IF SIMPLE PARA QUE LO EJECUTE SI NO ENCUENTRA OTROS
