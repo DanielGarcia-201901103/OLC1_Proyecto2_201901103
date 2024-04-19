@@ -24,6 +24,7 @@ const Oid = require("../interprete/expresion/Oid.js");
 const Bdowhile = require("../interprete/instruccion/Bdowhile.js");
 const Continu = require("../interprete/instruccion/Continu.js");
 const elseif = require("../interprete/instruccion/elseif.js");
+const soloelse = require("../interprete/instruccion/soloelse.js");
 %}
 
 %lex
@@ -246,7 +247,7 @@ CONTEIF: resbreak sigpuntoycoma                                              {$$
 
 FINIF: llavecierra                                                                                            {$$=$1;} 
         | llavecierra reselse resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {addELSEif(new elseif($5, $8, $9 ,@1.first_line, @1.first_column)); $$= getElSEIF();} 
-        | llavecierra reselse llaveabre CONTENIDOS llavecierra                                                {$$=$4;} 
+        | llavecierra reselse llaveabre CONTENIDOS llavecierra                                                {$$= new soloelse($4, @1.first_line, @1.first_column);} 
 ;
 
 SENTSWITCH: resswitch parentesisabre EXPRESIONES parentesiscierra llaveabre SWCASOS llavecierra    {$$=$1 +" "+$2 + " " + $3 + " " +$4+" "+$5+" "+$6+" " + $7;} 

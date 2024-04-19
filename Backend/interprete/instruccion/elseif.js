@@ -51,21 +51,41 @@ class elseif extends Instruccion {
                 }
 */
             } else {
-                
-                console.log("probando en el else if " + this.otrasinstruccionesif);
+                console.log("acá ando probando en el else if si entra ")
                 if(this.otrasinstruccionesif == '}'){
                     console.log("estoy dentro de if con }")
                     return this
                 }
-                this.otrasinstruccionesif.interpretar(entornoif);
-                
-                console.log("probnado ", this.otrasinstruccionesif)
-                if(String(this.otrasinstruccionesif.condicion.valor).toLowerCase() == 'true'){
-                    console.log("estoy dentro del else if")
-                    this.otrasinstruccionesif.instruccionesif.forEach(instruccion => {
-                        instruccion.interpretar(entornoif);
-                    });
+
+                console.log(this.otrasinstruccionesif.length)
+                for(let i=0; i< this.otrasinstruccionesif.length;i++){
+                    let instruc = this.otrasinstruccionesif[i];
+                    instruc.interpretar(entornoif);
+                    if(instruc.tipo == 'break'){
+                        this.tipo = 'break';
+                        break;
+                    } else if(instruc.tipo == 'continue'){
+                        this.tipo = 'continue';
+                        break;
+                    }
                 }
+                /*
+                console.log("probando en el else ppppppppppp " + this.otrasinstruccionesif.length);
+                if(this.otrasinstruccionesif.instruccioneselse == 'else'){
+                    for(let i=0; i< this.otrasinstruccionesif.length;i++){
+                        let instruc = this.otrasinstruccionesif[i];
+                        instruc.interpretar(entornoif);
+                        if(instruc.tipo == 'break'){
+                            this.tipo = 'break';
+                            break;
+                        } else if(instruc.tipo == 'continue'){
+                            this.tipo = 'continue';
+                            break;
+                        }
+                    }
+                }*/
+                    
+                
                 
             }
         //guardar el entorno

@@ -6,6 +6,7 @@ function addVariables(id){
     lvariables.push(id);
 }
 function getLVariables(){
+    lvariables.reverse();
     return lvariables;
 }
 function concatenarlista(ls){
@@ -16,13 +17,14 @@ function limpiarlistVariables(){
 }
 // FUNCIONES PARA MANEJAR LAS LISTAS DE ELSE IF 
 function addELSEif(id){
-    lvariables.push(id);
+    listaelseif.push(id);
 }
 function getElSEIF(){
-    return lvariables;
+    listaelseif.reverse();
+    return listaelseif;
 }
 function limpiarElSEIF(){
-    lvariables = [];
+    listaelseif = [];
 }
 
 module.exports = {addVariables, limpiarlistVariables, getLVariables, concatenarlista , addELSEif, getElSEIF, limpiarElSEIF};
