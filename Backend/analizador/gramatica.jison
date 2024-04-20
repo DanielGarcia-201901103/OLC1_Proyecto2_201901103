@@ -29,6 +29,7 @@ const Switchh = require("../interprete/instruccion/Switchh.js");
 const Scasos = require("../interprete/instruccion/Scasos.js");
 const Sdefault = require("../interprete/instruccion/Sdefault.js");
 const BFor = require("../interprete/instruccion/BFor.js"); 
+const AsignacionV = require("../interprete/instruccion/AsignacionV.js");
 %}
 
 %lex
@@ -135,7 +136,8 @@ CODIGO: CODIGO INSTRUCCION               { $$ = $1; $$.push($2);}
         |INSTRUCCION                     { $$ = []; $$.push($1);}
 ;
 
-INSTRUCCION: DECLARACIONES            {console.log($1);$$=$1;}
+INSTRUCCION: DECLARACIONESARR            {console.log($1);$$=$1;}
+        | DECLARACIONES           {console.log($1);$$=$1;}
         | SENTENCIAS                  {console.log($1); $$=$1;}  
         | FUNCIONES                   {console.log($1); $$=$1;}    
         | METODOS                     {console.log($1); $$=$1;}    
@@ -151,7 +153,8 @@ DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= 
         | id sigdecremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Oid($1, "id", @1.first_line, @1.first_column, "id"),"--", @1.first_line, @1.first_column); } 
         | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
 ;
-
+DECLARACIONESARR: TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual resnew TIPODATO corcheteabre EXPRESIONES corchetecierra  sigpuntoycoma { $$= new AsignacionV($1, $2, $7, $9, @1.first_line, @1.first_column);  limpiarlistVariables();}
+;
 TIPODATO: resint       {$$="int";} 
         | resdouble    {$$="double";} 
         | resbool      {$$="booleano";} 

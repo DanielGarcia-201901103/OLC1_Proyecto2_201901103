@@ -5,6 +5,7 @@ const {addSimboloDec} = require('./manejoSimbolos.js');
 class Entorno{
     constructor(nombreentorno, anterior){
         this.tablasimbolos = {};
+        this.tablavectores = {};
         this.tablafunciones = {};
         this.anterior = anterior;
         this.nombreentorno = nombreentorno;
@@ -45,6 +46,16 @@ class Entorno{
         //error semantico variable no existe
         //return tipo de dato error
         
+    }
+
+    addSimboloVec(id, valor, tipo, entorno, linea, columna){
+        if (id in this.tablavectores){
+            //error semantico de variable ya declarada
+            return;
+        }
+        let simbolo = new Simbolo(id, valor ,tipo, entorno, linea, columna);
+        addSimboloDec(simbolo);
+        this.tablavectores[id] = simbolo;
     }
 
     addFuncion(nombre, parametros, instrucciones){
