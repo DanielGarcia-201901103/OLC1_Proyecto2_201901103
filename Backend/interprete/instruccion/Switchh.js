@@ -25,44 +25,87 @@ class Switchh extends Instruccion {
             9. Sí se valida que en la lista de casos es igual a default se interpreta las instrucciones de default*/
             let entornoswitch = new Entorno('SWITCH', entorno);
             this.condicion.interpretar(entornoswitch);
+            //console.log("ESTE VA ANTES DE IMPRIMIR LOS CASOS DEL SWITCH, SOLO PARA VER EL ORDEN DE LLEGADA DE LOS CASOS")
+            //console.log(this.casos)
+            //console.log("**************************************************************************************************************************")
+            if (this.casos[0].nombrecaso == 'default') {
+                
+                //let instruc = this.casos[0];
+                //instruc.interpretar(entornoswitch);
 
-            for(let i = 0; i < this.casos.length; i++){
-                //si el caso es igual a default se ejecuta el default, de lo contrario se ejecuta el caso
-                if(this.casos[i].nombrecaso == 'default'){
-                    let instruc = this.casos[i];
-                    instruc.interpretar(entornoswitch);
-                    if (instruc.tipo == 'break') {
-                        this.tipo = 'break';
-                        break;
-                    } else if (instruc.tipo == 'continue') {
-                        this.tipo = 'continue';
-                        break;
-                    }
-                }
-                if(this.casos[i].nombrecaso == 'case'){
-                    let instruc = this.casos[i];
-                    instruc.condicion.interpretar(entornoswitch);
-
-                    if(this.condicion.valor == instruc.condicion.valor){
-                        for(let j = 0; j < instruc.instruccionescas.length; j++){
-                            let instruc1 = instruc.instruccionescas[j];
-                            instruc1.interpretar(entornoswitch);
-                            if (instruc1.tipo == 'break') {
-                                this.tipo = 'break';
-                                break;
-                            } else if (instruc1.tipo == 'continue') {
-                                this.tipo = 'continue';
-                                break;
-                            }
+                for (let i = 0; i < this.casos.length; i++) {
+                    //si el caso es igual a default se ejecuta el default, de lo contrario se ejecuta el caso
+                        let instruc = this.casos[i];
+                        instruc.interpretar(entornoswitch);
+                        if (instruc.tipo == 'break') {
+                            this.tipo = 'break';
+                            break;
+                        } else if (instruc.tipo == 'continue') {
+                            this.tipo = 'continue';
+                            break;
                         }
-                        break;
+                    }
+            } else {
+                let listaauxiliardefault = [];
+                for (let i = 0; i < this.casos.length; i++) {
+                    //si el caso es igual a default se ejecuta el default, de lo contrario se ejecuta el caso
+
+                    if (this.casos[i].nombrecaso == 'case') {
+                        let instruc = this.casos[i];
+                        instruc.condicion.interpretar(entornoswitch);
+                    
+                        if (this.condicion.valor == instruc.condicion.valor) {
+                            for (let j = 0; j < instruc.instruccionescas.length; j++) {
+                                let instruc1 = instruc.instruccionescas[j];
+                                instruc1.interpretar(entornoswitch);
+                                if (instruc1.tipo == 'break') {
+                                    this.tipo = 'break';
+                                    break;
+                                } else if (instruc1.tipo == 'continue') {
+                                    this.tipo = 'continue';
+                                    break;
+                                }
+                            }
+                            return this;
+                        }
+                        
+                    }else{
+                        listaauxiliardefault.push(this.casos[i]);
+                    }
+                }
+
+                for (let i = 0; i < listaauxiliardefault.length; i++) {
+                    //si el caso es igual a default se ejecuta el default, de lo contrario se ejecuta el caso
+                    if (listaauxiliardefault[i].nombrecaso == 'default') {
+                        let instruc = listaauxiliardefault[i];
+                        instruc.interpretar(entornoswitch);
+                        if (instruc.tipo == 'break') {
+                            this.tipo = 'break';
+                            break;
+                        } else if (instruc.tipo == 'continue') {
+                            this.tipo = 'continue';
+                            break;
+                        }
                     }
 
-                    
-                    
-                    console.log('ESTOY EN EL CASO DE SWITCH, ACA DEBERIA EJECUTAR EL DEFAULT')
-                    /*acá colocar la validacion para que ejecute el default, si no funciona validar con el nombre */
                 }
+                /*
+                for (let i = 0; i < this.casos.length; i++) {
+                    //si el caso es igual a default se ejecuta el default, de lo contrario se ejecuta el caso
+                    if (this.casos[i].nombrecaso == 'default') {
+                        let instruc = this.casos[i];
+                        instruc.interpretar(entornoswitch);
+                        if (instruc.tipo == 'break') {
+                            this.tipo = 'break';
+                            break;
+                        } else if (instruc.tipo == 'continue') {
+                            this.tipo = 'continue';
+                            break;
+                        }
+                    }
+
+                } */
+                
             }
             //guardar el entorno
             return this;
@@ -72,5 +115,4 @@ class Switchh extends Instruccion {
         }
     }
 }
-//https://github.com/AlexIngGuerra/OLC1-1S2024/blob/main/clase_12/server/interprete/instruccion/If.js
 module.exports = Switchh;
