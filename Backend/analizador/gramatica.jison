@@ -28,6 +28,7 @@ const soloelse = require("../interprete/instruccion/soloelse.js");
 const Switchh = require("../interprete/instruccion/Switchh.js");
 const Scasos = require("../interprete/instruccion/Scasos.js");
 const Sdefault = require("../interprete/instruccion/Sdefault.js");
+const BFor = require("../interprete/instruccion/BFor.js"); 
 %}
 
 %lex
@@ -109,7 +110,7 @@ const Sdefault = require("../interprete/instruccion/Sdefault.js");
 \"[^\"]*\"		{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 
 <<EOF>>             return 'EOF';
-
+//para agregar los errores a la consola de salida, agregarlo a la lista de impresion que se encuentra en print global.obimpresiones desde la clase donde está addError
 . {addError('Error léxico', 'Caracter no reconocido\" ' + yytext +' \" ', yylloc.first_line, yylloc.first_column); console.error('Error léxico: \"' + yytext + '\", linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);}
 /lex
 
@@ -267,7 +268,7 @@ SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS                             {$
 SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra                                     {$$= new Bwhile($3, $6,  @1.first_line, @1.first_column);} 
 ;
 
-SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra {$$=$1+$2+" "+$3+" "+$4+" "+$5+" "+$6+" "+$7+" " +$8+$9+" "+$10;} 
+SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDECRE parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra {$$= new BFor($3, $4, $6, $9,  @1.first_line, @1.first_column);} 
 ;
 
 SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma               {$$= new Bdowhile($3, $7,  @1.first_line, @1.first_column);} 
