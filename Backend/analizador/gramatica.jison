@@ -19,12 +19,15 @@ const Flength = require("../interprete/otrasexpresiones/Flength.js");
 const Fround = require("../interprete/otrasexpresiones/Fround.js"); 
 const Ftypeof = require("../interprete/otrasexpresiones/Ftypeof.js"); 
 const Ftostring = require("../interprete/otrasexpresiones/Ftostring.js"); 
-const {addVariables, limpiarlistVariables, getLVariables, concatenarlista , addELSEif, getElSEIF, limpiarElSEIF} = require("../interprete/instruccion/listId.js");
+const {addVariables, limpiarlistVariables, getLVariables, concatenarlista , addELSEif, getElSEIF, limpiarElSEIF, addCasos, getCasos, concatenarlistaCasos, limpiarlistCasos} = require("../interprete/instruccion/listId.js");
 const Oid = require("../interprete/expresion/Oid.js");
 const Bdowhile = require("../interprete/instruccion/Bdowhile.js");
 const Continu = require("../interprete/instruccion/Continu.js");
 const elseif = require("../interprete/instruccion/elseif.js");
 const soloelse = require("../interprete/instruccion/soloelse.js");
+const Switchh = require("../interprete/instruccion/Switchh.js");
+const Scasos = require("../interprete/instruccion/Scasos.js");
+const Sdefault = require("../interprete/instruccion/Sdefault.js");
 %}
 
 %lex
@@ -246,19 +249,19 @@ CONTEIF: resbreak sigpuntoycoma                                              {$$
 ;
 
 FINIF: llavecierra                                                                                            {$$=[$1];} 
-        | llavecierra reselse resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {addELSEif(new elseif($5, $8, $9 ,@1.first_line, @1.first_column)); $$= getElSEIF();} 
+        | llavecierra reselse resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {addELSEif(new elseif($5, $8, $9 , @1.first_line, @1.first_column)); $$= getElSEIF();} 
         | llavecierra reselse llaveabre CONTENIDOS llavecierra                                                {$$= [new soloelse($4, @1.first_line, @1.first_column)];} 
 ;
 
-SENTSWITCH: resswitch parentesisabre EXPRESIONES parentesiscierra llaveabre SWCASOS llavecierra    {$$=$1 +" "+$2 + " " + $3 + " " +$4+" "+$5+" "+$6+" " + $7;} 
+SENTSWITCH: resswitch parentesisabre EXPRESIONES parentesiscierra llaveabre SWCASOS llavecierra    {$$=new Switchh($3, $6, @1.first_line, @1.first_column); limpiarlistCasos();} 
 ;
 
-SWCASOS: SWCASE                                                               {$$=$1;} 
-        | SWCASE SWCASOS                                                      {$$=$1 + " " +$2;} 
+SWCASOS: SWCASE                                                               { addCasos($1); $$=getCasos();} 
+        | SWCASE SWCASOS                                                      { addCasos($1); concatenarlistaCasos($2); $$=getCasos();}
 ;
 
-SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS                             {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
-        | resdefault dospuntos CONTENIDOS                                     {$$=$1+ " " + $2 +" " + $3;} 
+SWCASE: rescase ASIGNACIONES dospuntos CONTENIDOS                             {$$= new Scasos($2, $4, @1.first_line, @1.first_column);} 
+        | resdefault dospuntos CONTENIDOS                                     {$$= new Sdefault($3, @1.first_line, @1.first_column);} 
 ;
 
 SENTWHILE: reswhile parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOSCICLOS llavecierra                                     {$$= new Bwhile($3, $6,  @1.first_line, @1.first_column);} 
@@ -270,13 +273,13 @@ SENTFOR: resfor parentesisabre DECLARACIONES EXPRESIONES sigpuntoycoma INCREYDEC
 SENTDOWHILE: resdo llaveabre CONTENIDOSCICLOS llavecierra reswhile parentesisabre EXPRESIONES parentesiscierra sigpuntoycoma               {$$= new Bdowhile($3, $7,  @1.first_line, @1.first_column);} 
 ;
 
-CONTENIDOSCICLOS: CONTENIDOSCICLOS CONTENIDOCICL                          { $$ = $1; $$.push($2);}
-        | CONTENIDOCICL                                                   { $$ = []; $$.push($1);}
+CONTENIDOSCICLOS: CONTENIDOSCICLOS CONTENIDOCICL                              { $$ = $1; $$.push($2);}
+        | CONTENIDOCICL                                                       { $$ = []; $$.push($1);}
 ;
-CONTENIDOCICL:resbreak sigpuntoycoma                                      {$$= new BBreak(@1.first_line, @1.first_column);} 
+CONTENIDOCICL:resbreak sigpuntoycoma                                          {$$= new BBreak(@1.first_line, @1.first_column);} 
         | rescontinue sigpuntoycoma                                           {$$= new Continu(@1.first_line, @1.first_column);} 
         | RETORNOS                                                            {$$=$1;} 
-        | INSTRUCCION                                                              {$$=$1;} 
+        | INSTRUCCION                                                         {$$=$1;} 
 ;
 
 RETORNOS: resreturn sigpuntoycoma                                             {$$=$1 + $2;} 
