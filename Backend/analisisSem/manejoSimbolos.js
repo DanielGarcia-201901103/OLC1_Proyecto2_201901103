@@ -1,10 +1,9 @@
-const Simbolo = require('./simbolos');
+const Simbolos = require('./simbolos');
 const fs = require('fs');
 let tablaSimbolos = [];
 const urlReporteS = '../Backend/analisisSem/ReportesArchivos/ReporteSimbolos.html';
 
-function addSimbolo(id, tipo, tipodato, entorno, linea, columna) {
-    let vsimbolo = new Simbolos(id, tipo, tipodato, entorno, linea, columna);
+function addSimboloDec(vsimbolo) {
     tablaSimbolos.push(vsimbolo);
 }
 
@@ -32,7 +31,7 @@ function generarTablaS() {
         <tr>
         <th>#</th>
         <th>ID</th>
-        <th>Tipo</th>
+        <th>Valor</th>
         <th>Tipo Dato</th>
         <th>Entorno</th>
         <th>Linea</th>
@@ -109,7 +108,7 @@ function generarTablaS() {
     }
 
     module.exports = {
-        addSimbolo,
+        addSimboloDec,
         generarTablaS,
         limpiarTablaS,
         openReporteS

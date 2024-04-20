@@ -85,6 +85,25 @@ const CodeEditorWindow = () => {
   const validare = (data) => {
     console.log(data.salida);
   };
+
+
+  const handleOpenReportSimbols = async (e) => {
+    e.preventDefault();
+    await fetch('http://localhost:4000/simbolos', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json()).then(data => validarS(data));
+
+    // Aquí puedes implementar la lógica para ejecutar el código y actualizar la salida
+    // Ejemplo: establecer la salida como el valor de entrada
+  };
+  const validarS = (data) => {
+    console.log(data.salida);
+  };
   return (
     <>
       <div className="conjuntoBotones">
@@ -95,7 +114,7 @@ const CodeEditorWindow = () => {
           <Button className="gbotones" onClick={handleSaveFile} >Guardar Archivo</Button>{' '}
           <Button className="botonE" onClick={handleRunCode}>Ejecutar</Button>{' '}
           <Button className="gbotonesR" onClick={handleOpenReportErrors}>Reporte Errores</Button>{' '}
-          <Button className="gbotonesR">Reporte Tabla Simbolos</Button>{' '}
+          <Button className="gbotonesR" onClick={handleOpenReportSimbols}>Reporte Tabla Simbolos</Button>{' '}
           <Button className="gbotonesR">Generar Arbol AST</Button>{' '}
         </ButtonGroup>
       </div>

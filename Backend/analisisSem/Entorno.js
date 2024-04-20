@@ -1,5 +1,6 @@
 const Simbolo = require('./simbolos.js').Simbolo;
 const Funcion = require('./funcion.js').Funcion;
+const {addSimboloDec} = require('./manejoSimbolos.js');
 
 class Entorno{
     constructor(nombreentorno, anterior){
@@ -15,6 +16,8 @@ class Entorno{
             return;
         }
         let simbolo = new Simbolo(id, valor ,tipo, entorno, linea, columna);
+        let simbolo1 = new Simbolo(id, valor.valor ,tipo, entorno, linea, columna);
+        addSimboloDec(simbolo1);
         this.tablasimbolos[id] = simbolo;
     }
 

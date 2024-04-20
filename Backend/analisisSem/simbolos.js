@@ -1,7 +1,8 @@
 class Simbolo{
-    constructor(id, tipo, entorno, linea, columna){
+    constructor(id, tipo, tipoDato, entorno, linea, columna){
         this.id = id;
         this.tipo = tipo;
+        this.tipoDato = tipoDato;
         this.entorno = entorno;
         this.linea = linea;
         this.columna = columna;
@@ -12,6 +13,9 @@ class Simbolo{
     }
     getTipo(){
         return this.tipo;
+    }
+    getTipoDato(){
+        return this.tipoDato;
     }
     getEntorno(){
         return this.entorno;
@@ -27,6 +31,9 @@ class Simbolo{
     }
     setTipo(tipo){
         this.tipo = tipo;
+    }
+    setTipoDato(tipoDato){
+        this.tipoDato = tipoDato;
     }
     setEntorno(entorno){
         this.entorno = entorno;
