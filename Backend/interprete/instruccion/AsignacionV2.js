@@ -49,7 +49,7 @@ class AsignacionV2 extends Instruccion{
             }
 
             for(let i = 0; i < this.id.length; i++){
-                entorno.addSimboloVec(this.id[i], matriz ,this.tipodec, entorno.nombreentorno, this.linea, this.columna);
+                entorno.addSimboloVec2(this.id[i], matriz ,this.tipodec, entorno.nombreentorno, this.linea, this.columna);
             }
 
         return this;

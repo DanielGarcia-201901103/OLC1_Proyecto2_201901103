@@ -6,6 +6,7 @@ class Entorno{
     constructor(nombreentorno, anterior){
         this.tablasimbolos = {};
         this.tablavectores = {};
+        this.tablavectores2 = {};
         this.tablafunciones = {};
         this.anterior = anterior;
         this.nombreentorno = nombreentorno;
@@ -69,6 +70,16 @@ class Entorno{
         this.tablavectores[id] = simbolo;
     }
 
+    addSimboloVec2(id, valor, tipo, entorno, linea, columna){
+        if (id in this.tablavectores){
+            //error semantico de variable ya declarada
+            return;
+        }
+        let simbolo = new Simbolo(id, valor ,tipo, entorno, linea, columna);
+        addSimboloDec(simbolo);
+        this.tablavectores2[id] = simbolo;
+    }
+
     addSimboloVec2T(id, valor, tipo, entorno, linea, columna, lsval){
         if (id in this.tablavectores){
             //error semantico de variable ya declarada
@@ -77,7 +88,7 @@ class Entorno{
         let simbolo = new Simbolo(id, valor ,tipo, entorno, linea, columna);
         let simbolo1 = new Simbolo(id, lsval ,tipo, entorno, linea, columna);
         addSimboloDec(simbolo1);
-        this.tablavectores[id] = simbolo;
+        this.tablavectores2[id] = simbolo;
     }
 
     addFuncion(nombre, parametros, instrucciones){
