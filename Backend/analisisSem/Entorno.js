@@ -70,6 +70,19 @@ class Entorno{
         this.tablavectores[id] = simbolo;
     }
 
+    getSimboloVec(id){
+        let ent = this;
+        while (ent != null){
+            if(!(id in ent.tablavectores)){
+                ent = ent.anterior
+            }
+            return ent.tablavectores[id];
+        }
+        return ;
+        //error semantico variable no existe
+        //return tipo de dato error
+    }
+
     addSimboloVec2(id, valor, tipo, entorno, linea, columna){
         if (id in this.tablavectores){
             //error semantico de variable ya declarada
@@ -91,6 +104,19 @@ class Entorno{
         this.tablavectores2[id] = simbolo;
     }
 
+    getSimboloVec2(id){
+        let ent = this;
+        while (ent != null){
+            if(!(id in ent.tablavectores2)){
+                ent = ent.anterior
+            }
+            return ent.tablavectores2[id];
+        }
+        return ;
+        //error semantico variable no existe
+        //return tipo de dato error
+    }
+    
     addFuncion(nombre, parametros, instrucciones){
         let simbolo = new Funcion(nombre, parametros, instrucciones);
         this.tablafunciones[nombre] = simbolo;

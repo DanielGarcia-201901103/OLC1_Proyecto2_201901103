@@ -33,6 +33,7 @@ const AsignacionV = require("../interprete/instruccion/AsignacionV.js");
 const AsignacionV2 = require("../interprete/instruccion/AsignacionV2.js");
 const AsignacionVT = require("../interprete/instruccion/AsignacionVT.js");
 const AsignacionV2T = require("../interprete/instruccion/AsignacionV2T.js");
+const AccesoV = require("../interprete/instruccion/AccesoV.js");
 %}
 
 %lex
@@ -194,6 +195,7 @@ ASIGNACIONES: EXPRESIONES              {$$=$1;}
 EXPRESIONES: OPERACIONES           {$$=$1;} 
         | OPERACIONESRELACIONAL    {$$=$1;} 
         | OPERADORESLOGICOS        {$$=$1;} 
+        | ACCESOVEC                {$$=$1;} 
         | id                       {$$= new Oid($1, "id", @1.first_line, @1.first_column, "id"); }
         | caracter                 {$$= new Dato($1, "char", @1.first_line, @1.first_column);} 
         | cadena                   {$$= new Dato($1, "string", @1.first_line, @1.first_column);} 
@@ -213,7 +215,9 @@ OTRASEXPRESIONES: CASTEAR          {$$=$1;}
         | FTOSTRING                {$$=$1;} 
         | FCSTR                    {$$=$1;} 
 ; 
-
+ACCESOVEC: id corcheteabre EXPRESIONES  corchetecierra  corcheteabre EXPRESIONES  corchetecierra   {$$= $1;}
+        | id corcheteabre EXPRESIONES  corchetecierra                                              {$$= new AccesoV($1, $3, @1.first_line, @1.first_column) ;}
+;
 OPERACIONES: menos EXPRESIONES %prec Umenos                                              {$$= new Aritmetica($2, $2 , $1 + "unario", @1.first_line, @1.first_column );} 
         | EXPRESIONES mas EXPRESIONES                                                    {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 
         | EXPRESIONES menos EXPRESIONES                                                  {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 
