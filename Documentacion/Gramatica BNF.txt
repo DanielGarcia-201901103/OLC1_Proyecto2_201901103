@@ -3,9 +3,9 @@
 <CODIGO> ::= <CODIGO> <INSTRUCCION> 
                         |  <INSTRUCCION>
 
-<INSTRUCCION> ::=  <DECLARACIONES>
+<INSTRUCCION> ::= <DECLARACIONESARR>	
+				 |  <DECLARACIONES>
                                  |  <SENTENCIAS>
-                                 |  <INCREYDECRE>
                                  |  <FUNCIONES>
                                  |  <METODOS> 
                                  |  <LLAMADAS> ;
@@ -15,6 +15,28 @@
 <DECLARACIONES> ::= <TIPODATO> <LISTANVARIABLES>;
                                         | <TIPODATO> <LISTANVARIABLES> = <ASIGNACIONES>;
                                         | <LISTANVARIABLES> = <ASIGNACIONES> ;
+					| id ++;
+					| id --;
+<DECLARACIONESARR> ::= <TIPODATO> <LISTANVARIABLES> [ ] = new <TIPODATO> [ <EXPRESIONES> ];
+	             | <TIPODATO> <LISTANVARIABLES> [ ] = [ <LISTANEXPR> ];
+		     | <TIPODATO> <LISTANVARIABLES> [ ] [ ] = new <TIPODATO> [ <EXPRESIONES> ] [ <EXPRESIONES> ];
+	             | <TIPODATO> <LISTANVARIABLES> [ ] [ ] = [ <LISTASFILAS> ];
+		     | id [ <EXPRESIONES> ] = <EXPRESIONES> ;
+		     | id [ <EXPRESIONES> ] [ <EXPRESIONES> ] = <EXPRESIONES> ;
+;
+
+<LISTASFILAS> ::= [ <LISTANEXP> ] , <LISTASFILAS>
+			| [ <LISTANEXP> ]
+;
+
+
+<LISTANEXP>:  <EXPRESIONES> signocoma <LISTANEXP>     
+        |   <EXPRESIONES>                           
+;
+
+<LISTANEXPR>:  <EXPRESIONES> signocoma <LISTANEXPR>    
+        |   <EXPRESIONES>                          
+;
 
 <LISTANVARIABLES> ::= id
                                         | id , <LISTANVARIABLES>
@@ -25,56 +47,67 @@
                             |  char
                             |  std::string
 
-<ASIGNACIONES> ::= id
-                                    | caracter
-                                    | cadena
-                                    | true
-                                    | false
-                                    | decimal
-                                    | entero
-                                    | <OPERACIONES>
-                                    | <OPERACIONESRELACIONAL> 
-                                    | <OPERADORTERNARIO>
-                                    | <OPERADORESLOGICOS>
-                                    | <AGRUPACION>
-                                    | <CASTEAR>
-                                    | <INCREYDECRE>
-                                    | <LLAMADAS>
-                                    | <FTOLOWER>
-                                    | <FTOUPPER>
-                                    | <FROUND>
-                                    | <FLENGTH>
-                                    | <FTYPEOF>
-                                    | <FTOSTRING>
-                                    | <FCSTR>
+<ASIGNACIONES> ::= <EXPRESIONES>
+		| <OTRASEXPRESIONES>
+;
+
+<EXPRESIONES>: <OPERACIONES>           
+        | <OPERACIONESRELACIONAL>   
+        | <OPERADORESLOGICOS>          
+        | <ACCESOVEC>                 
+        | id                       
+        | caracter                 
+        | cadena                   
+        | bool                     
+        | decimal                  
+        | numero                 
+;
+
+<OTRASEXPRESIONES>: <CASTEAR>         
+        | <OPERADORTERNARIO>      
+        | <INCREYDECRE>             
+        | <LLAMADAS>               
+        | <FTOLOWER>               
+        | <FTOUPPER>                
+        | <FROUND>                  
+        | <FLENGTH>                 
+        | <FTYPEOF>                 
+        | <FTOSTRING>                
+        | <FCSTR>                   
+; 
+
+<ACCESOVEC> : id [ <EXPRESIONES>  ]  [ <EXPRESIONES>  ]   
+         | id [ <EXPRESIONES>  ]      
+;
 
 <AGRUPACION> ::= ( <ASIGNACIONES> )
 
-<OPERACIONES>  ::= <ASIGNACIONES> + <ASIGNACIONES>
-                                    | <ASIGNACIONES> - <ASIGNACIONES>
-                                    | <ASIGNACIONES> * <ASIGNACIONES>
-                                    | <ASIGNACIONES> / <ASIGNACIONES>
-                                    | <ASIGNACIONES> % <ASIGNACIONES>
-                                    | pow ( <ASIGNACIONES> , <ASIGNACIONES> )
-                                    | -  <ASIGNACIONES>
+<OPERACIONES>  ::= <EXPRESIONES> + <EXPRESIONES>
+                  | <EXPRESIONES> - <EXPRESIONES>
+                  | <EXPRESIONES> * <EXPRESIONES>
+                  | <EXPRESIONES> / <EXPRESIONES>
+                  | <EXPRESIONES> % <EXPRESIONES>
+                  | pow ( <EXPRESIONES> , <EXPRESIONES> )
+                  | -  <EXPRESIONES>
+		  | <AGRUPACION>
 
-<OPERACIONESRELACIONAL>   ::= <ASIGNACIONES> == <ASIGNACIONES>
-                                                            | <ASIGNACIONES> != <ASIGNACIONES>
-                                                            | <ASIGNACIONES> < <ASIGNACIONES>
-                                                            | <ASIGNACIONES> > <ASIGNACIONES>
-                                                            | <ASIGNACIONES> <= <ASIGNACIONES>
-                                                            | <ASIGNACIONES> >= <ASIGNACIONES> 
+<OPERACIONESRELACIONAL>   ::= <EXPRESIONES> == <EXPRESIONES>
+                           | <EXPRESIONES> != <EXPRESIONES>
+                           | <EXPRESIONES> < <EXPRESIONES>
+                           | <EXPRESIONES> > <EXPRESIONES>
+                           | <EXPRESIONES> <= <EXPRESIONES>
+                           | <EXPRESIONES> >= <EXPRESIONES> 
 
 <OPERADORTERNARIO> ::= <OPERACIONESRELACIONAL> ? <ASIGNACIONES> : <ASIGNACIONES>
 
-<OPERADORESLOGICOS>  ::=  <ASIGNACIONES> || <ASIGNACIONES>
-                                                    | <ASIGNACIONES> && <ASIGNACIONES>
-                                                    | ! <ASIGNACIONES>
+<OPERADORESLOGICOS>  ::=  <EXPRESIONES> || <EXPRESIONES>
+                        | <EXPRESIONES> && <EXPRESIONES>
+                        | ! <EXPRESIONES>
 
-<CASTEAR> ::=   (  <TIPODATO>  ) <ASIGNACIONES>
+<CASTEAR> ::=   (  <TIPODATO>  ) <EXPRESIONES>
 
-<INCREYDECRE> ::= <ASIGNACIONES> ++
-                                   | <ASIGNACIONES> --
+<INCREYDECRE> ::= <EXPRESIONES> ++
+                | <EXPRESIONES> --
 
 <SENTENCIAS>  ::= <SENTIF> 
                                 | <SENTSWITCH>
@@ -82,38 +115,50 @@
                                 | <SENTFOR>
                                 | <SENTDOWHILE>
 
-<SENTIF> ::= if ( <CONDICIONALIF> )  { <CONTENIDOS> <FINIF>
+<SENTIF> ::= if ( <EXPRESIONES> )  { <CONTENIDOS> <FINIF>
 
 
 <CONDICIONALIF> ::= <OPERACIONESRELACIONAL>
                                     | <OPERADORESLOGICOS> 
                                     | id
 
-<FINIF> ::= } 
-                 | } else <SENTIF>
-                 | } else { <CONTENIDOS> }
+<CONTENIDOS>: <CONTENIDOS> <CONTEIF>  
+        | CONTEIF                                    
+;
 
-<SENTSWITCH> ::= switch  ( <CONDICIONALIF> ) { <SWCASOS> }
+<CONTEIF>: break ;     
+        | continue break;                          
+        | <RETORNOS>                                                 
+        | <INSTRUCCION>        
+;
+
+<FINIF> ::= } 
+          | } else if ( <EXPRESIONES> )  { <CONTENIDOS> <FINIF>
+          | } else { <CONTENIDOS> }
+
+<SENTSWITCH> ::= switch  ( <EXPRESIONES> ) { <SWCASOS> }
 <SWCASOS> ::= <SWCASE>
                            | <SWCASE> <SWCASOS>
 <SWCASE> ::=  case <ASIGNACIONES> : <CONTENIDOS>
                         |  default : <CONTENIDOS>
 
-<CONTENIDOS> := <CODIGO>
-                                | break ;
-                                | <RETORNOS>
 
 
-<SENTWHILE> ::= while (<CONDICIONALIF>) {<CONTENIDOSCICLOS> }
+<SENTWHILE> ::= while (<EXPRESIONES>) {<CONTENIDOSCICLOS> }
 
-<SENTFOR> ::= for ( <DECLARACIONES> ; <CONDICIONALIF> ; <INCREYDECRE>){ <CONTENIDOSCICLOS> }
+<SENTFOR> ::= for ( <DECLARACIONES> <EXPRESIONES> ; <INCREYDECRE>){ <CONTENIDOSCICLOS> }
 
-<SENTDOWHILE> ::= do { <CONTENIDOSCICLOS> } while ( <CONDICIONALIF> ) ;
+<SENTDOWHILE> ::= do { <CONTENIDOSCICLOS> } while ( <EXPRESIONES> ) ;
 
-<CONTENIDOSCICLOS> := <CODIGO>
-                                | break ;
-                                | continue ;
-                                | <RETORNOS>
+<CONTENIDOSCICLOS>: <CONTENIDOSCICLOS> <CONTENIDOCICL>           
+        | <CONTENIDOCICL>    
+;
+<CONTENIDOCICL>:break ;     
+        | continue ;      
+        | <RETORNOS>                        
+        | <INSTRUCCION>                  
+;
+
 
 <RETORNOS> ::= return ;
                             | return  <ASIGNACIONES> ;
