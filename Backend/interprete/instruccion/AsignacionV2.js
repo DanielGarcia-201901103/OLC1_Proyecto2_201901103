@@ -2,27 +2,28 @@ const Instruccion = require("../Instruccion.js");
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
 
-class AsignacionV extends Instruccion{
-    constructor(tipodec, id, tipoasig, expresion, linea, columna){
+class AsignacionV2 extends Instruccion{
+    constructor(tipodec, id, tipoasig, expresionf, expresionc, linea, columna){
         super();
         this.tipodec = tipodec;
         this.id = id;
         this.tipoasig = tipoasig;
-        this.expresion = expresion;
+        this.expresionf = expresionf;
+        this.expresionc = expresionc;
         this.linea = linea;
         this.columna = columna;
     }
 
     interpretar(entorno){
         try{    
-            let valor = this.expresion.interpretar(entorno);
+            let valorf = this.expresionf.interpretar(entorno);
+            let valorc = this.expresionc.interpretar(entorno);
             if(this.tipodec != this.tipoasig){
                 addError('Error Semantico', 'Los tipos deben ser iguales en la declaración de vectores: ' + this.tipodec + ' y ' + this.tipoasig, this.linea, this.columna);
                 //error semantico
                 return this;
             }
-            console.log("espresion "+this.expresion);
-            if(this.expresion.tipo != 'int'){
+            if(this.expresionf.tipo != 'int' && this.expresionc.tipo != 'int'){
                 addError('Error Semantico', 'El tamaño del vector debe ser de tipo entero - int', this.linea, this.columna);
                 //error semantico
                 return this;
@@ -39,13 +40,18 @@ class AsignacionV extends Instruccion{
                 defecto = "";
             }
             let lista = [];
-            for(let i = 0 ; i < valor; i++){
+            for(let i = 0 ; i < valorc; i++){
                 lista.push(defecto);
+            }
+            let matriz = [];
+            for(let i = 0 ; i < valorf; i++){
+                matriz.push(lista);
             }
 
             for(let i = 0; i < this.id.length; i++){
-                entorno.addSimboloVec(this.id[i], lista ,this.tipodec, entorno.nombreentorno, this.linea, this.columna);
+                entorno.addSimboloVec(this.id[i], matriz ,this.tipodec, entorno.nombreentorno, this.linea, this.columna);
             }
+
         return this;
     }catch(error){
         addError('Error', 'Ha ocurrido un error en la declaración de vectores', this.linea, this.columna);
@@ -53,4 +59,4 @@ class AsignacionV extends Instruccion{
     }
 }
 
-module.exports = AsignacionV;
+module.exports = AsignacionV2;

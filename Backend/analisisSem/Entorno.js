@@ -58,6 +58,17 @@ class Entorno{
         this.tablavectores[id] = simbolo;
     }
 
+    addSimboloVecT(id, valor, tipo, entorno, linea, columna, lsval){
+        if (id in this.tablavectores){
+            //error semantico de variable ya declarada
+            return;
+        }
+        let simbolo = new Simbolo(id, valor ,tipo, entorno, linea, columna);
+        let simbolo1 = new Simbolo(id, lsval ,tipo, entorno, linea, columna);
+        addSimboloDec(simbolo1);
+        this.tablavectores[id] = simbolo;
+    }
+
     addFuncion(nombre, parametros, instrucciones){
         let simbolo = new Funcion(nombre, parametros, instrucciones);
         this.tablafunciones[nombre] = simbolo;

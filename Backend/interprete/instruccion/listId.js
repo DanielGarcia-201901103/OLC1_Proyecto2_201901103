@@ -2,6 +2,7 @@
 let lvariables = [];
 let listaelseif = [];
 let listacasosswitch = [];
+let listaexpresionesv = [];
 
 function addVariables(id){
     lvariables.push(id);
@@ -43,5 +44,22 @@ function limpiarlistCasos(){
     listacasosswitch = [];
 }
 
+//FUNCIONES PARA MANEJAR LAS LISTAS DE EXPRESIONES DE DECLARACION DE VECTORES
+function addExp(id){
+    listaexpresionesv.push(id);
+}
+function getExp(){
+    listaexpresionesv.reverse();
+    return listaexpresionesv;
+}
+function concatenarlistaExp(ls){
+    listaexpresionesv.concat(ls);
+}
+function limpiarlistExp(){
+    listaexpresionesv = [];
+}
 
-module.exports = {addVariables, limpiarlistVariables, getLVariables, concatenarlista , addELSEif, getElSEIF, limpiarElSEIF, addCasos, getCasos, concatenarlistaCasos, limpiarlistCasos};
+module.exports = {addVariables, limpiarlistVariables, getLVariables, concatenarlista , 
+    addELSEif, getElSEIF, limpiarElSEIF, 
+    addCasos, getCasos, concatenarlistaCasos, limpiarlistCasos,
+    addExp, getExp, concatenarlistaExp, limpiarlistExp};
