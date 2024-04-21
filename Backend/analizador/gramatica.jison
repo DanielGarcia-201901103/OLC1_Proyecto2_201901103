@@ -34,6 +34,7 @@ const AsignacionV2 = require("../interprete/instruccion/AsignacionV2.js");
 const AsignacionVT = require("../interprete/instruccion/AsignacionVT.js");
 const AsignacionV2T = require("../interprete/instruccion/AsignacionV2T.js");
 const AccesoV = require("../interprete/instruccion/AccesoV.js");
+const AccesoV2 = require("../interprete/instruccion/AccesoV2.js");
 %}
 
 %lex
@@ -157,8 +158,8 @@ DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= 
         | id sigdecremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Oid($1, "id", @1.first_line, @1.first_column, "id"),"--", @1.first_line, @1.first_column); } 
         | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
 ;
-DECLARACIONESARR: TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual resnew TIPODATO corcheteabre EXPRESIONES corchetecierra sigpuntoycoma { $$= new AsignacionV($1, $2, $7, $9, @1.first_line, @1.first_column);  limpiarlistVariables();}
-        | TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual corcheteabre LISTANEXPR corchetecierra sigpuntoycoma { $$= new AsignacionVT($1, $2, $7, @1.first_line, @1.first_column);  limpiarlistVariables(); limpiarlistExp();}
+DECLARACIONESARR: TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual resnew TIPODATO corcheteabre EXPRESIONES corchetecierra sigpuntoycoma     { $$= new AsignacionV($1, $2, $7, $9, @1.first_line, @1.first_column);  limpiarlistVariables();}
+        | TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual corcheteabre LISTANEXPR corchetecierra sigpuntoycoma                              { $$= new AsignacionVT($1, $2, $7, @1.first_line, @1.first_column);  limpiarlistVariables(); limpiarlistExp();}
         | TIPODATO LISTANVARIABLES corcheteabre corchetecierra corcheteabre corchetecierra sigigual resnew TIPODATO corcheteabre EXPRESIONES corchetecierra corcheteabre EXPRESIONES corchetecierra sigpuntoycoma { $$= new AsignacionV2($1, $2, $9, $11, $14, @1.first_line, @1.first_column);  limpiarlistVariables();}
         | TIPODATO LISTANVARIABLES corcheteabre corchetecierra corcheteabre corchetecierra sigigual corcheteabre LISTASFILAS corchetecierra sigpuntoycoma { $$= new AsignacionV2T($1, $2, $9, @1.first_line, @1.first_column);  limpiarLSMA();}
 ;
@@ -168,7 +169,7 @@ LISTASFILAS: corcheteabre LISTANEXP corchetecierra signocoma LISTASFILAS    { ad
 ;
 
 
-LISTANEXP:  EXPRESIONES signocoma LISTANEXP    {  addExp($1); concatenarlistaExp($3); $$=getExp(); limpiarlistExp();} 
+LISTANEXP:  EXPRESIONES signocoma LISTANEXP      {  addExp($1); concatenarlistaExp($3); $$=getExp(); limpiarlistExp();} 
         |   EXPRESIONES                          {  addExp($1); $$=getExp(); } 
 ;
 
@@ -183,8 +184,8 @@ TIPODATO: resint       {$$="int";}
         | resstring    {$$= "string";} 
 ;
 
-LISTANVARIABLES:  id signocoma LISTANVARIABLES    {  addVariables($1); concatenarlista($3); $$=getLVariables();} 
-        |   id                                    {addVariables($1); $$=getLVariables();} 
+LISTANVARIABLES:  id signocoma LISTANVARIABLES    { addVariables($1); concatenarlista($3); $$=getLVariables();} 
+        |   id                                    { addVariables($1); $$=getLVariables();} 
 ;
 
 ASIGNACIONES: EXPRESIONES              {$$=$1;}  
@@ -215,7 +216,7 @@ OTRASEXPRESIONES: CASTEAR          {$$=$1;}
         | FTOSTRING                {$$=$1;} 
         | FCSTR                    {$$=$1;} 
 ; 
-ACCESOVEC: id corcheteabre EXPRESIONES  corchetecierra  corcheteabre EXPRESIONES  corchetecierra   {$$= $1;}
+ACCESOVEC: id corcheteabre EXPRESIONES  corchetecierra  corcheteabre EXPRESIONES  corchetecierra   {$$= new AccesoV2($1, $3, $6, @1.first_line, @1.first_column);}
         | id corcheteabre EXPRESIONES  corchetecierra                                              {$$= new AccesoV($1, $3, @1.first_line, @1.first_column) ;}
 ;
 OPERACIONES: menos EXPRESIONES %prec Umenos                                              {$$= new Aritmetica($2, $2 , $1 + "unario", @1.first_line, @1.first_column );} 

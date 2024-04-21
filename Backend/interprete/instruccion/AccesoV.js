@@ -32,7 +32,6 @@ class AccesoV extends Instruccion{
             if(posicion < listavalores.length && posicion >= 0){
                 this.valor = listavalores[posicion].interpretar(entorno);
                 this.tipo = listavalores[posicion].tipo;
-                console.log(this.valor + ' ' + this.tipoid);
                 return this.valor;
             }else{
                 addError('Error Semantico', 'El indice esta fuera de rango', this.linea, this.columna);
