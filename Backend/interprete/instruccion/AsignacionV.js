@@ -21,7 +21,6 @@ class AsignacionV extends Instruccion{
                 //error semantico
                 return this;
             }
-            console.log("espresion "+this.expresion);
             if(this.expresion.tipo != 'int'){
                 addError('Error Semantico', 'El tamaño del vector debe ser de tipo entero - int', this.linea, this.columna);
                 //error semantico

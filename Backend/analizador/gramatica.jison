@@ -19,7 +19,7 @@ const Flength = require("../interprete/otrasexpresiones/Flength.js");
 const Fround = require("../interprete/otrasexpresiones/Fround.js"); 
 const Ftypeof = require("../interprete/otrasexpresiones/Ftypeof.js"); 
 const Ftostring = require("../interprete/otrasexpresiones/Ftostring.js"); 
-const {addVariables, limpiarlistVariables, getLVariables, concatenarlista , addELSEif, getElSEIF, limpiarElSEIF, addCasos, getCasos, concatenarlistaCasos, limpiarlistCasos, addExp, getExp, concatenarlistaExp, limpiarlistExp} = require("../interprete/instruccion/listId.js");
+const {addVariables, limpiarlistVariables, getLVariables, concatenarlista , addELSEif, getElSEIF, limpiarElSEIF, addCasos, getCasos, concatenarlistaCasos, limpiarlistCasos, addExp, getExp, concatenarlistaExp, limpiarlistExp, addLSMA, getLSMA, concatenarLSMA, limpiarLSMA} = require("../interprete/instruccion/listId.js");
 const Oid = require("../interprete/expresion/Oid.js");
 const Bdowhile = require("../interprete/instruccion/Bdowhile.js");
 const Continu = require("../interprete/instruccion/Continu.js");
@@ -32,6 +32,7 @@ const BFor = require("../interprete/instruccion/BFor.js");
 const AsignacionV = require("../interprete/instruccion/AsignacionV.js");
 const AsignacionV2 = require("../interprete/instruccion/AsignacionV2.js");
 const AsignacionVT = require("../interprete/instruccion/AsignacionVT.js");
+const AsignacionV2T = require("../interprete/instruccion/AsignacionV2T.js");
 %}
 
 %lex
@@ -158,10 +159,20 @@ DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= 
 DECLARACIONESARR: TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual resnew TIPODATO corcheteabre EXPRESIONES corchetecierra sigpuntoycoma { $$= new AsignacionV($1, $2, $7, $9, @1.first_line, @1.first_column);  limpiarlistVariables();}
         | TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual corcheteabre LISTANEXPR corchetecierra sigpuntoycoma { $$= new AsignacionVT($1, $2, $7, @1.first_line, @1.first_column);  limpiarlistVariables(); limpiarlistExp();}
         | TIPODATO LISTANVARIABLES corcheteabre corchetecierra corcheteabre corchetecierra sigigual resnew TIPODATO corcheteabre EXPRESIONES corchetecierra corcheteabre EXPRESIONES corchetecierra sigpuntoycoma { $$= new AsignacionV2($1, $2, $9, $11, $14, @1.first_line, @1.first_column);  limpiarlistVariables();}
+        | TIPODATO LISTANVARIABLES corcheteabre corchetecierra corcheteabre corchetecierra sigigual corcheteabre LISTASFILAS corchetecierra sigpuntoycoma { $$= new AsignacionV2T($1, $2, $9, @1.first_line, @1.first_column);  limpiarLSMA();}
+;
+
+LISTASFILAS: corcheteabre LISTANEXP corchetecierra signocoma LISTASFILAS    { addLSMA($2); concatenarLSMA($5); $$=getLSMA(); } 
+        |  corcheteabre LISTANEXP corchetecierra                            { addLSMA($2); $$=getLSMA(); } 
+;
+
+
+LISTANEXP:  EXPRESIONES signocoma LISTANEXP    {  addExp($1); concatenarlistaExp($3); $$=getExp(); limpiarlistExp();} 
+        |   EXPRESIONES                          {  addExp($1); $$=getExp(); } 
 ;
 
 LISTANEXPR:  EXPRESIONES signocoma LISTANEXPR    {  addExp($1); concatenarlistaExp($3); $$=getExp();} 
-        |   EXPRESIONES                          {addExp($1); $$=getExp();} 
+        |   EXPRESIONES                          {  addExp($1); $$=getExp();} 
 ;
 
 TIPODATO: resint       {$$="int";} 

@@ -3,12 +3,12 @@ let lvariables = [];
 let listaelseif = [];
 let listacasosswitch = [];
 let listaexpresionesv = [];
+let listaMatriz = [];
 
 function addVariables(id){
-    lvariables.push(id);
+    lvariables.unshift(id);
 }
 function getLVariables(){
-    lvariables.reverse();
     return lvariables;
 }
 function concatenarlista(ls){
@@ -46,10 +46,9 @@ function limpiarlistCasos(){
 
 //FUNCIONES PARA MANEJAR LAS LISTAS DE EXPRESIONES DE DECLARACION DE VECTORES
 function addExp(id){
-    listaexpresionesv.push(id);
+    listaexpresionesv.unshift(id);
 }
 function getExp(){
-    listaexpresionesv.reverse();
     return listaexpresionesv;
 }
 function concatenarlistaExp(ls){
@@ -58,8 +57,22 @@ function concatenarlistaExp(ls){
 function limpiarlistExp(){
     listaexpresionesv = [];
 }
+//FUNCIONES PARA MANEJAR LAS LISTAS DE LISTASFILAS DE LA MATRIZ DE VECTORES
+function addLSMA(id){
+    listaMatriz.unshift(id);
+}
+function getLSMA(){
+    return listaMatriz;
+}
+function concatenarLSMA(ls){
+    listaMatriz.concat(ls);
+}
+function limpiarLSMA(){
+    listaMatriz = [];
+}
 
 module.exports = {addVariables, limpiarlistVariables, getLVariables, concatenarlista , 
     addELSEif, getElSEIF, limpiarElSEIF, 
     addCasos, getCasos, concatenarlistaCasos, limpiarlistCasos,
-    addExp, getExp, concatenarlistaExp, limpiarlistExp};
+    addExp, getExp, concatenarlistaExp, limpiarlistExp,
+    addLSMA, getLSMA, concatenarLSMA, limpiarLSMA};
