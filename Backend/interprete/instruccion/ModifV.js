@@ -44,7 +44,7 @@ class ModifV extends Instruccion{
                 //almacenando en la posicion de la lista el objeto Data actualizado
                 listavalores[posicion] =  this.nexpresion;
                 entorno.actualizarSimboloVec(this.id, listavalores);
-                return this.valor;
+                return this;
             }else{
                 addError('Error Semantico', 'El indice esta fuera de rango', this.linea, this.columna);
             }

@@ -130,6 +130,20 @@ class Entorno{
         //error semantico variable no existe
         //return tipo de dato error
     }
+
+    actualizarSimboloVec2(id, act){
+        let ent = this;
+        while (ent != null){
+            if(!(id in ent.tablavectores2)){
+                ent = ent.anterior
+            }
+            ent.tablavectores2[id].setTipo(act);
+            return ;
+        }
+        //error semantico variable no existe
+        //return tipo de dato error
+        
+    }
     
     addFuncion(nombre, parametros, instrucciones){
         let simbolo = new Funcion(nombre, parametros, instrucciones);

@@ -38,9 +38,7 @@ class AccesoV2 extends Instruccion{
                 let listavalorescolumna = listavaloresMatriz[posicionf];
                 if(posicionc < listavalorescolumna.length && posicionc >= 0){
                     this.valor = listavaloresMatriz[posicionf][posicionc].interpretar(entorno);
-                    console.log('valor en matriz', this.valor);
                     this.tipo =  listavaloresMatriz[posicionf][posicionc].tipo;
-                    console.log('tipo en matriz', this.tipo);
                     return this.valor;
                 }else{
                     addError('Error Semantico', 'El indice de columna está fuera de rango', this.linea, this.columna);
