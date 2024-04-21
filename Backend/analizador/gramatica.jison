@@ -35,6 +35,8 @@ const AsignacionVT = require("../interprete/instruccion/AsignacionVT.js");
 const AsignacionV2T = require("../interprete/instruccion/AsignacionV2T.js");
 const AccesoV = require("../interprete/instruccion/AccesoV.js");
 const AccesoV2 = require("../interprete/instruccion/AccesoV2.js");
+const ModifV = require("../interprete/instruccion/ModifV.js");
+const ModifV2 = require("../interprete/instruccion/ModifV2.js");
 %}
 
 %lex
@@ -162,6 +164,8 @@ DECLARACIONESARR: TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual 
         | TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual corcheteabre LISTANEXPR corchetecierra sigpuntoycoma                              { $$= new AsignacionVT($1, $2, $7, @1.first_line, @1.first_column);  limpiarlistVariables(); limpiarlistExp();}
         | TIPODATO LISTANVARIABLES corcheteabre corchetecierra corcheteabre corchetecierra sigigual resnew TIPODATO corcheteabre EXPRESIONES corchetecierra corcheteabre EXPRESIONES corchetecierra sigpuntoycoma { $$= new AsignacionV2($1, $2, $9, $11, $14, @1.first_line, @1.first_column);  limpiarlistVariables();}
         | TIPODATO LISTANVARIABLES corcheteabre corchetecierra corcheteabre corchetecierra sigigual corcheteabre LISTASFILAS corchetecierra sigpuntoycoma { $$= new AsignacionV2T($1, $2, $9, @1.first_line, @1.first_column);  limpiarLSMA();}
+        | id corcheteabre EXPRESIONES corchetecierra sigigual EXPRESIONES sigpuntoycoma                                                                   { $$= new ModifV($1, $3, $6, @1.first_line, @1.first_column);}
+        | id corcheteabre EXPRESIONES corchetecierra corcheteabre EXPRESIONES corchetecierra sigigual EXPRESIONES sigpuntoycoma                           { $$= new ModifV2($1, $3, $6, $9, @1.first_line, @1.first_column);}
 ;
 
 LISTASFILAS: corcheteabre LISTANEXP corchetecierra signocoma LISTASFILAS    { addLSMA($2); concatenarLSMA($5); $$=getLSMA(); } 
@@ -216,9 +220,11 @@ OTRASEXPRESIONES: CASTEAR          {$$=$1;}
         | FTOSTRING                {$$=$1;} 
         | FCSTR                    {$$=$1;} 
 ; 
+
 ACCESOVEC: id corcheteabre EXPRESIONES  corchetecierra  corcheteabre EXPRESIONES  corchetecierra   {$$= new AccesoV2($1, $3, $6, @1.first_line, @1.first_column);}
         | id corcheteabre EXPRESIONES  corchetecierra                                              {$$= new AccesoV($1, $3, @1.first_line, @1.first_column) ;}
 ;
+
 OPERACIONES: menos EXPRESIONES %prec Umenos                                              {$$= new Aritmetica($2, $2 , $1 + "unario", @1.first_line, @1.first_column );} 
         | EXPRESIONES mas EXPRESIONES                                                    {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 
         | EXPRESIONES menos EXPRESIONES                                                  {$$= new Aritmetica($1,$3,$2, @1.first_line, @1.first_column) ;} 

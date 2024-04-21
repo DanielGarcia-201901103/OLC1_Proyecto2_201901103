@@ -83,6 +83,20 @@ class Entorno{
         //return tipo de dato error
     }
 
+    actualizarSimboloVec(id, act){
+        let ent = this;
+        while (ent != null){
+            if(!(id in ent.tablavectores)){
+                ent = ent.anterior
+            }
+            ent.tablavectores[id].setTipo(act);
+            return ;
+        }
+        //error semantico variable no existe
+        //return tipo de dato error
+        
+    }
+
     addSimboloVec2(id, valor, tipo, entorno, linea, columna){
         if (id in this.tablavectores){
             //error semantico de variable ya declarada
