@@ -104,6 +104,26 @@ const CodeEditorWindow = () => {
   const validarS = (data) => {
     console.log(data.salida);
   };
+
+
+  const handleOpenReportAST = async (e) => {
+    e.preventDefault();
+    await fetch('http://localhost:4000/arbol', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json()).then(data => validarAS(data));
+
+    // Aquí puedes implementar la lógica para ejecutar el código y actualizar la salida
+    // Ejemplo: establecer la salida como el valor de entrada
+  };
+  const validarAS = (data) => {
+    console.log(data.salida);
+  };
+  
   return (
     <>
       <div className="conjuntoBotones">
@@ -115,7 +135,7 @@ const CodeEditorWindow = () => {
           <Button className="botonE" onClick={handleRunCode}>Ejecutar</Button>{' '}
           <Button className="gbotonesR" onClick={handleOpenReportErrors}>Reporte Errores</Button>{' '}
           <Button className="gbotonesR" onClick={handleOpenReportSimbols}>Reporte Tabla Simbolos</Button>{' '}
-          <Button className="gbotonesR">Generar Arbol AST</Button>{' '}
+          <Button className="gbotonesR" onClick={handleOpenReportAST}>Generar Arbol AST</Button>{' '}
         </ButtonGroup>
       </div>
       <div className="code-editor-container">

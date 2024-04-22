@@ -69,15 +69,18 @@ class Asignacion extends Instruccion{
         
         let op = getcont();
         let padre = getcont();
-        let igualdad = "\"=\""
+        let oc = getcont();
+        let occ = getcont();
         nodo.padre = padre;
         nodo.cadena =
             asig.cadena+
             `${op}[label="${this.id}"]\n`+
             `${padre}[label="Asignación"]\n`+
-            `${padre}--${this.tipo}\n`+
+            `${oc}[label="${this.tipo}"]\n`+
+            `${occ}[label="="]\n`+
+            `${padre}--${oc}\n`+
             `${padre}--${op}\n`+
-            `${padre}--${igualdad}\n`+
+            `${padre}--${occ}\n`+
             `${padre}--${asig.padre}\n`
             ;
 

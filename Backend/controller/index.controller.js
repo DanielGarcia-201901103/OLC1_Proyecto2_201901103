@@ -1,7 +1,7 @@
 const analiza = require('../analizador/gramatica');
 const { openReporteErr, generarTabla, limpiarTabla } = require('../analisisSem/manejoErrores');
 const { generarTablaS, limpiarTablaS, openReporteS } = require('../analisisSem/manejoSimbolos');
-const { generarAST, escribirArchivoDot } = require('../analisisSem/manejoAST');
+const { generarAST, escribirArchivoDot, openReporteArbol } = require('../analisisSem/manejoAST');
 const Entorno = require('../analisisSem/Entorno');
 require('../interprete/instruccion/print');
 
@@ -25,7 +25,6 @@ const analizar = (req, res) => {
         })
         cadena = cadena +"\n}"
         escribirArchivoDot(cadena)
-        generarAST();
         cadena = "";
         res.status(200).json({ message: 'Analizando...', salida: obimpresiones });
         obimpresiones = [];
@@ -66,6 +65,10 @@ const arbol = (req, res) => {
     //verificar si se creó el archivo del arbol .dot
     //si el archivo existe se abre y se envía la respuesta 
     //hacia el frontend
+    generarAST();
+    let respuesta = openReporteArbol();
+    console.log('Respuesta:', respuesta);
+    res.status(200).json({ message: 'Analizando...', salida: respuesta });
 }
 
 //falta abrir, guardar y crear archivo

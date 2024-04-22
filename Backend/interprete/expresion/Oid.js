@@ -1,5 +1,6 @@
 const Instruccion = require('../Instruccion.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class Oid extends Instruccion {
     constructor(id, tipo, fila, columna, tipoid) {
@@ -35,6 +36,29 @@ class Oid extends Instruccion {
         } catch (error) {
             addError('Error', 'Error al interpretar el dato' + error, this.fila, this.columna);
         }
+    }
+
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let nodoDato = getcont();
+        let nodoPadre = getcont();
+        let oi = getcont();
+
+        let cadena = 
+        `${nodoDato}[label="${this.valor}"]\n`+
+        `${oi}[label="${this.id}"]\n`+
+        `${nodoPadre}[label="Expresion"]\n`+
+        `${nodoPadre}--${oi}\n`+
+        `${oi}--${nodoDato}\n`;
+
+        nodo.padre = nodoPadre;
+        nodo.cadena = cadena;
+
+        return nodo;
     }
 }
 

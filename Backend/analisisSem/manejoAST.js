@@ -1,4 +1,4 @@
-
+const urlReporte = '../Backend/analisisSem/ReportesArchivos/ast.svg';
 // <ruta_bin>/dot -Tsvg <ruta_archivo> -o <ruta_generada>
 //https://drive.google.com/drive/u/0/search?q=laboratorio%20compiladores%201%202023
 let dot = "C:/Program Files/Graphviz/bin/dot"
@@ -21,7 +21,7 @@ function generarAST(){
 
 function escribirArchivoDot(data){
     fs.mkdirSync('../Backend/analisisSem/ReportesArchivos/',{recursive:true});//Creamos la carpeta
-    fs.appendFile(entrada, data, function (err) {
+    fs.writeFile(entrada, data, function (err) {
         if (err) {
             console.log(err)
         } else {
@@ -30,6 +30,20 @@ function escribirArchivoDot(data){
     });
 }
 
+function openReporteArbol(){
+    import('open').then((open) => {
+        // Abrir el archivo en el navegador
+        open.default(urlReporte)
+        .then(() => {
+            console.log('Archivo abierto en el navegador');
+        })
+        .catch((err) => {
+            console.error('Error al abrir el archivo:', err);
+        });
+    }).catch((err) => {
+        console.error('Error al importar el módulo:', err);
+    });
+}
 //escribirArchivoDot(cadena)
 //generarAST();
-module.exports = {generarAST, escribirArchivoDot};
+module.exports = {generarAST, escribirArchivoDot, openReporteArbol};
