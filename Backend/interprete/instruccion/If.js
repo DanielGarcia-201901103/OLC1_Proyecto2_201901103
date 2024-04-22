@@ -53,12 +53,11 @@ class If extends Instruccion {
 
 
                 if (this.otrasinstruccionesif[0] == '}') {
-                    console.log("estoy dentro de if con }")
                     return this
                 } else {
 
                     if (this.otrasinstruccionesif[0].nombreelse == 'else') {
-                        console.log("tiene que ejecutar el else")
+                        
                         let resultado = this.otrasinstruccionesif[0].instruccioneselse.forEach(instruccion => {
                             instruccion.interpretar(entornoif);
                             if (instruccion.tipo == 'break') {
@@ -75,12 +74,9 @@ class If extends Instruccion {
                         for (let i = 0; i < this.otrasinstruccionesif.length; i++) {
                             let instruc = this.otrasinstruccionesif[i];
                             instruc.condicion.interpretar(entornoif);
-                            console.log("probando en if para interpretar el else if   -- ", instruc.otrasinstruccionesif)
-                            
                             if (instruc.condicion.valor == true) {
                                 instruc.instruccionesif.forEach(instruccion => {
                                     instruccion.interpretar(entornoif);
-                                    console.log("buscando el else para ejecutarlo ---" + instruccion.otrasinstruccionesif)
                                 });
                                 if (instruc.tipo == 'break') {
                                     this.tipo = 'break';
@@ -92,11 +88,9 @@ class If extends Instruccion {
                                 break;
                             }
                             if (instruc.otrasinstruccionesif[0] == '}') {
-                                console.log("estoy dentro de if con }")
                                 return this
                             } else {
                                 if (instruc.otrasinstruccionesif[0].nombreelse == 'else') {
-                                    console.log("tiene que ejecutar el else")
                                     let resultado = instruc.otrasinstruccionesif[0].instruccioneselse.forEach(instruccion => {
                                         instruccion.interpretar(entornoif);
                                         if (instruccion.tipo == 'break') {

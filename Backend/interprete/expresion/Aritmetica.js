@@ -61,11 +61,11 @@ class Aritmetica extends Instruccion {
                         return Number(this.valor);
                     } else if (this.op1.tipo == 'int' && this.op2.tipo == 'string') {
                         this.tipo = 'string';
-                        this.valor = String.fromCharCode(valor1) + valor2;
+                        this.valor = String(valor1) + String(valor2);
                         return this.valor;
                     } else if (this.op1.tipo == 'string' && this.op2.tipo == 'int') {
                         this.tipo = 'string';
-                        this.valor = valor1 + String.fromCharCode(valor2);
+                        this.valor = String(valor1) + String(valor2);
                         return this.valor;
                     } else if (this.op1.tipo == 'double' && this.op2.tipo == 'double') {
                         this.tipo = 'double';
@@ -91,11 +91,11 @@ class Aritmetica extends Instruccion {
                         return Number(this.valor);
                     } else if (this.op1.tipo == 'double' && this.op2.tipo == 'string') {
                         this.tipo = 'string';
-                        this.valor = String.fromCharCode(valor1) + valor2;
+                        this.valor = String(valor1) + String(valor2);
                         return this.valor;
                     } else if (this.op1.tipo == 'string' && this.op2.tipo == 'double') {
                         this.tipo = 'string';
-                        this.valor = valor1 + String.fromCharCode(valor2);
+                        this.valor = String(valor1) + String(valor2);
                         return this.valor;
                     } else if (this.op1.tipo == 'booleano' && this.op2.tipo == 'string') {
                         this.tipo = 'string';
@@ -117,7 +117,7 @@ class Aritmetica extends Instruccion {
                         return this.valor;
                     } else if (this.op1.tipo == 'string' && this.op2.tipo == 'string') {
                         this.tipo = 'string';
-                        this.valor = valor1 + valor2;
+                        this.valor = String(valor1) + String(valor2);
                         return this.valor;
                     } else if (this.op1.tipo == 'double' && this.op2.tipo == 'char') {
                         // ME quedé aquí, hay que convertir el char a int y sumar, tiene que tomar el valor ascii y devolver un int
