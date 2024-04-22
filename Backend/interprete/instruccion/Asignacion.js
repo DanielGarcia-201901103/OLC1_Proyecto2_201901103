@@ -1,6 +1,7 @@
 const Instruccion = require("../Instruccion.js");
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class Asignacion extends Instruccion{
     constructor(id, expresion, tipo, linea, columna){
@@ -55,6 +56,32 @@ class Asignacion extends Instruccion{
     }catch(error){
         addError('Error', 'Ha ocurrido un error ', this.linea, this.columna);
     }
+    }
+
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let asig = this.expresion.getAst();
+        //let id = this.id.getAst();
+        
+        let op = getcont();
+        let padre = getcont();
+        let igualdad = "\"=\""
+        nodo.padre = padre;
+        nodo.cadena =
+            asig.cadena+
+            `${op}[label="${this.id}"]\n`+
+            `${padre}[label="Asignación"]\n`+
+            `${padre}--${this.tipo}\n`+
+            `${padre}--${op}\n`+
+            `${padre}--${igualdad}\n`+
+            `${padre}--${asig.padre}\n`
+            ;
+
+        return nodo;
     }
 }
 

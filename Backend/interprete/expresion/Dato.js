@@ -1,6 +1,6 @@
 const Instruccion = require('../Instruccion.js');
 const { addError } = require('../../analisisSem/manejoErrores');
-
+const { getcont } = require('../../analisisSem/contador.js');
 class Dato extends Instruccion {
     constructor(valor,tipo, fila, columna) {
         super();
@@ -41,6 +41,27 @@ class Dato extends Instruccion {
         } catch (error) {
             addError('Error', 'Error al interpretar el dato' + error, this.fila, this.columna);
         }
+    }
+
+    
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let nodoDato = getcont();
+        let nodoPadre = getcont();
+
+        let cadena = 
+        `${nodoDato}[label="${this.valor}"]\n`+
+        `${nodoPadre}[label="expresion"]\n`+
+        `${nodoPadre}--${nodoDato}\n`;
+
+        nodo.padre = nodoPadre;
+        nodo.cadena = cadena;
+
+        return nodo;
     }
 }
 
