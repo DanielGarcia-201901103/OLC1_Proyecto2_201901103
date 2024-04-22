@@ -34,7 +34,7 @@ class Oid extends Instruccion {
                 return this.valor;
             
         } catch (error) {
-            addError('Error', 'Error al interpretar el dato' + error, this.fila, this.columna);
+            addError('Error', 'Error al interpretar el dato en obtener id ' + error, this.fila, this.columna);
         }
     }
 

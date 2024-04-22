@@ -16,7 +16,7 @@ class elseif extends Instruccion {
     interpretar(entorno) {
         try {
             let entornoif = new Entorno('ELSEIF', entorno);
-            this.condicion.interpretar(entornoif);
+            this.condicion.interpretar(entorno);
             console.log("estoy en else if nueva clase " + this.condicion.tipo)
             if (this.condicion.tipo != 'booleano') {
                 addError('Error Semantico', 'La condición no es de tipo bool', this.linea, this.columna);

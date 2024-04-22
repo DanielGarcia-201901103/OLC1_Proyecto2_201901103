@@ -15,7 +15,7 @@ class If extends Instruccion {
     interpretar(entorno) {
         try {
             let entornoif = new Entorno('IF', entorno);
-            this.condicion.interpretar(entornoif);
+            this.condicion.interpretar(entorno);
 
             if (this.condicion.tipo != 'booleano') {
                 addError('Error Semantico', 'La condición no es de tipo bool', this.linea, this.columna);
@@ -73,7 +73,7 @@ class If extends Instruccion {
 
                         for (let i = 0; i < this.otrasinstruccionesif.length; i++) {
                             let instruc = this.otrasinstruccionesif[i];
-                            instruc.condicion.interpretar(entornoif);
+                            instruc.condicion.interpretar(entorno);
                             if (instruc.condicion.valor == true) {
                                 instruc.instruccionesif.forEach(instruccion => {
                                     instruccion.interpretar(entornoif);

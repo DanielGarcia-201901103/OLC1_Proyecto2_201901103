@@ -4,6 +4,7 @@ let listaelseif = [];
 let listacasosswitch = [];
 let listaexpresionesv = [];
 let listaMatriz = [];
+let listaparametros = [];
 
 function addVariables(id){
     lvariables.unshift(id);
@@ -70,6 +71,7 @@ function concatenarLSMA(ls){
 function limpiarLSMA(){
     listaMatriz = [];
 }
+// FUNCIONES PARA MANEJAR LAS LISTAS DE PARAMETROS DE FUNCIONES Y METODOS
 
 module.exports = {addVariables, limpiarlistVariables, getLVariables, concatenarlista , 
     addELSEif, getElSEIF, limpiarElSEIF, 
