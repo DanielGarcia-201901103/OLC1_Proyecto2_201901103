@@ -1,5 +1,6 @@
 const Instruccion = require("../Instruccion.js");
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class Relacional extends Instruccion {
     constructor(op1, op2, operador, fila, columna) {
@@ -263,6 +264,31 @@ class Relacional extends Instruccion {
         } catch (error) {
             addError('Error', 'Error al interpretar la expresion relacional', this.fila, this.columna);
         }
+    }
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let izq = this.op1.getAst();
+        let der = this.op2.getAst();
+        
+        let op = getcont();
+        let padre = getcont();
+
+        nodo.padre = padre;
+        nodo.cadena =
+            izq.cadena+
+            der.cadena+
+            `${op}[label="${this.operador}"]\n`+
+            `${padre}[label="Expresion"]\n`+
+            `${padre}--${izq.padre}\n`+
+            `${padre}--${op}\n`+
+            `${padre}--${der.padre}\n`
+            ;
+
+        return nodo;
     }
 }
 

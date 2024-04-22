@@ -416,7 +416,7 @@ class Aritmetica extends Instruccion {
             izq.cadena+
             der.cadena+
             `${op}[label="${this.operador}"]\n`+
-            `${padre}[label="expresion"]\n`+
+            `${padre}[label="Expresion"]\n`+
             `${padre}--${izq.padre}\n`+
             `${padre}--${op}\n`+
             `${padre}--${der.padre}\n`

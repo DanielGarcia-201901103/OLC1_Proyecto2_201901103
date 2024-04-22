@@ -1,5 +1,6 @@
 const Instruccion = require("../Instruccion.js");
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class Logico extends Instruccion {
     constructor(op1, op2, operador, fila, columna) {
@@ -162,6 +163,33 @@ class Logico extends Instruccion {
         } catch (error) {
             addError('Error', 'Error al interpretar el logico' + error, this.fila, this.columna);
         }
+    }
+
+    
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let izq = this.op1.getAst();
+        let der = this.op2.getAst();
+        
+        let op = getcont();
+        let padre = getcont();
+
+        nodo.padre = padre;
+        nodo.cadena =
+            izq.cadena+
+            der.cadena+
+            `${op}[label="${this.operador}"]\n`+
+            `${padre}[label="Expresion"]\n`+
+            `${padre}--${izq.padre}\n`+
+            `${padre}--${op}\n`+
+            `${padre}--${der.padre}\n`
+            ;
+
+        return nodo;
     }
 }
 

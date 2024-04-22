@@ -1,5 +1,6 @@
 const Instruccion = require('../Instruccion.js')
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class IncrementoDecremento extends Instruccion {
     constructor(id,op1,operador, fila, columna) {
@@ -81,6 +82,30 @@ class IncrementoDecremento extends Instruccion {
             addError('Error', 'Error al realizar el incremento o decremento' + error, this.fila, this.columna);
 
         }
+    }
+
+    
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let der = this.op1.getAst();
+        
+        let op = getcont();
+        let padre = getcont();
+
+        nodo.padre = padre;
+        nodo.cadena =
+            der.cadena+
+            `${op}[label="${this.operador}"]\n`+
+            `${padre}[label="Expresion"]\n`+
+            `${padre}--${this.id}\n`+
+            `${padre}--${op}\n`
+            ;
+
+        return nodo;
     }
 }
 module.exports = IncrementoDecremento;

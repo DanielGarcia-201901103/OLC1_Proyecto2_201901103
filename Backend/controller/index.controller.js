@@ -26,6 +26,7 @@ const analizar = (req, res) => {
         cadena = cadena +"\n}"
         escribirArchivoDot(cadena)
         generarAST();
+        cadena = "";
         res.status(200).json({ message: 'Analizando...', salida: obimpresiones });
         obimpresiones = [];
         
