@@ -1,4 +1,15 @@
 graph {
 ordering="out"
+1[label="0"]
+2[label="Expresion"]
+2--1
+3[label="var1"]
+4[label="Asignación"]
+5[label="int"]
+6[label="="]
+4--5
+4--3
+4--6
+4--2
 
 }

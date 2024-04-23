@@ -4,6 +4,7 @@ const { addError } = require('../../analisisSem/manejoErrores.js');
 class Metodos extends Instruccion {
     constructor(id, parametros, instruccionesmet, linea, columna) {
         super();
+        this.tipofuncion = "void"
         this.id = id;
         this.parametros = parametros;
         this.instruccionesmet = instruccionesmet;
@@ -21,7 +22,7 @@ class Metodos extends Instruccion {
                     let instruccion = this.instruccionesmet[i]
                     instruccion.interpretar(entornomet);
                 }*/
-                entorno.addSimboloMet(this.id, this.instruccionesmet, "void", entornomet.nombreentorno, this.linea, this.columna);
+                entorno.addSimboloMet(this.id, this.instruccionesmet, this.tipofuncion , entornomet.nombreentorno, this.linea, this.columna);
                 return this;
             }else{
 

@@ -10,7 +10,6 @@ class Entorno{
         this.tablavectores = {};
         this.tablavectores2 = {};
         this.tablametodos = {};
-        this.tablafunciones = {};
     }
     
     addSimbolo(id, valor, tipo, entorno, linea, columna){
@@ -187,22 +186,6 @@ class Entorno{
         return;
         //error semantico variable no existe
         //return tipo de dato error
-    }
-    addFuncion(nombre, parametros, instrucciones){
-        let simbolo = new Simbolo(nombre, parametros, instrucciones);
-        this.tablafunciones[nombre] = simbolo;
-    }
-
-    getFuncion(nombre){
-        let entorno = this;
-        let valor =  entorno.tablafunciones[id];
-        while (valor == undefined && this.anterior != null){
-            entorno = entorno.anterior;
-            valor = entorno.tablafunciones[id];
-        }
-        //addError("Semantico", "Función no existe"+ nombre , 0, 0);
-        //return;
-        return valor;
     }
 }
 

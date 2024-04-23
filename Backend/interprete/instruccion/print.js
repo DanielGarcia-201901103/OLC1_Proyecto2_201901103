@@ -32,5 +32,8 @@ class Print extends Instruccion {
         }
     }
 }
+function addLErr(recibiendo){
+    obimpresiones.push("-----> " + recibiendo + '\n');
+    }
 
-module.exports = Print;
+module.exports = {Print, addLErr};

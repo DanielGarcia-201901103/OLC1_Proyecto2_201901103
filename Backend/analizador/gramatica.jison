@@ -1,7 +1,7 @@
 %{
 const {addError} = require("../analisisSem/manejoErrores");
 const Dato = require("../interprete/expresion/Dato.js");
-const Print = require("../interprete/instruccion/Print.js");
+const {Print, addLErr} = require("../interprete/instruccion/Print.js");
 const Aritmetica = require("../interprete/expresion/Aritmetica.js");
 const IncrementoDecremento = require("../interprete/expresion/IncrementoDecremento.js");
 const IncrementoDecremento2 = require("../interprete/expresion/IncrementoDecremento2.js");
@@ -40,6 +40,8 @@ const ModifV2 = require("../interprete/instruccion/ModifV2.js");
 const Metodos = require("../interprete/instruccion/Metodos.js");
 const LLamadasMet = require("../interprete/instruccion/LLamadasMet.js");
 const Execute = require("../interprete/instruccion/Execute.js");
+const Fcstr = require("../interprete/otrasexpresiones/Fcstr.js"); 
+const MFuncion = require("../interprete/instruccion/MFuncion.js");
 %}
 
 %lex
@@ -122,7 +124,8 @@ const Execute = require("../interprete/instruccion/Execute.js");
 
 <<EOF>>             return 'EOF';
 //para agregar los errores a la consola de salida, agregarlo a la lista de impresion que se encuentra en print global.obimpresiones desde la clase donde está addError
-. {addError('Error léxico', 'Caracter no reconocido\" ' + yytext +' \" ', yylloc.first_line, yylloc.first_column); console.error('Error léxico: \"' + yytext + '\", linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);}
+. {addError('Error léxico', 'Caracter no reconocido\" ' + yytext +' \" ', yylloc.first_line, yylloc.first_column); addLErr("Error léxico Caracter no reconocido \"" + yytext +" \" En la línea: " + yylloc.first_line + "En la columna: "+ yylloc.first_column );}
+//console.error('Error léxico: \"' + yytext + '\", linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);
 /lex
 
 %left 'orlogico'
@@ -161,7 +164,7 @@ DECLARACIONES: TIPODATO LISTANVARIABLES sigpuntoycoma                     { $$= 
         | LISTANVARIABLES sigigual ASIGNACIONES sigpuntoycoma             { $$= new Reasignacion($1, $3, @1.first_line, @1.first_column); limpiarlistVariables();}  
         | id sigincremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Oid($1, "id", @1.first_line, @1.first_column, "id"),"++", @1.first_line, @1.first_column); } 
         | id sigdecremento sigpuntoycoma                                  { $$= new IncrementoDecremento($1,new Oid($1, "id", @1.first_line, @1.first_column, "id"),"--", @1.first_line, @1.first_column); } 
-        | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
+        | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column); addLErr("Error sintáctico, No se reconoce \"" + $1 +" \" En la línea: " +  this._$.first_line + "En la columna: "+ this._$.first_column );}
 ;
 DECLARACIONESARR: TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual resnew TIPODATO corcheteabre EXPRESIONES corchetecierra sigpuntoycoma     { $$= new AsignacionV($1, $2, $7, $9, @1.first_line, @1.first_column);  limpiarlistVariables();}
         | TIPODATO LISTANVARIABLES corcheteabre corchetecierra sigigual corcheteabre LISTANEXPR corchetecierra sigpuntoycoma                              { $$= new AsignacionVT($1, $2, $7, @1.first_line, @1.first_column);  limpiarlistVariables(); limpiarlistExp();}
@@ -197,7 +200,7 @@ LISTANVARIABLES:  id signocoma LISTANVARIABLES    { addVariables($1); concatenar
 
 ASIGNACIONES: EXPRESIONES              {$$=$1;}  
         | OTRASEXPRESIONES             {$$=$1;}
-        | error                        { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
+        | error sigpuntoycoma                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column); addLErr("Error sintáctico, No se reconoce \"" + $1 +" \" En la línea: " +  this._$.first_line + "En la columna: "+ this._$.first_column );}
 ;
 
 EXPRESIONES: OPERACIONES           {$$=$1;} 
@@ -271,8 +274,8 @@ SENTENCIAS: SENTIF                                                    {$$=$1;}
         | SENTDOWHILE                                                 {$$=$1;} 
         | SENTWHILE                                                   {$$=$1;}  
         | SENTFOR                                                     {$$=$1;} 
-        | error                        { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column);}
- ;
+        | error llavecierra                                             { addError('Error sintáctico', 'No se reconoce' + $1, this._$.first_line, this._$.first_column); addLErr("Error sintáctico, No se reconoce \"" + $1 +" \" En la línea: " +  this._$.first_line + "En la columna: "+ this._$.first_column );}
+;
 
 SENTIF: resif parentesisabre EXPRESIONES parentesiscierra llaveabre CONTENIDOS FINIF    {$$= new If($3, $6, $7 ,@1.first_line, @1.first_column); limpiarElSEIF();} 
 ;
@@ -324,7 +327,7 @@ RETORNOS: resreturn sigpuntoycoma                                             {$
         | resreturn ASIGNACIONES sigpuntoycoma                                {$$=$1 + " " + $2 + " "+ $3;} 
 ;
 
-FUNCIONES: TIPODATO id SNPARAMETROS llaveabre CONTENIDOSCICLOS llavecierra    {$$=$1 + " "+ $2 + " " + $3 +$4 + " " + $5 + $6;} 
+FUNCIONES: TIPODATO id SNPARAMETROS llaveabre CONTENIDOSCICLOS llavecierra    {$$= new MFuncion($1, $2, $3, $5, @1.first_line, @1.first_column);} 
 ;
 
 SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra                      {$$=$2;} 
