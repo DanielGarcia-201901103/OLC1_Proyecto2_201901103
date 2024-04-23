@@ -1,4 +1,4 @@
-const Instruccion = require("../Instruccion.js");
+const {Instruccion, TInst} = require("../Instruccion.js");
 const { addError } = require('../../analisisSem/manejoErrores.js');
 const { getcont } = require('../../analisisSem/contador.js');
 

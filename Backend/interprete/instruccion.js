@@ -9,8 +9,24 @@ class Instruccion{
             padre: -1,
             cadena: ""
         }
+        
         return nodo;
     }
 }
 
-module.exports = Instruccion;
+const TInst = {
+    PRINT: 'COUT',
+    IF: 'IF',
+    SWITCH: 'SWITCH',
+    DECLARAR: 'DECLARAR',
+    WHILE: 'WHILE',
+    DOWHILE: 'DOWHILE',
+    FOR: 'FOR',
+    BREAK: 'BREAK',
+    FUNCION: 'FUNCION',
+    METODO: 'METODO',
+    GLOBAL: 'GLOBAL',
+    RETURN: 'RETURN'
+}
+
+module.exports = {Instruccion, TInst};

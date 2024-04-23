@@ -1,4 +1,4 @@
-const Instruccion = require('../Instruccion.js');
+const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores.js');
 class Bdowhile extends Instruccion {
@@ -13,7 +13,7 @@ class Bdowhile extends Instruccion {
     interpretar(entorno) {
         try {
             
-            let entornodowhile = new Entorno('DOWHILE', entorno);
+            let entornodowhile = new Entorno(TInst.DOWHILE, entorno);
             
             //Este do while ya funciona
             /*do{

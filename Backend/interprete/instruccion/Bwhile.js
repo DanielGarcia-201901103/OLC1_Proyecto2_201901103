@@ -1,4 +1,4 @@
-const Instruccion = require('../Instruccion.js');
+const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores.js');
 class Bwhile extends Instruccion {
@@ -13,8 +13,8 @@ class Bwhile extends Instruccion {
     interpretar(entorno) {
         try {
             
-            let entornowhile = new Entorno('WHILE', entorno);
-            this.condicion.interpretar(entornowhile);
+            let entornowhile = new Entorno(TInst.WHILE, entorno);
+            this.condicion.interpretar(entorno);
             if (this.condicion.tipo != 'booleano') {
                 addError('Error Semantico', 'La condición del while debe ser de tipo bool ', this.linea, this.columna);
                 //error semantico la condicion no es de tipo boolean
@@ -27,8 +27,9 @@ class Bwhile extends Instruccion {
                 });
                 this.condicion.interpretar(entornowhile);
             }*/
-
+            
             while(this.condicion.valor == true){
+                
                 let resultado = 'WHILE';
                 for (let i = 0; i < this.instruccioneswhile.length; i++) {
                     let instruccion = this.instruccioneswhile[i]

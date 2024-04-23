@@ -1,4 +1,4 @@
-const Instruccion = require('../Instruccion.js');
+const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
 
@@ -15,20 +15,17 @@ class elseif extends Instruccion {
 
     interpretar(entorno) {
         try {
-            let entornoif = new Entorno('ELSEIF', entorno);
             this.condicion.interpretar(entorno);
-            console.log("estoy en else if nueva clase " + this.condicion.tipo)
             if (this.condicion.tipo != 'booleano') {
                 addError('Error Semantico', 'La condición no es de tipo bool', this.linea, this.columna);
                 return this;
             }
-            console.log("estoy en else if nueva clase " + this.condicion.valor)
             if (this.condicion.valor == true) {
                 
                 console.log(this.instruccionesif.length)
                 for(let i=0; i< this.instruccionesif.length;i++){
                     let instruc = this.instruccionesif[i];
-                    instruc.interpretar(entornoif);
+                    instruc.interpretar(entorno);
                     if(instruc.tipo == 'break'){
                         this.tipo = 'break';
                         break;
@@ -52,16 +49,13 @@ class elseif extends Instruccion {
                 }
 */
             } else {
-                console.log("acá ando probando en el else if si entra ")
                 if(this.otrasinstruccionesif[0] == '}'){
-                    console.log("estoy dentro de else if con }")
                     return this
                 }
 
-                console.log(this.otrasinstruccionesif.length)
                 for(let i=0; i< this.otrasinstruccionesif.length;i++){
                     let instruc = this.otrasinstruccionesif[i];
-                    instruc.interpretar(entornoif);
+                    instruc.interpretar(entorno);
                     if(instruc.tipo == 'break'){
                         this.tipo = 'break';
                         break;

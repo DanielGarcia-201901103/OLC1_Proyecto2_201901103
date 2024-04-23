@@ -37,6 +37,9 @@ const AccesoV = require("../interprete/instruccion/AccesoV.js");
 const AccesoV2 = require("../interprete/instruccion/AccesoV2.js");
 const ModifV = require("../interprete/instruccion/ModifV.js");
 const ModifV2 = require("../interprete/instruccion/ModifV2.js");
+const Metodos = require("../interprete/instruccion/Metodos.js");
+const LLamadasMet = require("../interprete/instruccion/LLamadasMet.js");
+const Execute = require("../interprete/instruccion/Execute.js");
 %}
 
 %lex
@@ -324,26 +327,25 @@ RETORNOS: resreturn sigpuntoycoma                                             {$
 FUNCIONES: TIPODATO id SNPARAMETROS llaveabre CONTENIDOSCICLOS llavecierra    {$$=$1 + " "+ $2 + " " + $3 +$4 + " " + $5 + $6;} 
 ;
 
-SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra                      {$$=$1 + " " + $2 + " " + $3;} 
-        | parentesisabre  parentesiscierra                                    {$$=$1 + $2;} 
+SNPARAMETROS: parentesisabre PARAMETROS parentesiscierra                      {$$=$2;} 
+        | parentesisabre  parentesiscierra                                    {$$=[];} 
 ;
 
 PARAMETROS: TIPODATO EXPRESIONES                                              {$$=$1+ $2;} 
         | TIPODATO EXPRESIONES signocoma PARAMETROS                           {$$=$1 + " " +  $2 +" " + $3 + " "  +  $4;} 
 ;
 
-METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra        {$$=$1 + " " + $2 + " "+$3 + $4 + " " + $5+ " " + $6;} 
+METODOS: resvoid id SNPARAMETROS llaveabre CONTENIDOSMETOD llavecierra        {$$= new Metodos($2, $3, $5, @1.first_line, @1.first_column);} 
 ;
 
 CONTENIDOSMETOD: CONTENIDOSMETOD CONTMETOD                                    { $$ = $1; $$.push($2);} 
         | CONTMETOD                                                           { $$ = []; $$.push($1);}
 ;
-CONTMETOD: resbreak sigpuntoycoma                                             {$$= new BBreak(@1.first_line, @1.first_column);} 
-        | rescontinue sigpuntoycoma                                           {$$= new Continu(@1.first_line, @1.first_column);} 
+CONTMETOD: RETORNOS                                                           {$$=$1;} 
         | INSTRUCCION                                                         {$$=$1;} 
 ;
 
-LLAMADAS: id SNPARAMETROS                                                     {$$=$1 + " " + $2;} 
+LLAMADAS: id SNPARAMETROS                                                     {$$= new LLamadasMet($1, $2, @1.first_line, @1.first_column);} 
 ;
 
 FCOUT:  rescout menormenor ASIGNACIONES menormenor resendl sigpuntoycoma    {$$= new Print($3, "salto", @1.first_line, @1.first_column) ;} 
@@ -371,7 +373,7 @@ FTOSTRING: restostring parentesisabre ASIGNACIONES parentesiscierra           {$
 FCSTR: EXPRESIONES sigpunto rescstr parentesisabre parentesiscierra           {$$=$1 + " " + $2 + " " + $3 + " " + $4 + $5;} 
 ;
 
-FEXECUTE: resexecute id SNPARAMETROS sigpuntoycoma                            {$$=$1 + " " + $2 + " " + $3 + " " + $4;} 
+FEXECUTE: resexecute LLAMADAS sigpuntoycoma                                   {$$=new Execute($2, @1.first_line, @1.first_column);} 
 ;
 
 //la siguiente linea es la que maneja los errores sintacticos

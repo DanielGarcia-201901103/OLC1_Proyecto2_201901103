@@ -1,4 +1,4 @@
-const Instruccion = require('../Instruccion.js');
+const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
 
@@ -23,7 +23,7 @@ class Switchh extends Instruccion {
             7. Sí se cumple la condicion interpretar las instrucciones del caso
             8. Sí no se cumple la condición se realiza un break, 
             9. Sí se valida que en la lista de casos es igual a default se interpreta las instrucciones de default*/
-            let entornoswitch = new Entorno('SWITCH', entorno);
+            let entornoswitch = new Entorno(TInst.SWITCH, entorno);
             this.condicion.interpretar(entornoswitch);
             //console.log("ESTE VA ANTES DE IMPRIMIR LOS CASOS DEL SWITCH, SOLO PARA VER EL ORDEN DE LLEGADA DE LOS CASOS")
             //console.log(this.casos)

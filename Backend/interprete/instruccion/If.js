@@ -1,4 +1,4 @@
-const Instruccion = require('../Instruccion.js');
+const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
 
@@ -14,16 +14,14 @@ class If extends Instruccion {
 
     interpretar(entorno) {
         try {
-            let entornoif = new Entorno('IF', entorno);
-            this.condicion.interpretar(entorno);
+            let entornoif = new Entorno(TInst.IF, entorno);
+            this.condicion.interpretar(entornoif);
 
             if (this.condicion.tipo != 'booleano') {
                 addError('Error Semantico', 'La condición no es de tipo bool', this.linea, this.columna);
                 return this;
             }
             if (this.condicion.valor == true) {
-
-                console.log(this.instruccionesif.length)
                 for (let i = 0; i < this.instruccionesif.length; i++) {
                     let instruc = this.instruccionesif[i];
                     instruc.interpretar(entornoif);
@@ -35,6 +33,7 @@ class If extends Instruccion {
                         break;
                     }
                 }
+                return this;
                 /*
                 let resultado = this.instruccionesif.forEach(instruccion => {
                     instruccion.interpretar(entornoif);
@@ -73,7 +72,7 @@ class If extends Instruccion {
 
                         for (let i = 0; i < this.otrasinstruccionesif.length; i++) {
                             let instruc = this.otrasinstruccionesif[i];
-                            instruc.condicion.interpretar(entorno);
+                            instruc.condicion.interpretar(entornoif);
                             if (instruc.condicion.valor == true) {
                                 instruc.instruccionesif.forEach(instruccion => {
                                     instruccion.interpretar(entornoif);

@@ -1,4 +1,4 @@
-const Instruccion = require('../Instruccion.js');
+const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores.js');
 class BFor extends Instruccion {
@@ -15,7 +15,7 @@ class BFor extends Instruccion {
     interpretar(entorno) {
         try {
             /* */
-            let entornofor = new Entorno('FOR', entorno);
+            let entornofor = new Entorno(TInst.FOR, entorno);
             this.decl.interpretar(entornofor);
             this.condicion.interpretar(entornofor);
 

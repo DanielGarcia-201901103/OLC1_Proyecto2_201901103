@@ -1,4 +1,4 @@
-const Instruccion = require('../Instruccion.js');
+const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores.js');
 class Metodos extends Instruccion {
@@ -14,22 +14,14 @@ class Metodos extends Instruccion {
     interpretar(entorno) {
         try {
             /* */
-            let entornomet = new Entorno('METODO', entorno);
+            let entornomet = new Entorno(TInst.METODO, entorno);
             //Manejando el metodo sin parametros 
             if(this.parametros.length === 0){
-                for (let i = 0; i < this.instruccionesmet.length; i++) {
+                /*for (let i = 0; i < this.instruccionesmet.length; i++) {
                     let instruccion = this.instruccionesmet[i]
                     instruccion.interpretar(entornomet);
-                    /*
-                    if(instruccion.tipo == 'break'){
-                        addError('Error Semantico', 'Break no permitido dentro de' + error, this.linea, this.columna);
-                        break;
-                    }else if(instruccion.tipo == 'continue'){
-                        addError('Error Semantico', 'continue no permitido dentro de' + error, this.linea, this.columna);
-                        break;
-                    }*/
-                }
-                entornomet.addSimboloMet(this.id, this.instruccionesmet, "void", entornomet, this.linea, this.columna);
+                }*/
+                entorno.addSimboloMet(this.id, this.instruccionesmet, "void", entornomet.nombreentorno, this.linea, this.columna);
                 return this;
             }else{
 
