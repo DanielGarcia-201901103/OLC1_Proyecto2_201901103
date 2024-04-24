@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require("../Instruccion.js");
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class Reasignacion extends Instruccion {
     constructor(id, expresion, linea, columna) {
@@ -32,6 +33,27 @@ class Reasignacion extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en reasignación de variable ', this.linea, this.columna);
         }
+    }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        };
+    
+        let expresionAst = this.expresion.getAst();
+    
+        let padre = getcont();
+        let cont = getcont();
+    
+        nodo.padre = padre;
+        nodo.cadena =
+            expresionAst.cadena +
+            `${padre}[label="Reasignacion"]\n` +
+            `${cont}[label="Variable"]\n` +
+            `${padre}--${cont}\n`+
+            `${cont}--${expresionAst.padre}\n`;;
+    
+        return nodo;
     }
 }
 

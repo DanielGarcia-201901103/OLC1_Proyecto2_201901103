@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class elseif extends Instruccion {
     constructor(condicion, instruccionesif, otrasinstruccionesif, linea, columna) {
@@ -89,6 +90,37 @@ class elseif extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en la interpretación del else if ' + error, this.linea, this.columna);
         }
+    }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+    
+        let condicionAst = this.condicion.getAst();
+        let instruccionesIfAst = this.instruccionesif.map(instruccion => instruccion.getAst());
+        let otrasInstruccionesIfAst = this.otrasinstruccionesif.map(instruccion => instruccion.getAst());
+    
+        let padre = getcont();
+        let contCondicion = getcont();
+        let contInstruccionesIf = getcont();
+        let contOtrasInstruccionesIf = getcont();
+    
+        nodo.padre = padre;
+        nodo.cadena =
+            condicionAst.cadena +
+            instruccionesIfAst.map(ast => `${contInstruccionesIf}--${ast.padre}\n${ast.cadena}`).join('') +
+            otrasInstruccionesIfAst.map(ast => `${contOtrasInstruccionesIf}--${ast.padre}\n${ast.cadena}`).join('') +
+            `${padre}[label="ELSE IF"]\n` +
+            `${contCondicion}[label="Condicion"]\n` +
+            `${contInstruccionesIf}[label="Instrucciones IF"]\n` +
+            `${contOtrasInstruccionesIf}[label="Otras Instrucciones IF"]\n` +
+            `${padre}--${contCondicion}\n` +
+            `${padre}--${contInstruccionesIf}\n` +
+            `${padre}--${contOtrasInstruccionesIf}\n` +
+            `${contCondicion}--${condicionAst.padre}\n`;
+    
+        return nodo;
     }
 }
 //https://github.com/AlexIngGuerra/OLC1-1S2024/blob/main/clase_12/server/interprete/instruccion/If.js

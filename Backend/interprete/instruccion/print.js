@@ -38,7 +38,6 @@ class Print extends Instruccion {
             padre: -1,
             cadena: ""
         }
-
         let izq = this.expresion.getAst();
 
         let op = getcont();

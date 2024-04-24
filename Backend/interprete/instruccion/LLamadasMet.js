@@ -1,6 +1,7 @@
 const { Instruccion, TInst } = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores.js');
+const { getcont } = require('../../analisisSem/contador.js');
 class LLamadasMet extends Instruccion {
     constructor(id, parametros, linea, columna) {
         super();
@@ -51,6 +52,25 @@ class LLamadasMet extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en la interpretación del la llamada a metodo o funcion ' + error, this.linea, this.columna);
         }
+    }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+    
+        let padre = getcont();
+        let id = getcont();
+        let params = getcont();
+        nodo.padre = padre;
+        nodo.cadena =
+            `${padre}[label="LLamadaMet"]\n` +
+            `${id}[label="${this.id}"]\n` +
+            `${params}[label="Parametros"]\n` +
+            `${padre}--${id}\n` +
+            `${padre}--${params}\n`;
+    
+        return nodo;
     }
 }
 

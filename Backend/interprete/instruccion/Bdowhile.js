@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores.js');
+const { getcont } = require('../../analisisSem/contador.js');
 class Bdowhile extends Instruccion {
     constructor(instruccionesdowhile, condicion, linea, columna) {
         super();
@@ -57,6 +58,31 @@ class Bdowhile extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en la interpretación del do while ' + error, this.linea, this.columna);
         }
+    }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+    
+        let instrucciones = this.instruccionesdowhile.map(instruccion => instruccion.getAst());
+        let condicion = this.condicion.getAst();
+    
+        let padre = getcont();
+        let bdw = getcont();
+        let cond = getcont();
+        nodo.padre = padre;
+        nodo.cadena =
+            instrucciones.map(ast => `${bdw}--${ast.padre}\n${ast.cadena}`).join('') +
+            `${padre}[label="DO WHILE"]\n` +
+            `${bdw}[label="Instrucciones"]\n` +
+            `${cond}[label="Condicion"]\n` +
+            `${padre}--${bdw}\n` +
+            `${padre}--${cond}\n` +
+            `${cond}--${condicion.padre}\n` 
+            ;
+    
+        return nodo;
     }
 }
 

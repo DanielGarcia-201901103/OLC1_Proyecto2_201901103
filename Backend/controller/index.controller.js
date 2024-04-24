@@ -17,7 +17,7 @@ const analizar = (req, res) => {
         const { texto } = req.body;
         //envia el texto a analizar y devuelve el resultado para poder enviarlo a la consola salida del frontend
         let resultado = analiza.parse(texto);
-        let cadena = "graph {\nordering=\"out\"\n"
+        let cadena = "graph {\nordering=\"out\"\n" 
         let entornoglobal = new Entorno('GLOBAL', null);
         resultado.forEach(instruccion => {
             instruccion.interpretar(entornoglobal);

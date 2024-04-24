@@ -15,7 +15,6 @@ class Flength extends Instruccion {
     interpretar(entorno) {
         try {
             let valor1 = this.op1.interpretar(entorno);
-            
             if (valor1 != undefined) {
                 if (this.op1.tipo == 'string') {
                     this.tipo = 'int';

@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores.js');
+const { getcont } = require('../../analisisSem/contador.js');
 class Metodos extends Instruccion {
     constructor(id, parametros, instruccionesmet, linea, columna) {
         super();
@@ -31,6 +32,35 @@ class Metodos extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en la interpretación del For ' + error, this.linea, this.columna);
         }
+    }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+    
+        let instruccionesAst = this.instruccionesmet.map(instruccion => instruccion.getAst());
+        
+        let padre = getcont();
+        let id = getcont();
+        let instrucciones = getcont();
+        let nodoPadreInstrucciones = getcont();
+    
+        let nodoInstrucciones = instruccionesAst.map(ast => `${nodoPadreInstrucciones}--${ast.padre}\n${ast.cadena}`).join('');
+    
+        nodo.padre = padre;
+        nodo.cadena =
+            `${padre}[label="Metodo"]\n` +
+            `${id}[label="${this.id}"]\n` +
+            `${instrucciones}[label="Instrucciones"]\n` +
+            `${padre}--${id}\n` +
+            `${padre}--${instrucciones}\n` +
+            `${instrucciones}--${nodoPadreInstrucciones}\n` +
+            `${nodoPadreInstrucciones}[label="Lista de Instrucciones"]\n` +
+            `${nodoInstrucciones}`
+            ;
+    
+        return nodo;
     }
 }
 

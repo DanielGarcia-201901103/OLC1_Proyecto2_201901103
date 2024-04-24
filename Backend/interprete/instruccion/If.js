@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class If extends Instruccion {
     constructor(condicion, instruccionesif, otrasinstruccionesif, linea, columna) {
@@ -134,6 +135,32 @@ class If extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en la interpretación del if ' + error, this.linea, this.columna);
         }
+    }
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+    
+        let condicion = this.condicion.getAst();
+        let instruccionesIfAst = this.instruccionesif.map(instruccion => instruccion.getAst());
+    
+        let padre = getcont();
+        let ini = getcont();
+        let cont = getcont();
+    
+        nodo.padre = padre;
+        nodo.cadena =
+            condicion.cadena +
+            instruccionesIfAst.map(ast => `${ini}--${ast.padre}\n${ast.cadena}`).join('') +
+            `${padre}[label="IF"]\n` +
+            `${cont}[label="Condicion"]\n` +
+            `${ini}[label="Instrucciones"]\n` +
+            `${padre}--${cont}\n` +
+            `${cont}--${condicion.padre}\n` +
+            `${padre}--${ini}\n`;
+    
+        return nodo;
     }
 }
 //https://github.com/AlexIngGuerra/OLC1-1S2024/blob/main/clase_12/server/interprete/instruccion/If.js

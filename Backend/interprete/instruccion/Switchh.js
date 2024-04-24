@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class Switchh extends Instruccion {
     constructor(condicion, casos, linea, columna) {
@@ -113,6 +114,29 @@ class Switchh extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en la interpretación del switch ' + error, this.linea, this.columna);
         }
+    }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        };
+    
+        let condicionAst = this.condicion.getAst();
+        let casosAst = this.casos.map(caso => caso.getAst());
+    
+        let padre = getcont();
+        let cont = getcont();
+    
+        nodo.padre = padre;
+        nodo.cadena =
+            condicionAst.cadena +
+            casosAst.map(ast => `${cont}--${ast.padre}\n${ast.cadena}`).join('') +
+            `${padre}[label="SWITCH"]\n` +
+            `${cont}[label="Casos"]\n` +
+            `${padre}--${condicionAst.padre}\n` +
+            `${cont}--${condicionAst.padre}\n`;
+    
+        return nodo;
     }
 }
 module.exports = Switchh;

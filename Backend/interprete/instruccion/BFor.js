@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores.js');
+const { getcont } = require('../../analisisSem/contador.js');
 class BFor extends Instruccion {
     constructor(decl, condicion, actualizacion, instruccionesfor, linea, columna) {
         super();
@@ -50,6 +51,40 @@ class BFor extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en la interpretación del For ' + error, this.linea, this.columna);
         }
+    }
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+    
+        let decl = this.decl.getAst();
+        let condicion = this.condicion.getAst();
+        let actualizacion = this.actualizacion.getAst();
+        let instrucciones = this.instruccionesfor.map(instruccion => instruccion.getAst());
+    
+        let padre = getcont();
+        let bdw = getcont();
+        let upd = getcont();
+        let cond = getcont();
+        nodo.padre = padre;
+        nodo.cadena =
+            decl.cadena+
+            condicion.cadena+
+            actualizacion.cadena+
+            instrucciones.map(ast => `${bdw}--${ast.padre}\n${ast.cadena}`).join('') +
+            `${padre}[label="FOR"]\n` +
+            `${bdw}[label="Instrucciones"]\n` +
+            `${upd}[label="Actualizar"]\n` +
+            `${cond}[label="Condicion"]\n` +
+            `${padre}--${decl.padre}\n` + 
+            `${padre}--${cond}\n` +
+            `${padre}--${upd}\n` +
+            `${padre}--${bdw}\n` +
+            `${cond}--${condicion.padre}\n` +// Agregar relación con la declaración
+            `${upd}--${actualizacion.padre}\n`;  // Agregar relación con la actualización
+    
+        return nodo;
     }
 }
 

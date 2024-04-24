@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require('../Instruccion.js');
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class Sdefault extends Instruccion {
     constructor(instrucciondefault, linea, columna) {
@@ -30,6 +31,26 @@ class Sdefault extends Instruccion {
         } catch (error) {
             addError('Error', 'Ha ocurrido un error en la interpretación del else ' + error, this.linea, this.columna);
         }
+    }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        };
+    
+        let instruccionesDefaultAst = this.instrucciondefault.map(instruccion => instruccion.getAst());
+    
+        let padre = getcont();
+        let cont = getcont();
+    
+        nodo.padre = padre;
+        nodo.cadena =
+            instruccionesDefaultAst.map(ast => `${cont}--${ast.padre}\n${ast.cadena}`).join('') +
+            `${padre}[label="DEFAULT"]\n` +
+            `${cont}[label="Instrucciones"]\n`+
+            `${padre}--${cont}\n` ;
+    
+        return nodo;
     }
 }
 module.exports = Sdefault;

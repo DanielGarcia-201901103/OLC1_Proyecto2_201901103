@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require("../Instruccion.js");
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class ModifV extends Instruccion{
     constructor(id, expresion, nexpresion, linea, columna){
