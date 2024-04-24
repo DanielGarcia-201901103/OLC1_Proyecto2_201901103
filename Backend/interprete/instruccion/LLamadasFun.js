@@ -30,6 +30,28 @@ class LLamadasFun extends Instruccion {
             addError('Error', 'Ha ocurrido un error en la interpretación del la llamada a metodo ' + error, this.linea, this.columna);
         }
     }
+    getAst(){
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+        let op = getcont();
+        let padre = getcont();
+        let par1 = getcont();
+        let par2 = getcont();
+
+        nodo.padre = padre;
+        nodo.cadena = `${op}[label="${this.id}"]\n`+
+            `${padre}[label="Llamada"]\n`+
+            `${par1}[label="("]\n`+
+            `${par2}[label="("]\n`+
+            `${padre}--${op}\n`+
+            `${padre}--${par1}\n`+
+            `${padre}--${par2}\n`
+            ;
+
+        return nodo;
+    }
 }
 
 module.exports = LLamadasFun;

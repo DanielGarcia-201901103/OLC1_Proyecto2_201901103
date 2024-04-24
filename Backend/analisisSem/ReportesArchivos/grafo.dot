@@ -11,5 +11,33 @@ ordering="out"
 4--3
 4--6
 4--2
+7[label="Otro metodo"]
+8[label="Expresion"]
+8--7
+9[label="cout"]
+11[label="Cout"]
+10[label="<<"]
+12[label="<<"]
+13[label="endl"]
+11--9
+11--10
+11--8
+11--12
+11--13
+14[label="0"]
+16[label="var1"]
+15[label="Expresion"]
+15--16
+16--14
+17[label="cout"]
+19[label="Cout"]
+18[label="<<"]
+19--17
+19--18
+19--15
+20[label="execute"]
+21[label="Execute"]
+21--20
+21---1
 
 }
