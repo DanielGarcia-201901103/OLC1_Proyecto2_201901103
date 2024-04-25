@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require("../Instruccion.js");
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class AsignacionV extends Instruccion{
     constructor(tipodec, id, tipoasig, expresion, linea, columna){
@@ -49,6 +50,34 @@ class AsignacionV extends Instruccion{
     }catch(error){
         addError('Error', 'Ha ocurrido un error en la declaración de vectores', this.linea, this.columna);
     }
+    }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let asig = this.expresion.getAst();
+        //let id = this.id.getAst();
+
+        let op = getcont();
+        let padre = getcont();
+        let oc = getcont();
+        let occ = getcont();
+        nodo.padre = padre;
+        nodo.cadena =
+            asig.cadena +
+            `${op}[label="${this.id}"]\n` +
+            `${padre}[label="Asignación"]\n` +
+            `${oc}[label="${this.tipo}"]\n` +
+            `${occ}[label="="]\n` +
+            `${padre}--${oc}\n` +
+            `${padre}--${op}\n` +
+            `${padre}--${occ}\n` +
+            `${padre}--${asig.padre}\n`
+            ;
+
+        return nodo;
     }
 }
 
