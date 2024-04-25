@@ -1,6 +1,7 @@
 const {Instruccion, TInst} = require("../Instruccion.js");
 const Entorno = require('../../analisisSem/Entorno.js');
 const { addError } = require('../../analisisSem/manejoErrores');
+const { getcont } = require('../../analisisSem/contador.js');
 
 class AccesoV extends Instruccion{
     constructor(id, expresion, linea, columna){
@@ -43,6 +44,33 @@ class AccesoV extends Instruccion{
     }catch(error){
         addError('Error', 'Ha ocurrido un error ', this.linea, this.columna);
     }
+    }
+
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let expAst = this.expresion.getAst();
+        let padre = getcont();
+        let oc = getcont();
+        let oc1 = getcont();
+        let oc2 = getcont();
+        nodo.padre = padre;
+        nodo.cadena =
+            `${padre}[label="Acceso a Vector"]\n` +
+            `${expAst.cadena}` +
+            `${oc}[label="${this.id}"]\n` +
+            `${oc1}[label="["]\n` +
+            `${oc2}[label="]"]\n` +
+            `${padre}--${oc}\n`+
+            `${padre}--${oc1}\n`+
+            `${padre}--${expAst.padre}\n` +
+            `${padre}--${oc2}\n`
+            ;
+
+        return nodo;
     }
 }
 

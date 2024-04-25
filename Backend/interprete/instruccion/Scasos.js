@@ -40,8 +40,8 @@ class Scasos extends Instruccion {
             instruccionesAst.map(ast => `${cont}--${ast.padre}\n${ast.cadena}`).join('') +
             `${padre}[label="CASO"]\n` +
             `${cont}[label="Instrucciones"]\n` +
-            `${padre}--${condicionAst.padre}\n` +
-            `${cont}--${condicionAst.padre}\n`;
+            `${padre}--${cont}\n` +
+            `${padre}--${condicionAst.padre}\n` ;
     
         return nodo;
     }

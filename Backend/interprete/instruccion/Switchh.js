@@ -133,8 +133,8 @@ class Switchh extends Instruccion {
             casosAst.map(ast => `${cont}--${ast.padre}\n${ast.cadena}`).join('') +
             `${padre}[label="SWITCH"]\n` +
             `${cont}[label="Casos"]\n` +
-            `${padre}--${condicionAst.padre}\n` +
-            `${cont}--${condicionAst.padre}\n`;
+            `${padre}--${cont}\n` +
+            `${padre}--${condicionAst.padre}\n` ;
     
         return nodo;
     }

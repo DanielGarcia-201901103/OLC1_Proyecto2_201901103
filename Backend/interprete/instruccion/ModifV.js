@@ -56,6 +56,38 @@ class ModifV extends Instruccion{
         addError('Error', 'Ha ocurrido un error ', this.linea, this.columna);
     }
     }
+    getAst() {
+        let nodo = {
+            padre: -1,
+            cadena: ""
+        }
+
+        let expAst = this.expresion.getAst();
+        let nexpAst = this.nexpresion.getAst();
+        let padre = getcont();
+        let oc = getcont();
+        let oc1 = getcont();
+        let oc2 = getcont();
+        let oc3 = getcont();
+        nodo.padre = padre;
+        nodo.cadena =
+            `${padre}[label="Modificacion de Vector"]\n` +
+            `${expAst.cadena}` +
+            `${nexpAst.cadena}` +
+            `${oc}[label="${this.id}"]\n` +
+            `${oc1}[label="["]\n` +
+            `${oc2}[label="]"]\n` +
+            `${oc3}[label="="]\n` +
+            `${padre}--${oc}\n` +
+            `${padre}--${oc1}\n` +
+            `${padre}--${expAst.padre}\n` +
+            `${padre}--${oc2}\n` + 
+            `${padre}--${oc3}\n` + 
+            `${padre}--${nexpAst.padre}\n` 
+            ;
+
+        return nodo;
+    }
 }
 
 module.exports = ModifV;

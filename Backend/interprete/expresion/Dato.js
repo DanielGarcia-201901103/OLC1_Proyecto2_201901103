@@ -54,8 +54,8 @@ class Dato extends Instruccion {
         let nodoPadre = getcont();
 
         let cadena = 
-        `${nodoDato}[label="${this.valor}"]\n`+
         `${nodoPadre}[label="Expresion"]\n`+
+        `${nodoDato}[label="${this.valor}"]\n`+
         `${nodoPadre}--${nodoDato}\n`;
 
         nodo.padre = nodoPadre;
